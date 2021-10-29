@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1917" height="1093" viewBox="0 0 1917 1093">
+  <defs>
+    <style>
+      .cls-1, .cls-6, .cls-7 {
+        fill: #448ccb;
+      }
+
+      .cls-1, .cls-2, .cls-3, .cls-4, .cls-5, .cls-6, .cls-7, .cls-8 {
+        stroke: #000;
+        stroke-width: 1px;
+      }
+
+      .cls-1, .cls-3, .cls-5, .cls-6, .cls-7, .cls-8 {
+        fill-rule: evenodd;
+      }
+
+      .cls-2, .cls-3 {
+        fill: #ff0;
+      }
+
+      .cls-4, .cls-5 {
+        fill: red;
+      }
+
+      .cls-6 {
+        filter: url(#filter);
+      }
+
+      .cls-7 {
+        filter: url(#filter-2);
+      }
+
+      .cls-8 {
+        fill: none;
+      }
+
+      .cls-9 {
+        font-size: 72px;
+        font-family: "Franklin Gothic Heavy";
+      }
+    </style>
+    <filter id="filter" x="1225.41" y="681.188" width="135.56" height="98.343" filterUnits="userSpaceOnUse">
+      <feFlood result="flood" flood-color="#f6ff05"/>
+      <feComposite result="composite" operator="in" in2="SourceGraphic"/>
+      <feBlend result="blend" in2="SourceGraphic"/>
+    </filter>
+    <filter id="filter-2" x="2153.34" y="476.656" width="123.63" height="128.032" filterUnits="userSpaceOnUse">
+      <feFlood result="flood" flood-color="#f6ff05"/>
+      <feComposite result="composite" operator="in" in2="SourceGraphic"/>
+      <feBlend result="blend" in2="SourceGraphic"/>
+    </filter>
+  </defs>
+  <g id="Obszar_kompozycji_1" data-name="Obszar kompozycji 1">
+    <path id="Prostokąt_zaokrąglony_1" data-name="Prostokąt zaokrąglony 1" class="cls-1" d="M1398.42,505.388l335.71-306a18.333,18.333,0,0,1,25.9,1.2l156,171.141a18.339,18.339,0,0,1-1.2,25.9l-335.71,306a18.333,18.333,0,0,1-25.9-1.2l-156-171.141A18.339,18.339,0,0,1,1398.42,505.388Z" transform="translate(-435 -14)"/>
+    <circle id="Elipsa_1" data-name="Elipsa 1" class="cls-2" cx="1120.515" cy="482.485" r="49.675"/>
+    <path id="Kształt_1" data-name="Kształt 1" class="cls-3" d="M1787.25,391.309c14.16,46.945,5.54,99.337-27.77,137.768-39.66,45.757-108.01,63.5-171.06,40.8q50.76-46.5,101.51-93,48.615-43.923,97.24-87.845" transform="translate(-435 -14)"/>
+    <circle id="Elipsa_1-2" data-name="Elipsa 1" class="cls-2" cx="1285.86" cy="331.781" r="49.67"/>
+    <circle id="Elipsa_1-3" data-name="Elipsa 1" class="cls-4" cx="1121.44" cy="482.563" r="37.44"/>
+    <circle id="Elipsa_1-4" data-name="Elipsa 1" class="cls-4" cx="1286.765" cy="331.86" r="37.455"/>
+    <path id="Górne_czerwone_uszy" data-name="Górne czerwone uszy" class="cls-5" d="M1379.79,359.041l56.03-51.071,10.85,11.894-56.03,51.071Z" transform="translate(-435 -14)"/>
+    <path id="Górne_czerwone_uszy_kopia" data-name="Górne czerwone uszy kopia" class="cls-5" d="M1545.13,208.34l56.03-51.071L1612,169.163l-56.03,51.071Z" transform="translate(-435 -14)"/>
+    <path id="Prostokąt_1" data-name="Prostokąt 1" class="cls-3" d="M1409.01,354.191l19.28-17.582,70.48,77.314-19.29,17.582Z" transform="translate(-435 -14)"/>
+    <path id="Prostokąt_1_kopia" data-name="Prostokąt 1 kopia" class="cls-3" d="M1574.34,203.49l19.29-17.582,70.47,77.314L1644.81,280.8Z" transform="translate(-435 -14)"/>
+    <path id="Prostokąt_2" data-name="Prostokąt 2" class="cls-5" d="M1395.94,612.9l41.33-37.675,74.09,81.279-41.33,37.675Z" transform="translate(-435 -14)"/>
+    <path id="Prostokąt_2-2" data-name="Prostokąt 2" class="cls-1" d="M1782.02,556.791l41.34-37.675,74.08,81.279-41.33,37.675Z" transform="translate(-435 -14)"/>
+    <path id="Reka" class="cls-1" d="M2003.14,384.274l78.08-71.164,234,256.721L2237.15,641Z" transform="translate(-435 -14)"/>
+    <path id="Reka_kopia" data-name="Reka kopia" class="cls-1" d="M1587.53,808.49l-38.23,98.478-323.82-125.72,38.23-98.479Z" transform="translate(-435 -14)"/>
+    <g transform="translate(-435 -14)" style="fill: #448ccb; filter: url(#filter)">
+      <path id="Trójkat" class="cls-6" d="M1360.95,777.052l-135.54,2.471,38.66-98.328Z" style="stroke: inherit; filter: none; fill: inherit"/>
+    </g>
+    <use transform="translate(-435 -14)" xlink:href="#Trójkat" style="stroke: #000; filter: none; fill: none"/>
+    <path id="Noga" class="cls-1" d="M1903.37,1099.49L2078.8,939.579l234.91,257.711L2138.28,1357.2Z" transform="translate(-435 -14)"/>
+    <path id="Noga_kopia" data-name="Noga kopia" class="cls-1" d="M2107.28,913.625l175.43-159.911,234.91,257.716-175.43,159.91Z" transform="translate(-435 -14)"/>
+    <path id="Prostokąt_2_kopia" data-name="Prostokąt 2 kopia" class="cls-5" d="M1800.09,244.524l41.33-37.676,74.09,81.279L1874.17,325.8Z" transform="translate(-435 -14)"/>
+    <path id="Prostokąt_3" data-name="Prostokąt 3" class="cls-1" d="M1524.24,753.655L1969.71,347.6l344.23,377.649L1868.47,1131.3Z" transform="translate(-435 -14)"/>
+    <g transform="translate(-435 -14)" style="fill: #448ccb; filter: url(#filter-2)">
+      <path id="Trójkat_kopia" data-name="Trójkat kopia" class="cls-7" d="M2276.97,604.7l-123.62-55.636,76.94-72.409Z" style="stroke: inherit; filter: none; fill: inherit"/>
+    </g>
+    <use transform="translate(-435 -14)" xlink:href="#Trójkat_kopia" style="stroke: #000; filter: none; fill: none"/>
+    <path id="Prostokąt_4" data-name="Prostokąt 4" class="cls-5" d="M2330.24,1182.22l200.24-182.514,50.6,55.5-200.24,182.52Z" transform="translate(-435 -14)"/>
+    <path id="Kształt_2" data-name="Kształt 2" class="cls-8" d="M650.733,678.934c-78.882-91.108-9.709-280.217,154.487-422.377S1166.49,72.99,1245.37,164.1c67.5,77.955,26.51,227.652-89.59,358.324,35.92,19.925,83.47,38.908,126.26,31.909-53.73,46.645-142,51.886-209.48,47.421C912.278,731.471,726.7,766.672,650.733,678.934Z" transform="translate(-435 -14)"/>
+    <text id="Hej_" data-name="Hej!" class="cls-9" transform="translate(389.879 584.476) rotate(-39.068) scale(3.084)">Hej!</text>
+  </g>
+</svg>
