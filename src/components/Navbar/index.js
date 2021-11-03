@@ -79,20 +79,20 @@ const Navbar = () => {
                     {menuItems.map(menuItem => {
                         const { menuTitle, pageURL } = menuItem;
                         return (
-                            <MenuItem onClick={() => handleMenuClick(pageURL)}>
+                            <MenuItem key={menuTitle} onClick={() => handleMenuClick(pageURL)}>
                                 {menuTitle}
                             </MenuItem>
                         );
                     })}
                 </Menu>
                 <NavMenu>
-                    <NavLink to="/aktualnosci" activeStyle>
+                    <NavLink to="/aktualnosci" >
                         Aktualności
                     </NavLink>
-                    <NavLink to="/zajecia" activeStyle>
+                    <NavLink to="/zajecia" >
                         Zajęcia
                     </NavLink>
-                    <NavLink to="/sklep" activeStyle>
+                    <NavLink to="/sklep" >
                         Sklep
                     </NavLink>
                 </NavMenu>

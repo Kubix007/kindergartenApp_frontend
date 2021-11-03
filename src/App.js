@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Router } from './Router';
 import { AuthContext } from './context/AuthContext';
-import { RoleContext } from './context/RoleContext';
+import { UserContext } from './context/UserContext';
 import { useHistory } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,7 +11,7 @@ import './App.css';
 
 const App = () => {
   const [auth, setAuth] = useState(false);
-  const [role, setRole] = useState();
+  const [user, setUser] = useState();
   const history = useHistory();
 
   useEffect(() => {
@@ -53,14 +53,14 @@ const App = () => {
   }, [])
 
   return (
-    <RoleContext.Provider value={{ role, setRole }}>
+    <UserContext.Provider value={{ user, setUser }}>
       <AuthContext.Provider value={{ auth, setAuth }}>
         <div>
           <Router />
         </div>
         <ToastContainer />
       </AuthContext.Provider>
-    </RoleContext.Provider>
+    </UserContext.Provider>
   );
 }
 

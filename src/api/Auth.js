@@ -16,6 +16,7 @@ const login = (email, password) => {
             .then((response) => {
                 if (response.data.token) {
                     localStorage.setItem("user", JSON.stringify(response.data.token));
+                    localStorage.setItem("role", JSON.stringify(response.data.user.role));
                 }
                 return response.data;
             });
@@ -44,6 +45,7 @@ const logout = () => {
     return httpRequest.send("POST", `${API}/logout`)
         .then(() => {
             localStorage.removeItem("user");
+            localStorage.removeItem("role");
             return <Redirect to="/logowanie" />;
         }, (error) => {
             console.log(error);
@@ -54,11 +56,17 @@ const getUser = () => {
     return httpRequest.send("GET", `${API}/user`);
 }
 
+const getUserRole = () => {
+    return httpRequest.send("GET", `${API}/user`);
+}
+
 const reset = () => {
     localStorage.removeItem("user");
 }
 
 const IsLogged = () => localStorage.getItem("user");
+
+const getRole = () => localStorage.getItem("role");
 
 const exportObject = {
     login,
@@ -67,5 +75,7 @@ const exportObject = {
     getUser,
     reset,
     register,
+    getUserRole,
+    getRole,
 }
 export default exportObject;

@@ -13,7 +13,7 @@ import LoginImage from '../svg/LoginImage.svg';
 import RobotLoginImage from '../svg/RobotLogin2.svg';
 import Auth from '../api/Auth';
 import { AuthContext } from '../context/AuthContext';
-import { RoleContext } from '../context/RoleContext';
+import { UserContext } from '../context/UserContext';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -66,16 +66,15 @@ export default function Login(props) {
     // eslint-disable-next-line no-unused-vars
     const { auth, setAuth } = useContext(AuthContext);
     // eslint-disable-next-line no-unused-vars
-    const { role, setRole } = useContext(RoleContext);
+    const { user, setUser } = useContext(UserContext);
 
 
     const login = () => {
         Auth.login(email, password).then(
             (response) => {
-                props.history.push("/aktualnosci");
                 setAuth(Auth.IsLogged());
-                console.log(response.data);
-                setRole(response.data);
+                setUser(response.user);
+                props.history.push("/aktualnosci");
             },
             (error) => {
                 console.log(error);

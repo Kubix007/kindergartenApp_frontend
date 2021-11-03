@@ -52,7 +52,7 @@ export const NavMenu = styled.div`
     }
 `
 
-export const NavButton = styled.nav`
+export const NavButton = styled.div`
     display: flex;
     align-items: center;
     margin-right: 24px;
