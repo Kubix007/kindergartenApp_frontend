@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import Menu from "@material-ui/core/Menu";
 import MenuItem from '@material-ui/core/MenuItem';
-import { FaBars } from 'react-icons/fa';
-import { IconButton } from '@material-ui/core';
 
 const DropbarElements = (props) => {
     const { history } = props;

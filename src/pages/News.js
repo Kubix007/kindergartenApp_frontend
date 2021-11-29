@@ -10,9 +10,12 @@ import SingleCardList from '../components/NewsPage/SingleCardList';
 import Button from '@mui/material/Button';
 import { Skeleton } from '@mui/material';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
+import AnnouncementOutlinedIcon from '@mui/icons-material/AnnouncementOutlined';
 import AddPopup from '../components/NewsPage/Popup';
 import AddNewsForm from '../components/Forms/AddNewsForm';
 import Auth from '../api/Auth';
+import PageHeader from '../components/PageHeader';
+
 
 const resourceAPI = 'news';
 
@@ -64,10 +67,13 @@ const News = () => {
 
     return (
         <>
+            <PageHeader
+                title="Aktualności"
+                subTitle="Bieżące wiadomości"
+                icon={<AnnouncementOutlinedIcon fontSize="large" />}
+            />
             <Container maxWidth="lg" className={classes.blogsContainer}>
-                <Typography variant="h4" className={classes.blogTitle}>
-                    Aktualności
-                </Typography>
+
                 {JSON.parse(Auth.getRole()) === "ADMIN" ? <Typography className={classes.button}>
                     <Button variant="contained" color="success" startIcon={<AddCircleOutlineRoundedIcon />} onClick={() => setOpenPopup(true)}>Dodaj aktualność</Button>
                 </Typography> : null}

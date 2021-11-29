@@ -82,7 +82,6 @@ export default function Register() {
             passwordConfirmation: ""
         },
         onSubmit: (values, actions) => {
-            //Object.assign(values, { role: ["ROLE_USER"] })
             Auth.register(values.login, values.email, values.password, values.passwordConfirmation).then(
                 () => {
                     toast.success(`Sukces! Pomyślnie stworzono konto`, {
