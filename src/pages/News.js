@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import { Skeleton } from '@mui/material';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import AnnouncementOutlinedIcon from '@mui/icons-material/AnnouncementOutlined';
-import AddPopup from '../components/NewsPage/Popup';
+import AddPopup from '../components/Popups/Popup';
 import AddNewsForm from '../components/Forms/AddNewsForm';
 import Auth from '../api/Auth';
 import PageHeader from '../components/PageHeader';

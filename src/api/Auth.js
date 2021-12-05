@@ -17,6 +17,7 @@ const login = (email, password) => {
                 if (response.data.token) {
                     localStorage.setItem("user", JSON.stringify(response.data.token));
                     localStorage.setItem("role", JSON.stringify(response.data.user.role));
+                    localStorage.setItem("id", JSON.stringify(response.data.user.id));
                 }
                 return response.data;
             });
@@ -46,6 +47,7 @@ const logout = () => {
         .then(() => {
             localStorage.removeItem("user");
             localStorage.removeItem("role");
+            localStorage.removeItem("id");
             return <Redirect to="/logowanie" />;
         }, (error) => {
             console.log(error);
@@ -68,6 +70,8 @@ const IsLogged = () => localStorage.getItem("user");
 
 const getRole = () => localStorage.getItem("role");
 
+const getUserId = () => localStorage.getItem("id");
+
 const exportObject = {
     login,
     IsLogged,
@@ -77,5 +81,6 @@ const exportObject = {
     register,
     getUserRole,
     getRole,
+    getUserId,
 }
 export default exportObject;

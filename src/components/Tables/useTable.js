@@ -4,11 +4,15 @@ import { Table, TableCell, TableHead, TableRow, makeStyles, TablePagination, Tab
 const useStyles = makeStyles(theme => ({
     table: {
         marginTop: theme.spacing(3),
+        display: 'table',
+        tableLayout: 'fixed',
         '& thead th': {
             fontWeight: '600',
             color: theme.palette.primary,
             backgroundColor: theme.palette.grey[50],
             boxShadow: '0 3px 5px 2px rgba(0, 0, 0, .1)',
+            maxWidth: 0,
+            minWidth: "1%"
 
         },
         '& tbody td': {
@@ -21,7 +25,7 @@ const useStyles = makeStyles(theme => ({
     },
 }))
 
-const useTable = (activities, headCells, filter) => {
+const useTable = (records, headCells, filter) => {
 
     const classes = useStyles();
 
@@ -73,7 +77,7 @@ const useTable = (activities, headCells, filter) => {
     }
 
     const activitiesAfterPagingAndSorting = () => {
-        return TableSort(filter.filter(activities.activities), getComparator(order, orderBy))
+        return TableSort(filter.filter(records), getComparator(order, orderBy))
             .slice(page * rowsPerPage, (page + 1) * rowsPerPage);
     }
 
@@ -84,7 +88,7 @@ const useTable = (activities, headCells, filter) => {
             rowsPerPage={rowsPerPage}
             page={page}
             component="div"
-            count={activities.activities.length}
+            count={records.length}
             onChangePage={handleChangePage}
             onChangeRowsPerPage={handleChangeRowsPerPage}
         >

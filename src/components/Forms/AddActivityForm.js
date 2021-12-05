@@ -11,8 +11,9 @@ import { toast } from 'react-toastify';
 import Repository from '../../api/Repository';
 import { UserContext } from '../../context/UserContext';
 import Auth from '../../api/Auth';
+import MenuItem from '@mui/material/MenuItem';
 
-const resourceAPI = 'news';
+const resourceAPI = 'activities';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -31,10 +32,10 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const postNewsAPI = (resourceAPI, data, actions) => {
+const postActivityAPI = (resourceAPI, data, actions) => {
     Repository.add(resourceAPI, data).then(
         () => {
-            toast.success(`Pomyślnie dodana aktualność`, {
+            toast.success(`Pomyślnie dodano grupę`, {
                 position: "bottom-center",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -45,61 +46,82 @@ const postNewsAPI = (resourceAPI, data, actions) => {
             });
             actions.resetForm({
                 values: {
-                    title: "",
-                    description: "",
+                    name: "",
+                    leader: "",
                 },
             })
+
         },
         (error) => {
-            console.log(error);
-            console.log(error.response);
+            console.log('Error', error)
+            toast.error(`Nie udało się dodać grupy`, {
+                position: "bottom-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+            });
+            actions.resetForm({
+                values: {
+                    name: "",
+                    leader: "",
+                },
+            })
         }
     );
 }
 
-const AddNewsForm = ({ getNewsAPI, setOpenPopup }) => {
+const AddActivityForm = ({ getActivitiesAPI, setOpenPopup, employees }) => {
     const classes = useStyles();
     const { user, setUser } = useContext(UserContext);
 
     const validationSchema = yup.object({
-        title: yup
-            .string()
+        name: yup
+            .string("Pole musi byc napisem")
             .required("Pole wymagane"),
-        description: yup
-            .string()
+        leader: yup
+            .string("Pole musi byc napisem")
+            .required("Pole wymagane"),
+
     });
 
     const formik = useFormik({
         initialValues: {
-            title: "",
-            description: "",
+            name: "",
+            leader: "",
         },
         onSubmit: (values, actions) => {
             let data = null;
+            let leaderName = employees.filter(x => x.id === values.leader);
+            leaderName = `${leaderName[0].first_name} ${leaderName[0].surname}`;
             if (typeof user !== "undefined") {
                 data = {
-                    title: values.title,
-                    description: values.description,
-                    author: user.login,
+                    name: values.name,
+                    leader: leaderName,
+                    leader_id: values.leader,
                 }
-                postNewsAPI(resourceAPI, data, actions);
+                console.log(data)
+                postActivityAPI(resourceAPI, data, actions);
                 setOpenPopup(false);
-                getNewsAPI();
+                getActivitiesAPI();
             } else {
                 Auth.getUser().then(
                     (response) => {
                         setUser(response.data);
                         data = {
-                            title: values.title,
-                            description: values.description,
-                            author: response.data.login,
+                            name: values.name,
+                            leader: leaderName,
+                            leader_id: values.leader,
                         }
-                        postNewsAPI(resourceAPI, data, actions);
+                        postActivityAPI(resourceAPI, data, actions);
+                        console.log(data)
                         setOpenPopup(false);
-                        getNewsAPI();
+                        getActivitiesAPI();
                     },
                     (error) => {
-                        console.log(error);
+                        console.log(error.response);
                     }
                 )
             }
@@ -113,40 +135,43 @@ const AddNewsForm = ({ getNewsAPI, setOpenPopup }) => {
             <Grid item xs={true} sm={true} md={true}>
                 <form className={classes.form} noValidate onSubmit={formik.handleSubmit}>
                     <TextField
-                        name="title"
+                        name="name"
                         variant="outlined"
                         margin="normal"
                         required
                         fullWidth
-                        id="title"
-                        label="Nagłówek"
+                        id="name"
+                        label="Nazwa zajęć"
                         autoFocus
-                        value={formik.values.title}
+                        value={formik.values.name}
                         onChange={formik.handleChange}
-                        error={formik.touched.title && Boolean(formik.errors.title)}
-                        helperText={formik.touched.title && formik.errors.title}
+                        error={formik.touched.name && Boolean(formik.errors.name)}
+                        helperText={formik.touched.name && formik.errors.name}
                         onBlur={formik.handleBlur}
 
                     />
                     <TextField
+                        name="leader"
                         variant="outlined"
                         margin="normal"
+                        required
                         fullWidth
-                        id="description"
-                        maxRows={11}
-                        multiline
-                        minRows={7}
-                        label="Opis"
-                        name="description"
-                        value={formik.values.description}
+                        id="leader"
+                        label="Prowadzący"
+                        select
+                        in
+                        value={formik.values.leader}
                         onChange={formik.handleChange}
-                        error={formik.touched.description && Boolean(formik.errors.description)}
-                        helperText={formik.touched.description && formik.errors.description}
+                        error={formik.touched.leader && Boolean(formik.errors.leader)}
+                        helperText={formik.touched.leader && formik.errors.leader}
                         onBlur={formik.handleBlur}
-                    />
+                    >
+                        {employees.map(employee => (
+                            <MenuItem key={employee.id} value={employee.id}>{employee.first_name} {employee.surname}</MenuItem>
+                        ))}
+                    </TextField>
                     <Grid className={classes.grid} container xs={12} sm={true} md={true}>
                         <Grid className={classes.grid} item xs={true} sm={true} md={true}>
-
                             <Button
                                 type="submit"
                                 variant="contained"
@@ -172,4 +197,4 @@ const AddNewsForm = ({ getNewsAPI, setOpenPopup }) => {
     );
 }
 
-export default AddNewsForm;
+export default AddActivityForm;

@@ -8,8 +8,8 @@ import Typography from '@mui/material/Typography';
 import ButtonDelete from './ButtonDelete';
 import ButtonEdit from './ButtonEdit';
 import DeleteNewsForm from '../Forms/DeleteNewsForm';
-import DeletePopup from '../NewsPage/Popup';
-import EditPopup from '../NewsPage/Popup';
+import DeletePopup from '../Popups/Popup';
+import EditPopup from '../Popups/Popup';
 import EditNewsForm from '../Forms/EditNewsForm';
 import Auth from '../../api/Auth';
 

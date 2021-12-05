@@ -22,12 +22,17 @@ const deleteRequest = (resource, id) => {
     return HttpRequest.send("DELETE", `${API}${resource}/${id}`);
 }
 
+const deleteParticipant = (resource, participantId, acitvityId) => {
+    return HttpRequest.send("DELETE", `${API}${resource}?participantId=${participantId}&activitiesId=${acitvityId}`);
+}
+
 const exportObject = {
     getAll,
     getById,
     add,
     update,
     deleteRequest,
+    deleteParticipant,
 }
 
 export default exportObject;
