@@ -1,6 +1,5 @@
 import React from 'react'
 import Button from '@mui/material/Button';
-import DeleteIcon from '@mui/icons-material/Delete';
 import Repository from './../../api/Repository';
 import { toast } from 'react-toastify';
 
@@ -45,8 +44,7 @@ const ButtonDeleteParticipant = ({ activityId, participantId, getActivitiesAPI, 
         <Button
             variant="contained"
             color="error"
-            startIcon={<DeleteIcon />}
-            size="small"
+            size="medium"
             onClick={handleClick}
         >
             Usuń

@@ -32,6 +32,10 @@ const Navbar = () => {
         {
             menuTitle: "Sklep",
             pageURL: "/sklep"
+        },
+        {
+            menuTitle: "Moje przedmioty",
+            pageURL: "/przedmioty"
         }
     ];
 
@@ -94,6 +98,9 @@ const Navbar = () => {
                     </NavLink>
                     <NavLink to="/sklep" >
                         Sklep
+                    </NavLink>
+                    <NavLink to="/przedmioty" >
+                        Moje przedmioty
                     </NavLink>
                 </NavMenu>
                 <NavButton>
