@@ -8,15 +8,19 @@ import {
 
 const Popup = (props) => {
 
-    const { title, children, openPopup } = props;
+    const { title, children, openPopup, isTitle } = props;
+
+    Popup.defaultProps = {
+        isTitle: true,
+    };
 
     return (
         <Dialog open={openPopup} xs={12} sm={6} md={4}>
-            <DialogTitle>
+            {isTitle ? <DialogTitle>
                 <Typography align="center" variant="h5">
                     {title}
                 </Typography>
-            </DialogTitle>
+            </DialogTitle> : null}
             <DialogContent dividers>
                 {children}
             </DialogContent>

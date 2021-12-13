@@ -45,7 +45,7 @@ const News = () => {
     const [openPopup, setOpenPopup] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
-    const [news, setNews] = useState();
+    const [news, setNews] = useState([0]);
     const getNewsAPI = () => {
         setIsLoading(true);
         Repository.getAll(resourceAPI).then(
@@ -73,11 +73,10 @@ const News = () => {
                 icon={<AnnouncementOutlinedIcon fontSize="large" />}
             />
             <Container maxWidth="lg" className={classes.blogsContainer}>
-
                 {JSON.parse(Auth.getRole()) === "ADMIN" ? <Typography className={classes.button}>
                     <Button variant="contained" color="success" startIcon={<AddCircleOutlineRoundedIcon />} onClick={() => setOpenPopup(true)}>Dodaj aktualność</Button>
                 </Typography> : null}
-
+                {news.length === 0 ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}><h1>Brak aktualności</h1></div> : null}
                 <Grid container spacing={3}>
                     {!isLoading ? <SingleCardList singleNews={news} getNewsAPI={getNewsAPI} setOpenPopup={setOpenPopup}
                     /> :

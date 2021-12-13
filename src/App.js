@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Router } from './Router';
 import { AuthContext } from './context/AuthContext';
 import { UserContext } from './context/UserContext';
+import { ColoringBookContext } from './context/ColoringBookContext';
 import { useHistory } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -12,6 +13,8 @@ import './App.css';
 const App = () => {
   const [auth, setAuth] = useState(false);
   const [user, setUser] = useState();
+  const [coloringBook, setColoringBook] = useState();
+
   const history = useHistory();
 
   useEffect(() => {
@@ -53,14 +56,17 @@ const App = () => {
   }, [])
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
-      <AuthContext.Provider value={{ auth, setAuth }}>
-        <div>
-          <Router />
-        </div>
-        <ToastContainer />
-      </AuthContext.Provider>
-    </UserContext.Provider>
+    <ColoringBookContext.Provider value={{ coloringBook, setColoringBook }}>
+      <UserContext.Provider value={{ user, setUser }}>
+        <AuthContext.Provider value={{ auth, setAuth }}>
+          <div>
+            <Router />
+          </div>
+          <ToastContainer />
+        </AuthContext.Provider>
+      </UserContext.Provider>
+    </ColoringBookContext.Provider>
+
   );
 }
 

@@ -5,9 +5,7 @@ import { CardActionArea, CardActions, Grid } from '@material-ui/core';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import Auth from '../../api/Auth';
-import SvgConverter from './SvgConverter';
-import ButtonBuyItem from './ButtonBuyItem';
+import ButtonColoringBook from './ButtonColoringBook';
 
 const useStyles = makeStyles(() => ({
     card: {
@@ -27,17 +25,8 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-function render_xml(id, xml_string) {
-    var doc = new DOMParser().parseFromString(xml_string, 'application/xml');
-    var el = document.getElementById(id)
-    el.appendChild(
-        el.ownerDocument.importNode(doc.documentElement, true),
-    )
-}
-
-const SingleShopCard = ({ userPoints, userDetailsId, item, setBuyingStatusPopup, getUserDetailsAPI }) => {
+const SingleItemCard = ({ item }) => {
     const classes = useStyles();
-    const [openBuyItemPopup, setOpenBuyItemPopup] = useState(false);
 
     return (
         <>
@@ -56,12 +45,9 @@ const SingleShopCard = ({ userPoints, userDetailsId, item, setBuyingStatusPopup,
                             <Typography gutterBottom variant="h7" component="h4">
                                 {item.category}
                             </Typography>
-                            <Typography variant="body2" color="textSecondary" component="p">
-                                Koszt: {item.cost} pkt.
-                            </Typography>
                         </CardContent>
-                        {JSON.parse(Auth.getRole()) === "ADMIN" ? <CardActions className={classes.cardActions}>
-                            <ButtonBuyItem getUserDetailsAPI={getUserDetailsAPI} setBuyingStatusPopup={setBuyingStatusPopup} item={item} userPoints={userPoints} userDetailsId={userDetailsId} openPopup={openBuyItemPopup} setOpenPopup={setOpenBuyItemPopup} />
+                        {item.category === "Kolorowanka" ? <CardActions className={classes.cardActions}>
+                            <ButtonColoringBook item={item} />
                         </CardActions> : null}
                     </CardActionArea>
                 </Card>
@@ -70,6 +56,6 @@ const SingleShopCard = ({ userPoints, userDetailsId, item, setBuyingStatusPopup,
     );
 }
 
-export default SingleShopCard;
+export default SingleItemCard;
 
 

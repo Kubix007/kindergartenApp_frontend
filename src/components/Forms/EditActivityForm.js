@@ -135,7 +135,6 @@ const EditActivityForm = ({ getActivitiesAPI, setOpenPopup, editedGroup }) => {
                     user_details_id: values.particpant,
                 }
                 postParticipantsAPI(resourceParticpantsAPI, data, actions);
-                console.log(data);
                 setOpenPopup(false);
                 getActivitiesAPI();
             } else {
@@ -147,7 +146,6 @@ const EditActivityForm = ({ getActivitiesAPI, setOpenPopup, editedGroup }) => {
                             user_details_id: values.particpant,
                         }
                         postParticipantsAPI(resourceParticpantsAPI, data, actions);
-                        console.log(data);
                         setOpenPopup(false);
                         getActivitiesAPI();
                     },

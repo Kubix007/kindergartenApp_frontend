@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from 'react'
 import PageHeader from '../components/PageHeader';
 import StoreOutlinedIcon from '@mui/icons-material/StoreOutlined';
-import { Grid, Container } from '@material-ui/core';
+import { Grid, Container, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Repository from './../api/Repository';
 import { Skeleton } from '@mui/material';
 import ShopCardList from '../components/ShopPage/ShopCardList';
+import Auth from '../api/Auth';
+import BuyingStatusPopup from '../components/Popups/Popup';
+import BuyingStatusForm from '../components/Forms/BuyingStatusForm';
 
-const resourceAPI = 'shop';
+const resourceShopAPI = 'shop';
+const resourceUserDetailsAPI = 'user_details';
 
 const useStyles = makeStyles(theme => ({
 
     pageContent: {
-        margin: theme.spacing(5),
+        margin: theme.spacing(7),
         padding: theme.spacing(3),
     },
 }))
@@ -22,10 +26,15 @@ const Shop = () => {
     // eslint-disable-next-line no-unused-vars
     const [openPopup, setOpenPopup] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [isPointsLoading, setIsPointsLoading] = useState(true);
+    const [userPoints, setUserPoints] = useState();
+    const [userDetailsId, setUserDetailsId] = useState();
     const [ItemShop, setItemShop] = useState();
+    const [buyingStatusPopup, setBuyingStatusPopup] = useState();
+
     const getShopAPI = () => {
         setIsLoading(true);
-        Repository.getAll(resourceAPI).then(
+        Repository.getAll(resourceShopAPI).then(
             (data) => {
                 setTimeout(() => {
                     setItemShop(data.data);
@@ -38,22 +47,27 @@ const Shop = () => {
         )
     }
 
-    // function render_xml(id, xml_string) {
-    //     var doc = new DOMParser().parseFromString(xml_string, 'application/xml');
-    //     var el = document.getElementById(id)
-    //     el.appendChild(
-    //         el.ownerDocument.importNode(doc.documentElement, true),
-    //     )
-    // }
+    const getUserDetails = () => {
+        setIsPointsLoading(true);
+        let id = parseInt(Auth.getUserId());
+        Repository.getById(resourceUserDetailsAPI, id).then(
+            (data) => {
+                setTimeout(() => {
+                    setUserPoints(data.data.data.points);
+                    setUserDetailsId(data.data.data.user_id);
+                    setIsPointsLoading(false);
+                }, 1000)
+            },
+            (error) => {
+                console.log(error);
+            }
+        )
+    }
 
     useEffect(() => {
         getShopAPI();
-        // render_xml(`foo`, `<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg"><g id="Spodnie"><title>Spodnie</title><rect id="svg_3" height="180" width="85" y="222" x="313" stroke="#000" fill="#84D3DB"/><rect id="svg_7" height="180" width="85" y="222" x="399" stroke="#000" fill="#84D3DB"/></g></svg>`);
+        getUserDetails();
     }, []);
-
-    // const onClick = () => {
-    //     document.getElementById('svg_3').setAttribute('fill', "#ff0000");
-    // }
 
     return (
         <>
@@ -63,9 +77,13 @@ const Shop = () => {
                 icon={<StoreOutlinedIcon fontSize="large" />}
             />
             <Container maxWidth="lg" className={classes.blogsContainer}>
-
+                {!isPointsLoading ? <Typography variant="h5" component="h2">
+                    Twoje punkty: {userPoints}
+                </Typography> : <Typography variant="h5" component="h2">
+                    Twoje punkty: Ładowanie...
+                </Typography>}
                 <Grid container spacing={3}>
-                    {!isLoading ? <ShopCardList singleShopItem={ItemShop} getShopAPI={getShopAPI} setOpenPopup={setOpenPopup}
+                    {!isLoading ? <ShopCardList getUserDetailsAPI={getUserDetails} setBuyingStatusPopup={setBuyingStatusPopup} userPoints={userPoints} userDetailsId={userDetailsId} singleShopItem={ItemShop} getShopAPI={getShopAPI} setOpenPopup={setOpenPopup}
                     /> :
                         (
                             <Grid container spacing={3}>
@@ -82,6 +100,16 @@ const Shop = () => {
                         )}
                 </Grid>
             </Container>
+            <BuyingStatusPopup
+                openPopup={buyingStatusPopup}
+                setOpenPopup={setBuyingStatusPopup}
+                title="Kupowanie..."
+                isTitle={false}
+            >
+                <BuyingStatusForm
+                    setOpenPopup={buyingStatusPopup}
+                />
+            </BuyingStatusPopup>
         </>
     );
 };

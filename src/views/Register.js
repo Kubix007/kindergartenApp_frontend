@@ -134,7 +134,6 @@ export default function Register() {
                             fullWidth
                             id="login"
                             label="Login"
-                            autoFocus
                             value={formik.values.login}
                             onChange={formik.handleChange}
                             error={formik.touched.login && Boolean(formik.errors.login)}

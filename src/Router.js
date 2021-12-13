@@ -10,6 +10,7 @@ import News from './pages/News';
 import Shop from './pages/Shop';
 import Activities from './pages/Activities';
 import Myitems from './pages/MyItems';
+import ColoringBook from './pages/ColoringBook';
 
 const requireLogin = (to, from, next) => {
     if (to.meta.auth) {
@@ -40,6 +41,7 @@ export const Router = () => {
                     <GuardedRoute exact path="/sklep" component={Shop} meta={{ auth: true }} />
                     <GuardedRoute exact path="/zajecia" component={Activities} meta={{ auth: true }} />
                     <GuardedRoute exact path="/przedmioty" component={Myitems} meta={{ auth: true }} />
+                    <GuardedRoute exact path="/kolorowanka" component={ColoringBook} meta={{ auth: true }} />
                     <GuardedRoute exact path="/" component={News} meta={{ auth: true }} />
                     <GuardedRoute path="*" component={Page404} />
                 </Switch>
