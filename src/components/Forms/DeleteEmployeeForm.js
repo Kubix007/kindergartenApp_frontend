@@ -21,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
 const DeleteEmployeeForm = ({ setOpenPopup, getEmployeesAPI, editedEmployee, setUpdatingStatusPopup }) => {
     const classes = useStyles();
 
+    // eslint-disable-next-line no-unused-vars
     const deleteEmployeesAPI = (id) => {
         Repository.deleteRequest(resourceAPI, id).then(
             () => {
@@ -42,6 +43,7 @@ const DeleteEmployeeForm = ({ setOpenPopup, getEmployeesAPI, editedEmployee, set
         );
     }
 
+    // eslint-disable-next-line no-unused-vars
     const postUserDetailsAPI = (resourceAPI, data, actions) => {
         Repository.add(resourceAPI, data).then(
             () => {
