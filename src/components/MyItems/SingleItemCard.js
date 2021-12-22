@@ -6,6 +6,9 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import ButtonColoringBook from './ButtonColoringBook';
+import ButtonPreviewColoringBook from './ButtonPreviewColoringBook';
+import PreviewColoringBookForm from '../Forms/PreviewColoringBookForm';
+import PreviewColoringBookPopup from './../Popups/Popup';
 
 const useStyles = makeStyles(() => ({
     card: {
@@ -27,6 +30,7 @@ const useStyles = makeStyles(() => ({
 
 const SingleItemCard = ({ item }) => {
     const classes = useStyles();
+    const [openPopup, setOpenPopup] = useState(false);
 
     return (
         <>
@@ -48,10 +52,22 @@ const SingleItemCard = ({ item }) => {
                         </CardContent>
                         {item.category === "Kolorowanka" ? <CardActions className={classes.cardActions}>
                             <ButtonColoringBook item={item} />
+                            <ButtonPreviewColoringBook item={item} setOpenPopup={setOpenPopup} />
                         </CardActions> : null}
                     </CardActionArea>
                 </Card>
             </Grid>
+            <PreviewColoringBookPopup
+                openPopup={openPopup}
+                setOpenPopup={setOpenPopup}
+                title="Podgląd kolorowanki"
+                maxWidth="lg"
+                onClose={() => setOpenPopup(false)}
+            >
+                <PreviewColoringBookForm
+                    setOpenPopup={setOpenPopup}
+                />
+            </PreviewColoringBookPopup>
         </>
     );
 }

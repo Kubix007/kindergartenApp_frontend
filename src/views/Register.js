@@ -14,6 +14,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import LoginImage from '../svg/LoginImage.svg';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -53,6 +54,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Register() {
     const classes = useStyles();
+    const history = useHistory();
 
     const validationSchema = yup.object({
         login: yup
@@ -100,7 +102,9 @@ export default function Register() {
                             password: '',
                             passwordConfirmation: ''
                         },
-                    })
+                    });
+                    history.push("/logowanie");
+
                 },
                 (error) => {
                     console.log(error);

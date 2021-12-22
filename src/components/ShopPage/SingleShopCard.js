@@ -6,7 +6,6 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import Auth from '../../api/Auth';
-import SvgConverter from './SvgConverter';
 import ButtonBuyItem from './ButtonBuyItem';
 
 const useStyles = makeStyles(() => ({
@@ -27,13 +26,6 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-function render_xml(id, xml_string) {
-    var doc = new DOMParser().parseFromString(xml_string, 'application/xml');
-    var el = document.getElementById(id)
-    el.appendChild(
-        el.ownerDocument.importNode(doc.documentElement, true),
-    )
-}
 
 const SingleShopCard = ({ userPoints, userDetailsId, item, setBuyingStatusPopup, getUserDetailsAPI }) => {
     const classes = useStyles();

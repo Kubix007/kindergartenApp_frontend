@@ -142,7 +142,6 @@ const AddActivityForm = ({ getActivitiesAPI, setOpenPopup, employees }) => {
                         fullWidth
                         id="name"
                         label="Nazwa zajęć"
-                        autoFocus
                         value={formik.values.name}
                         onChange={formik.handleChange}
                         error={formik.touched.name && Boolean(formik.errors.name)}

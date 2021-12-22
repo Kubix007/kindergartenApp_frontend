@@ -4,16 +4,12 @@ import { Table, TableCell, TableHead, TableRow, makeStyles, TablePagination, Tab
 const useStyles = makeStyles(theme => ({
     table: {
         marginTop: theme.spacing(3),
-        display: 'table',
         tableLayout: 'fixed',
         '& thead th': {
             fontWeight: '600',
             color: theme.palette.primary,
             backgroundColor: theme.palette.grey[50],
-            boxShadow: '0 3px 5px 2px rgba(0, 0, 0, .1)',
-            maxWidth: 0,
-            minWidth: "1%"
-
+            boxShadow: '0 2px 2px 2px rgba(0, 0, 0, .1)',
         },
         '& tbody td': {
             fontWeight: '300',

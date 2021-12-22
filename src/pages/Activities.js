@@ -44,8 +44,6 @@ const headCells = [
     { id: 'leader', label: 'Prowadzący:' },
     { id: 'participantCount', label: 'Liczba uczestników:' },
     { id: 'actions', label: 'Akcje:', disableSorting: true }
-
-
 ]
 
 const Activities = () => {
@@ -54,6 +52,7 @@ const Activities = () => {
     const [activities, setActivities] = useState();
     const [employees, setEmployees] = useState();
     const [isLoading, setIsLoading] = useState(true);
+    const [buttonDisabled, setButtonDisabled] = useState(true);
     const [openAddActivityPopup, setOpenAddActivityPopup] = useState(false);
     const [openEditActivityPopup, setOpenEditActivityPopup] = useState(false);
     const [openDeleteActivityPopup, setOpenDeleteActivityPopup] = useState(false);
@@ -84,9 +83,8 @@ const Activities = () => {
     const getEmployeesAPI = () => {
         Repository.getAll(resourceEmployeesAPI).then(
             (data) => {
-                setTimeout(() => {
-                    setEmployees(data.data);
-                }, 1000)
+                setEmployees(data.data);
+                setButtonDisabled(false);
             },
             (error) => {
                 console.log(error);
@@ -124,7 +122,7 @@ const Activities = () => {
 
             <Paper elevation={6} className={classes.pageContent}>
                 {JSON.parse(Auth.getRole()) === "ADMIN" ? <Toolbar className={classes.buttons}>
-                    <ButtonAddActivity setOpenPopup={setOpenAddActivityPopup} />
+                    <ButtonAddActivity setOpenPopup={setOpenAddActivityPopup} disabled={buttonDisabled} />
                 </Toolbar> : null}
                 <Toolbar className={classes.toolbar}>
                     <TextField variant="outlined" label="Wyszukaj nazwę grupy"
@@ -138,7 +136,7 @@ const Activities = () => {
                         onChange={handleSearch}
                     />
                 </Toolbar>
-                <TableContainer >
+                <TableContainer>
                     <HeadTable />
                     {!isLoading
                         ? (<TableBody>

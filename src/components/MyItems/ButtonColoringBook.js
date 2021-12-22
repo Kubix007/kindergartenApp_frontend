@@ -6,6 +6,7 @@ import { ColoringBookContext } from '../../context/ColoringBookContext';
 
 const ButtonColoringBook = ({ item }) => {
 
+    // eslint-disable-next-line no-unused-vars
     const { coloringBook, setColoringBook } = useContext(ColoringBookContext);
 
     const handleClick = () => {
