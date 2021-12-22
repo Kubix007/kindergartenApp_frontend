@@ -1,6 +1,6 @@
 import HttpRequest from '../api/HttpRequest';
 
-const API = "http://localhost:8000/api/";
+const API = "https://kindergarten-backend.herokuapp.com/api/";
 
 const getAll = (resource) => {
     return HttpRequest.send("GET", `${API}${resource}`);
