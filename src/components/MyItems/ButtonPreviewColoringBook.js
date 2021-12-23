@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import Button from '@mui/material/Button';
+import Button from '@material-ui/core/Button';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import { ColoringBookContext } from '../../context/ColoringBookContext';
 
@@ -15,7 +15,7 @@ const ButtonColoringBook = ({ item, setOpenPopup }) => {
     return (
         <Button
             variant="contained"
-            color="success"
+            color="primary"
             startIcon={<RemoveRedEyeOutlinedIcon />}
             onClick={handleClick}
         >
