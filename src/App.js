@@ -8,7 +8,15 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Auth from './api/Auth';
 import axios from "axios";
+import CssBaseline from '@mui/material/CssBaseline';
+
 import './App.css';
+import { createTheme } from '@material-ui/core';
+import { ThemeProvider } from '@material-ui/styles';
+
+const theme = createTheme({
+
+})
 
 const App = () => {
   const [auth, setAuth] = useState(false);
@@ -56,16 +64,19 @@ const App = () => {
   }, [])
 
   return (
-    <ColoringBookContext.Provider value={{ coloringBook, setColoringBook }}>
-      <UserContext.Provider value={{ user, setUser }}>
-        <AuthContext.Provider value={{ auth, setAuth }}>
-          <div>
-            <Router />
-          </div>
-          <ToastContainer />
-        </AuthContext.Provider>
-      </UserContext.Provider>
-    </ColoringBookContext.Provider>
+    <ThemeProvider theme={theme}>
+      <ColoringBookContext.Provider value={{ coloringBook, setColoringBook }}>
+        <UserContext.Provider value={{ user, setUser }}>
+          <AuthContext.Provider value={{ auth, setAuth }}>
+            <div>
+              <CssBaseline />
+              <Router />
+            </div>
+            <ToastContainer />
+          </AuthContext.Provider>
+        </UserContext.Provider>
+      </ColoringBookContext.Provider>
+    </ThemeProvider>
 
   );
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import Button from '@mui/material/Button';
+import Button from '@material-ui/core/Button';
 import EditIcon from '@mui/icons-material/Edit';
 
 const ButtonEdit = ({ setOpenPopup }) => {
@@ -7,7 +7,7 @@ const ButtonEdit = ({ setOpenPopup }) => {
     return (
         <Button
             variant="contained"
-            color="info"
+            color="primary"
             startIcon={<EditIcon />}
             onClick={() => setOpenPopup(true)}
         >

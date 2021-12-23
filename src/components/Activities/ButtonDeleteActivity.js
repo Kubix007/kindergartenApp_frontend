@@ -1,5 +1,5 @@
 import React from 'react'
-import Button from '@mui/material/Button';
+import Button from '@material-ui/core/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteActivityPopup from '../Popups/Popup';
 import DeleteActivityForm from '../Forms/DeleteActivityForm';
@@ -9,7 +9,7 @@ const ButtonDeleteActivity = ({ setOpenPopup, getActivitiesAPI, activityId, open
         <>
             <Button
                 variant="contained"
-                color="error"
+                color="primary"
                 startIcon={<DeleteIcon />}
                 size="small"
                 onClick={() => setOpenPopup(true)}

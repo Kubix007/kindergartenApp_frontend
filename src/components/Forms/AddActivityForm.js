@@ -3,7 +3,7 @@ import {
     Grid,
     TextField,
 } from '@material-ui/core';
-import Button from '@mui/material/Button';
+import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -183,7 +183,7 @@ const AddActivityForm = ({ getActivitiesAPI, setOpenPopup, employees }) => {
 
                             <Button
                                 variant="contained"
-                                color="error"
+                                color="primary"
                                 onClick={() => setOpenPopup(false)}
                             >
                                 Anuluj

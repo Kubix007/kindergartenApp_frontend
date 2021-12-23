@@ -1,5 +1,5 @@
 import React from 'react'
-import Button from '@mui/material/Button';
+import Button from '@material-ui/core/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const ButtonDelete = ({ setOpenPopup }) => {
@@ -7,7 +7,7 @@ const ButtonDelete = ({ setOpenPopup }) => {
     return (
         <Button
             variant="contained"
-            color="error"
+            color="primary"
             startIcon={<DeleteIcon />}
             onClick={() => setOpenPopup(true)}
         >

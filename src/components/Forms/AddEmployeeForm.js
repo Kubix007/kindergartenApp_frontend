@@ -3,7 +3,7 @@ import {
     Grid,
     TextField,
 } from '@material-ui/core';
-import Button from '@mui/material/Button';
+import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import Repository from '../../api/Repository';
 import { toast } from 'react-toastify';
@@ -223,7 +223,7 @@ const AddEmployeeForm = ({ setOpenPopup, getUserDetailsAPI, userDetails, setUpda
                             <Button
                                 type="submit"
                                 variant="contained"
-                                color="success"
+                                color="primary"
                             >
                                 Dodaj
                             </Button>
@@ -232,7 +232,7 @@ const AddEmployeeForm = ({ setOpenPopup, getUserDetailsAPI, userDetails, setUpda
 
                             <Button
                                 variant="contained"
-                                color="error"
+                                color="primary"
                                 onClick={() => setOpenPopup(false)}
                             >
                                 Anuluj

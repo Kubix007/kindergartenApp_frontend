@@ -1,5 +1,5 @@
 import React from 'react'
-import Button from '@mui/material/Button';
+import Button from '@material-ui/core/Button';
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import { toast } from 'react-toastify';
 import Repository from '../../api/Repository';
@@ -44,7 +44,7 @@ const ButtonSaveImage = ({ coloringImage }) => {
     return (
         <Button
             variant="contained"
-            color="success"
+            color="primary"
             startIcon={<SaveOutlinedIcon />}
             onClick={handleClick}
             size='large'

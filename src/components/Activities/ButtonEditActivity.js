@@ -1,5 +1,5 @@
 import React from 'react'
-import Button from '@mui/material/Button';
+import Button from '@material-ui/core/Button';
 import EditIcon from '@mui/icons-material/Edit';
 
 const ButtonEditActivity = ({ activity, setOpenPopup, openPopup, setEditedGroup }) => {
@@ -12,7 +12,7 @@ const ButtonEditActivity = ({ activity, setOpenPopup, openPopup, setEditedGroup 
     return (
         <Button
             variant="contained"
-            color="info"
+            color="primary"
             startIcon={<EditIcon />}
             size="small"
             onClick={() => handleClick()}

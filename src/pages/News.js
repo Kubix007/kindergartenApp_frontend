@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { makeStyles } from '@material-ui/core/styles';
 import Repository from '../api/Repository';
 import {
     Container,
@@ -7,7 +6,7 @@ import {
     Typography,
 } from '@material-ui/core';
 import SingleCardList from '../components/NewsPage/SingleCardList';
-import Button from '@mui/material/Button';
+import Button from '@material-ui/core/Button';
 import { Skeleton } from '@mui/material';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import AnnouncementOutlinedIcon from '@mui/icons-material/AnnouncementOutlined';
@@ -15,6 +14,7 @@ import AddPopup from '../components/Popups/Popup';
 import AddNewsForm from '../components/Forms/AddNewsForm';
 import Auth from '../api/Auth';
 import PageHeader from '../components/PageHeader';
+import { makeStyles } from '@material-ui/core/styles';
 
 
 const resourceAPI = 'news';
@@ -74,7 +74,7 @@ const News = () => {
             />
             <Container maxWidth="lg" className={classes.blogsContainer}>
                 {JSON.parse(Auth.getRole()) === "ADMIN" ? <Typography className={classes.button}>
-                    <Button variant="contained" color="success" startIcon={<AddCircleOutlineRoundedIcon />} onClick={() => setOpenPopup(true)}>Dodaj aktualność</Button>
+                    <Button variant="contained" color="primary" startIcon={<AddCircleOutlineRoundedIcon />} onClick={() => setOpenPopup(true)}>Dodaj aktualność</Button>
                 </Typography> : null}
                 {news.length === 0 ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}><h1>Brak aktualności</h1></div> : null}
                 <Grid container spacing={3}>
