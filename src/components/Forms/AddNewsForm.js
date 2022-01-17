@@ -3,7 +3,7 @@ import {
     Grid,
     TextField,
 } from '@material-ui/core';
-import Button from '@mui/material/Button';
+import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 import Repository from '../../api/Repository';
 import { UserContext } from '../../context/UserContext';
 import Auth from '../../api/Auth';
+import MenuItem from '@mui/material/MenuItem';
 
 const resourceAPI = 'news';
 
@@ -57,6 +58,17 @@ const postNewsAPI = (resourceAPI, data, actions) => {
     );
 }
 
+const newsType = [
+    {
+        id: "1",
+        value: "Ostrzeżenie",
+    },
+    {
+        id: "2",
+        value: "Informacja",
+    }
+]
+
 const AddNewsForm = ({ getNewsAPI, setOpenPopup }) => {
     const classes = useStyles();
     const { user, setUser } = useContext(UserContext);
@@ -66,13 +78,17 @@ const AddNewsForm = ({ getNewsAPI, setOpenPopup }) => {
             .string()
             .required("Pole wymagane"),
         description: yup
+            .string(),
+        type: yup
             .string()
+            .required("Pole wymagane"),
     });
 
     const formik = useFormik({
         initialValues: {
             title: "",
             description: "",
+            type: "",
         },
         onSubmit: (values, actions) => {
             let data = null;
@@ -81,6 +97,8 @@ const AddNewsForm = ({ getNewsAPI, setOpenPopup }) => {
                     title: values.title,
                     description: values.description,
                     author: user.login,
+                    type: values.type,
+
                 }
                 postNewsAPI(resourceAPI, data, actions);
                 setOpenPopup(false);
@@ -93,6 +111,7 @@ const AddNewsForm = ({ getNewsAPI, setOpenPopup }) => {
                             title: values.title,
                             description: values.description,
                             author: response.data.login,
+                            type: values.type,
                         }
                         postNewsAPI(resourceAPI, data, actions);
                         setOpenPopup(false);
@@ -120,7 +139,6 @@ const AddNewsForm = ({ getNewsAPI, setOpenPopup }) => {
                         fullWidth
                         id="title"
                         label="Nagłówek"
-                        autoFocus
                         value={formik.values.title}
                         onChange={formik.handleChange}
                         error={formik.touched.title && Boolean(formik.errors.title)}
@@ -144,23 +162,41 @@ const AddNewsForm = ({ getNewsAPI, setOpenPopup }) => {
                         helperText={formik.touched.description && formik.errors.description}
                         onBlur={formik.handleBlur}
                     />
+                    <TextField
+                        name="type"
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="type"
+                        label="Typ aktualności"
+                        select
+                        value={formik.values.type}
+                        onChange={formik.handleChange}
+                        error={formik.touched.type && Boolean(formik.errors.type)}
+                        helperText={formik.touched.type && formik.errors.type}
+                        onBlur={formik.handleBlur}
+                    >
+                        {newsType.map(type => (
+                            <MenuItem key={type.id} value={type.value}>{type.value}</MenuItem>
+                        ))}
+                    </TextField>
                     <Grid className={classes.grid} container xs={12} sm={true} md={true}>
                         <Grid className={classes.grid} item xs={true} sm={true} md={true}>
-
-                            <Button
+                            <Button variant="contained"
+                                color="primary"
                                 type="submit"
-                                variant="contained"
-                                color="success"
+
                             >
                                 Dodaj
                             </Button>
                         </Grid>
                         <Grid className={classes.grid} item xs={true} sm={true} md={true}>
-
-                            <Button
-                                variant="contained"
-                                color="error"
+                            <Button variant="contained"
+                                color="primary"
+                                type="submit"
                                 onClick={() => setOpenPopup(false)}
+
                             >
                                 Anuluj
                             </Button>

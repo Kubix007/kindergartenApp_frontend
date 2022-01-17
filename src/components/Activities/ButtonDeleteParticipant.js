@@ -1,5 +1,5 @@
 import React from 'react'
-import Button from '@mui/material/Button';
+import Button from '@material-ui/core/Button';
 import Repository from './../../api/Repository';
 import { toast } from 'react-toastify';
 
@@ -43,7 +43,7 @@ const ButtonDeleteParticipant = ({ activityId, participantId, getActivitiesAPI, 
     return (
         <Button
             variant="contained"
-            color="error"
+            color="primary"
             size="medium"
             onClick={handleClick}
         >

@@ -3,7 +3,7 @@ import {
     Grid,
     TextField,
 } from '@material-ui/core';
-import Button from '@mui/material/Button';
+import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -165,25 +165,24 @@ const AddActivityForm = ({ getActivitiesAPI, setOpenPopup, employees }) => {
                         helperText={formik.touched.leader && formik.errors.leader}
                         onBlur={formik.handleBlur}
                     >
-                        {employees.map(employee => (
+                        {employees.length > 0 ? employees.map(employee => (
                             <MenuItem key={employee.id} value={employee.id}>{employee.first_name} {employee.surname}</MenuItem>
-                        ))}
+                        )) : <MenuItem>Brak dostępnych prowadzących</MenuItem>}
                     </TextField>
                     <Grid className={classes.grid} container xs={12} sm={true} md={true}>
                         <Grid className={classes.grid} item xs={true} sm={true} md={true}>
                             <Button
-                                type="submit"
                                 variant="contained"
-                                color="success"
+                                color="primary"
+                                type="submit"
                             >
                                 Dodaj
                             </Button>
                         </Grid>
                         <Grid className={classes.grid} item xs={true} sm={true} md={true}>
-
                             <Button
                                 variant="contained"
-                                color="error"
+                                color="primary"
                                 onClick={() => setOpenPopup(false)}
                             >
                                 Anuluj

@@ -6,14 +6,14 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import Auth from '../../api/Auth';
-import ButtonBuyItem from './ButtonBuyItem';
+import ButtonBuyClothes from './ButtonBuyClothes';
 
 const useStyles = makeStyles(() => ({
     card: {
         maxWidth: "100%",
     },
     media: {
-        height: 240
+        height: 240,
     },
     cardActions: {
         display: "flex",
@@ -27,7 +27,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 
-const SingleShopCard = ({ userPoints, userDetailsId, item, setBuyingStatusPopup, getUserDetailsAPI }) => {
+const SingleShopClothesCard = ({ userPoints, userDetailsId, item, setBuyingStatusPopup, getUserDetailsAPI }) => {
     const classes = useStyles();
     const [openBuyItemPopup, setOpenBuyItemPopup] = useState(false);
 
@@ -40,10 +40,11 @@ const SingleShopCard = ({ userPoints, userDetailsId, item, setBuyingStatusPopup,
                             className={classes.media}
                             image={item.image}
                             title={item.item_name}
+                            style={{ backgroundSize: "auto" }}
                         />
                         <CardContent>
                             <Typography gutterBottom variant="h5" component="h2">
-                                {item.item_name}
+                                {item.name}
                             </Typography>
                             <Typography gutterBottom variant="h7" component="h4">
                                 {item.category}
@@ -52,9 +53,9 @@ const SingleShopCard = ({ userPoints, userDetailsId, item, setBuyingStatusPopup,
                                 Koszt: {item.cost} pkt.
                             </Typography>
                         </CardContent>
-                        {JSON.parse(Auth.getRole()) === "ADMIN" ? <CardActions className={classes.cardActions}>
-                            <ButtonBuyItem getUserDetailsAPI={getUserDetailsAPI} setBuyingStatusPopup={setBuyingStatusPopup} item={item} userPoints={userPoints} userDetailsId={userDetailsId} openPopup={openBuyItemPopup} setOpenPopup={setOpenBuyItemPopup} />
-                        </CardActions> : null}
+                        <CardActions className={classes.cardActions}>
+                            <ButtonBuyClothes getUserDetailsAPI={getUserDetailsAPI} setBuyingStatusPopup={setBuyingStatusPopup} item={item} userPoints={userPoints} userDetailsId={userDetailsId} openPopup={openBuyItemPopup} setOpenPopup={setOpenBuyItemPopup} />
+                        </CardActions>
                     </CardActionArea>
                 </Card>
             </Grid>
@@ -62,6 +63,6 @@ const SingleShopCard = ({ userPoints, userDetailsId, item, setBuyingStatusPopup,
     );
 }
 
-export default SingleShopCard;
+export default SingleShopClothesCard;
 
 

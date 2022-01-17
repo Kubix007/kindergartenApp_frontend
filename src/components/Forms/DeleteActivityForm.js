@@ -2,7 +2,7 @@ import React from 'react'
 import {
     Grid,
 } from '@material-ui/core';
-import Button from '@mui/material/Button';
+import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import Repository from '../../api/Repository';
 import { toast } from 'react-toastify';
@@ -53,10 +53,10 @@ const DeleteActivityForm = ({ setOpenPopup, getActivitiesAPI, activityId }) => {
             </Grid>
             <Grid container xs={true} sm={true} md={true} className={classes.gridButton}>
                 <Grid item xs={true} sm={true} md={true} className={classes.gridButton}>
-                    <Button onClick={() => handleClick()} variant="contained" color="success">Tak</Button>
+                    <Button onClick={() => handleClick()} variant="contained" color="primary">Tak</Button>
                 </Grid>
                 <Grid item xs={true} sm={true} md={true} className={classes.gridButton}>
-                    <Button onClick={() => setOpenPopup(false)} variant="contained" color="error">Nie</Button>
+                    <Button onClick={() => setOpenPopup(false)} variant="contained" color="primary">Nie</Button>
                 </Grid>
             </Grid>
         </Grid>

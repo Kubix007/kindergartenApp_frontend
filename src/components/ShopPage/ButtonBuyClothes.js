@@ -2,9 +2,9 @@ import React from 'react'
 import Button from '@material-ui/core/Button';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import BuyItemPopup from '../../components/Popups/Popup';
-import BuyItemForm from '../../components/Forms/BuyItemForm';
+import BuyItemClothing from '../../components/Forms/BuyItemClothing';
 
-const ButtonBuyItem = ({ setOpenPopup, openPopup, userPoints, userDetailsId, item, setBuyingStatusPopup, getUserDetailsAPI }) => {
+const ButtonBuyClothes = ({ setOpenPopup, openPopup, userPoints, userDetailsId, item, setBuyingStatusPopup, getUserDetailsAPI }) => {
     return (
         <>
             <Button
@@ -20,7 +20,7 @@ const ButtonBuyItem = ({ setOpenPopup, openPopup, userPoints, userDetailsId, ite
                 setOpenPopup={setOpenPopup}
                 title="Potwierdzenie akcji"
             >
-                <BuyItemForm
+                <BuyItemClothing
                     setOpenPopup={setOpenPopup}
                     item={item}
                     userPoints={userPoints}
@@ -33,4 +33,4 @@ const ButtonBuyItem = ({ setOpenPopup, openPopup, userPoints, userDetailsId, ite
     );
 }
 
-export default ButtonBuyItem;
+export default ButtonBuyClothes;

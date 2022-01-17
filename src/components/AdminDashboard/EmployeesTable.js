@@ -44,10 +44,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const headCells = [
-    { id: 'user_id', label: 'ID:', isAdmin: false, },
     { id: 'first_name', label: 'Imię:', isAdmin: false, },
     { id: 'surname', label: 'Nazwisko:', isAdmin: false, },
     { id: 'position_name', label: 'Stanowisko:', isAdmin: false, },
+    { id: 'activities', label: 'Prowadzi zajęcia:', isAdmin: false, },
     { id: 'phone', label: 'Telefon:', isAdmin: false, },
     { id: 'town', label: 'Miasto:', isAdmin: false, },
     { id: 'email', label: 'Email:', isAdmin: false, },
@@ -80,15 +80,15 @@ const EmployeesTable = ({ isLoading, employees, setOpenEditEmployeePopup, setUpd
                             key={row.id}
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
-                            <TableCell>{row.user_id}</TableCell>
                             <TableCell>{row.first_name}</TableCell>
                             <TableCell>{row.surname}</TableCell>
                             <TableCell>{row.position_name}</TableCell>
+                            <TableCell>{row.activities.map(activity => activity.name).join(", ")}</TableCell>
                             <TableCell>{row.phone}</TableCell>
                             <TableCell>{row.town}</TableCell>
                             <TableCell>{row.user.email}</TableCell>
                             {JSON.parse(Auth.getRole()) === "ADMIN" ? <TableCell >
-                                <Box justifyContent="space-between" display="flex">
+                                <Box justifyContent="space-evenly" display="flex">
                                     <ButtonEditEmployee employee={row} setOpenPopup={setOpenEditEmployeePopup} setEditedEmployee={setEditedEmployee} />
                                     <ButtonDeleteEmployee employee={row} setOpenPopup={setOpenDeleteEmployeePopup} setEditedEmployee={setEditedEmployee} />
                                 </Box >

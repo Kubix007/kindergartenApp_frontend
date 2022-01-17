@@ -1,5 +1,5 @@
 import React from 'react'
-import IconButton from '@mui/material/IconButton';
+import Button from '@material-ui/core/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const ButtonDeleteUser = ({ setOpenPopup, setEditedUser, user }) => {
@@ -10,14 +10,15 @@ const ButtonDeleteUser = ({ setOpenPopup, setEditedUser, user }) => {
     }
 
     return (
-        <IconButton
-            size='large'
-            style={{ backgroundColor: '#C62828', color: 'white' }}
+        <Button
+            variant="contained"
+            color="primary"
+            startIcon={<DeleteIcon />}
             onClick={handleClick}
-
+            size='small'
         >
-            <DeleteIcon />
-        </IconButton>
+            Usuń
+        </Button>
     );
 }
 

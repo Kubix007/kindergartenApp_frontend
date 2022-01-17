@@ -3,7 +3,7 @@ import {
     Grid,
     TextField,
 } from '@material-ui/core';
-import Button from '@mui/material/Button';
+import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -23,6 +23,10 @@ import { Skeleton } from '@mui/material';
 import ButtonAddPoints from '../Activities/ButtonAddPoints';
 import AddPointsForm from '../Forms/AddPointsForm';
 import AddPointsPopup from '../Popups/Popup';
+import Table from '@mui/material/Table';
+import TableHead from '@mui/material/TableHead';
+import LoadingTable from '../Tables/LoadingTable';
+import TableContainer from '@mui/material/TableContainer';
 
 const resourceParticpantsAPI = 'participants';
 const resourceUserDetailsAPI = 'user_details';
@@ -53,10 +57,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const headCells = [
-    { id: 'childs_first_name', label: 'Imię dziecka:' },
-    { id: 'childs_surname', label: 'Nazwisko dziecka:' },
-    { id: 'points', label: 'Punkty:' },
-    { id: 'actions', label: 'Akcje:', disableSorting: true }
+    { id: 'first_name', label: 'Imię dziecka:', isAdmin: false, },
+    { id: 'surname', label: 'Nazwisko dziecka:', isAdmin: false, },
+    { id: 'points', label: 'Punkty:', isAdmin: false, },
+    { id: 'actions', label: 'Akcje:', isAdmin: JSON.parse(Auth.getRole()) === "ADMIN" ? false : true }
 ]
 
 const postParticipantsAPI = (resourceAPI, data, actions) => {
@@ -108,12 +112,6 @@ const EditActivityForm = ({ getActivitiesAPI, setOpenPopup, editedGroup }) => {
     // eslint-disable-next-line no-unused-vars
     const [participantId, setParticipantId] = useState();
     // eslint-disable-next-line no-unused-vars
-    const [filter, setFilter] = useState({ filter: items => { return items; } });
-    const {
-        TableContainer,
-        HeadTable,
-        activitiesAfterPagingAndSorting,
-    } = useTable(editedGroup.participants, headCells, filter);
 
     const validationSchema = yup.object({
         particpant: yup
@@ -200,33 +198,42 @@ const EditActivityForm = ({ getActivitiesAPI, setOpenPopup, editedGroup }) => {
                     >
                         {`Liczba członków: ${editedGroup.participantCount}`}
                     </Typography>
-                    <TableContainer >
-                        <HeadTable />
-                        <TableBody>
-                            {
-                                activitiesAfterPagingAndSorting().map(item => (
-                                    <TableRow key={item.id}>
-                                        <TableCell className={classes.tabelCell}>{item.childs_first_name}</TableCell>
-                                        <TableCell className={classes.tabelCell}>{item.childs_surname}</TableCell>
-                                        <TableCell className={classes.tabelCell}>{item.points}</TableCell>
-                                        <TableCell className={classes.tabelCell}>{JSON.parse(Auth.getUserId()) === item.leader_id || JSON.parse(Auth.getRole()) === "ADMIN" ?
+                    <TableContainer>
+                        <Table className={classes.table} sx={{ minWidth: 650 }} aria-label="simple table">
+                            <TableHead>
+                                <TableRow>
+                                    {headCells.filter(headCell => headCell.isAdmin === false).map(headCell => (
+                                        <TableCell key={headCell.id}>{headCell.label}</TableCell>
+                                    ))}
+                                </TableRow>
+                            </TableHead>
+                            {!isLoading ? <TableBody>
+                                {editedGroup.participants.map((participant) => (
+                                    <TableRow
+                                        key={participant.id}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <TableCell>{participant.first_name}</TableCell>
+                                        <TableCell>{participant.surname}</TableCell>
+                                        <TableCell>{participant.points}</TableCell>
+                                        <TableCell className={classes.tabelCell}>
                                             <Box sx={{ '& button': { m: 1 } }}>
                                                 <div style={{ justifyContent: 'center', display: 'flex' }}>
                                                     <ButtonAddPoints
                                                         setOpenPopup={setOpenAddPointsPopup}
                                                         openPopup={openAddPointsPopup}
                                                         getActivitiesAPI={getActivitiesAPI}
-                                                        child={item}
+                                                        child={participant}
                                                         setKid={setKid}
                                                     />
-                                                    <ButtonDeleteParticipant activityId={item.id} setOpenPopup={setOpenPopup} getActivitiesAPI={getActivitiesAPI} participantId={item.user_id} />
+                                                    <ButtonDeleteParticipant activityId={editedGroup.id} setOpenPopup={setOpenPopup} getActivitiesAPI={getActivitiesAPI} participantId={participant.id} />
                                                 </div>
-                                            </Box > : null}
+                                            </Box >
                                         </TableCell>
-                                    </TableRow>)
-                                )
-                            }
-                        </TableBody>
+                                    </TableRow>
+                                ))}
+                            </TableBody> : <LoadingTable />}
+                        </Table>
                     </TableContainer>
                     <Typography
                         variant="h6"
@@ -252,7 +259,7 @@ const EditActivityForm = ({ getActivitiesAPI, setOpenPopup, editedGroup }) => {
                             onBlur={formik.handleBlur}
                         >
                             {userDetails.map(userDetails => (
-                                <MenuItem key={userDetails.id} value={userDetails.id}>{userDetails.childs_first_name} {userDetails.childs_surname}</MenuItem>
+                                <MenuItem key={userDetails.id} value={userDetails.id}>{userDetails.first_name} {userDetails.surname}</MenuItem>
                             ))}
                         </TextField> : <TextField
                             name="particpant"
@@ -270,9 +277,9 @@ const EditActivityForm = ({ getActivitiesAPI, setOpenPopup, editedGroup }) => {
                         <Grid className={classes.grid2} container xs={12} sm={true} md={true}>
                             <Grid className={classes.grid2} item xs={true} sm={true} md={true}>
                                 <Button
-                                    type="submit"
                                     variant="contained"
-                                    color="success"
+                                    color="primary"
+                                    type="submit"
                                 >
                                     Dodaj uczestnika
                                 </Button>
@@ -283,7 +290,7 @@ const EditActivityForm = ({ getActivitiesAPI, setOpenPopup, editedGroup }) => {
 
                                 <Button
                                     variant="contained"
-                                    color="error"
+                                    color="primary"
                                     onClick={() => setOpenPopup(false)}
                                 >
                                     Zamknij

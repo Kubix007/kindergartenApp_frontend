@@ -1,12 +1,12 @@
 import React from 'react'
-import SingleShopCard from './SingleShopCard';
+import SingleShopColoringBookCard from './SingleShopColoringBookCard';
 
-const ShopCardList = ({ singleShopItem, setBuyingStatusPopup, setOpenPopup, userPoints, userDetailsId, getUserDetailsAPI }) => {
+const ShopColoringBooksCardList = ({ singleShopItem, setBuyingStatusPopup, setOpenPopup, userPoints, userDetailsId, getUserDetailsAPI }) => {
     return (
         <>
             {singleShopItem.map((shopItem) => {
                 return (
-                    <SingleShopCard
+                    <SingleShopColoringBookCard
                         key={shopItem.id}
                         item={shopItem}
                         setOpenPopup={setOpenPopup}
@@ -20,4 +20,4 @@ const ShopCardList = ({ singleShopItem, setBuyingStatusPopup, setOpenPopup, user
     );
 }
 
-export default ShopCardList;
+export default ShopColoringBooksCardList;

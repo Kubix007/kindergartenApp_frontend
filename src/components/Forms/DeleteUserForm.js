@@ -2,12 +2,13 @@ import React from 'react'
 import {
     Grid,
 } from '@material-ui/core';
-import Button from '@mui/material/Button';
+import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import Repository from '../../api/Repository';
 import { toast } from 'react-toastify';
 
 const resourceAPI = 'user_details';
+const resourceUserAPI = 'user';
 
 const useStyles = makeStyles((theme) => ({
     gridButton: {
@@ -23,6 +24,18 @@ const DeleteUserForm = ({ setOpenPopup, getUserDetailsAPI, editedUser, setUpdati
 
     const deleteUserDetailsAPI = (id) => {
         Repository.deleteRequest(resourceAPI, id).then(
+            () => {
+                deleteUserAPI(editedUser.user_id);
+            },
+            (error) => {
+                console.log(error);
+                console.log(error.response);
+            }
+        );
+    }
+
+    const deleteUserAPI = (id) => {
+        Repository.deleteRequest(resourceUserAPI, id).then(
             () => {
                 setUpdatingStatusPopup(false);
                 toast.success(`Pomyślnie usunięto użytkownika`, {
@@ -56,10 +69,10 @@ const DeleteUserForm = ({ setOpenPopup, getUserDetailsAPI, editedUser, setUpdati
             </Grid>
             <Grid container xs={true} sm={true} md={true} className={classes.gridButton}>
                 <Grid item xs={true} sm={true} md={true} className={classes.gridButton}>
-                    <Button onClick={() => handleClick()} variant="contained" color="success">Tak</Button>
+                    <Button onClick={() => handleClick()} variant="contained" color="primary">Tak</Button>
                 </Grid>
                 <Grid item xs={true} sm={true} md={true} className={classes.gridButton}>
-                    <Button onClick={() => setOpenPopup(false)} variant="contained" color="error">Nie</Button>
+                    <Button onClick={() => setOpenPopup(false)} variant="contained" color="primary">Nie</Button>
                 </Grid>
             </Grid>
         </Grid>

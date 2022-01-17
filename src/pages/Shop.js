@@ -5,13 +5,15 @@ import { Grid, Container, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Repository from './../api/Repository';
 import { Skeleton } from '@mui/material';
-import ShopCardList from '../components/ShopPage/ShopCardList';
+import ShopColoringBooksCardList from '../components/ShopPage/ShopColoringBooksCardList';
+import ShopClothesCardList from '../components/ShopPage/ShopClothesCardList';
 import Auth from '../api/Auth';
 import BuyingStatusPopup from '../components/Popups/Popup';
 import BuyingStatusForm from '../components/Forms/BuyingStatusForm';
 
-const resourceShopAPI = 'shop';
+const resourceShopColoringBooksAPI = 'shop_coloring_books';
 const resourceUserDetailsAPI = 'user_details';
+const resourceShopClothesAPI = 'shop_clothes';
 
 const useStyles = makeStyles(theme => ({
 
@@ -25,20 +27,22 @@ const Shop = () => {
     const classes = useStyles();
     // eslint-disable-next-line no-unused-vars
     const [openPopup, setOpenPopup] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoadingColoringBooks, setIsLoadingColoringBooks] = useState(true);
+    const [isLoadingClothes, setIsLoadingClothes] = useState(true);
     const [isPointsLoading, setIsPointsLoading] = useState(true);
     const [userPoints, setUserPoints] = useState();
     const [userDetailsId, setUserDetailsId] = useState();
-    const [ItemShop, setItemShop] = useState();
+    const [itemShop, setItemShop] = useState();
+    const [clothesFromShop, setClothesFromShop] = useState();
     const [buyingStatusPopup, setBuyingStatusPopup] = useState();
 
     const getShopAPI = () => {
-        setIsLoading(true);
-        Repository.getAll(resourceShopAPI).then(
+        setIsLoadingColoringBooks(true);
+        Repository.getAll(resourceShopColoringBooksAPI).then(
             (data) => {
                 setTimeout(() => {
                     setItemShop(data.data);
-                    setIsLoading(false);
+                    setIsLoadingColoringBooks(false);
                 }, 1000)
             },
             (error) => {
@@ -64,9 +68,25 @@ const Shop = () => {
         )
     }
 
+    const getShopClothesAPI = () => {
+        setIsLoadingClothes(true);
+        Repository.getAll(resourceShopClothesAPI).then(
+            (data) => {
+                setTimeout(() => {
+                    setClothesFromShop(data.data);
+                    setIsLoadingClothes(false);
+                }, 1000)
+            },
+            (error) => {
+                console.log(error);
+            }
+        )
+    }
+
     useEffect(() => {
         getShopAPI();
         getUserDetails();
+        getShopClothesAPI();
     }, []);
 
     return (
@@ -78,13 +98,13 @@ const Shop = () => {
             />
             <Container maxWidth="lg" className={classes.blogsContainer}>
                 {!isPointsLoading ? <Typography variant="h5" component="h2">
-                    Twoje punkty: {userPoints}
+                    Twoje punkty: {userPoints} pkt.
                 </Typography> : <Typography variant="h5" component="h2">
                     Twoje punkty: Ładowanie...
                 </Typography>}
-                <Grid container spacing={3}>
-                    {!isLoading ? <ShopCardList getUserDetailsAPI={getUserDetails} setBuyingStatusPopup={setBuyingStatusPopup} userPoints={userPoints} userDetailsId={userDetailsId} singleShopItem={ItemShop} getShopAPI={getShopAPI} setOpenPopup={setOpenPopup}
-                    /> :
+                <Grid container spacing={3} style={{ paddingTop: "10px" }}>
+                    {!isLoadingColoringBooks && !isLoadingClothes ? <><ShopColoringBooksCardList getUserDetailsAPI={getUserDetails} setBuyingStatusPopup={setBuyingStatusPopup} userPoints={userPoints} userDetailsId={userDetailsId} singleShopItem={itemShop} getShopAPI={getShopAPI} setOpenPopup={setOpenPopup}
+                    /><ShopClothesCardList getUserDetailsAPI={getUserDetails} setBuyingStatusPopup={setBuyingStatusPopup} userPoints={userPoints} userDetailsId={userDetailsId} singleShopItem={clothesFromShop} getShopAPI={getShopAPI} setOpenPopup={setOpenPopup} /> </> :
                         (
                             <Grid container spacing={3}>
                                 <Grid item xs={12} sm={6} md={4}>

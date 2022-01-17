@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import PageHeader from '../components/PageHeader';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
@@ -27,7 +27,7 @@ import ButtonAddEmployee from '../components/AdminDashboard/ButtonAddEmployee';
 
 const resourceUserDetailsAPI = 'user_details';
 const resourceEmployeesAPI = 'employees';
-
+const resourceActivitiesAPI = 'activities';
 
 const useStyles = makeStyles((theme) => ({
     pageContent: {
@@ -65,12 +65,17 @@ const AdminDashboard = () => {
     const [isUsersSelected, setIsUsersSelected] = useState(true);
     const [openEditUserPopup, setOpenEditUserPopup] = useState(false);
     const [editedUser, setEditedUser] = useState();
+    const [activityLeadersId, setActivityLeadersId] = useState();
     const [editedEmployee, setEditedEmployee] = useState();
     const [updatingStatusPopup, setUpdatingStatusPopup] = useState(false);
     const [openDeleteUserPopup, setOpenDeleteUserPopup] = useState(false);
     const [openEditEmployeePopup, setOpenEditEmployeePopup] = useState(false);
     const [openDeleteEmployeePopup, setOpenDeleteEmployeePopup] = useState(false);
     const [openAddEmployeePopup, setOpenAddEmployeePopup] = useState(false);
+
+    useEffect(() => {
+        getActivityLeadersId();
+    }, []);
 
     const getUserDetailsAPI = () => {
         Repository.getAll(resourceUserDetailsAPI).then(
@@ -85,7 +90,19 @@ const AdminDashboard = () => {
         )
     }
 
+    const getActivityLeadersId = () => {
+        Repository.getAll(resourceActivitiesAPI).then(
+            (data) => {
+                setActivityLeadersId(data.data.activities);
+            },
+            (error) => {
+                console.log(error);
+            }
+        )
+    }
+
     const getEmployeesAPI = () => {
+        setUpdatingStatusPopup(true);
         Repository.getAll(resourceEmployeesAPI).then(
             (data) => {
                 setEmployees(data.data);
@@ -173,6 +190,7 @@ const AdminDashboard = () => {
             <DeleteEmployeePopup
                 openPopup={openDeleteEmployeePopup}
                 setOpenPopup={setOpenDeleteEmployeePopup}
+                getActivityLeadersId={getActivityLeadersId}
                 title="Usuń pracownika"
                 maxWidth="sm"
             >
@@ -181,6 +199,7 @@ const AdminDashboard = () => {
                     getEmployeesAPI={getEmployeesAPI}
                     editedEmployee={editedEmployee}
                     setUpdatingStatusPopup={setUpdatingStatusPopup}
+                    activityLeadersId={activityLeadersId}
                 />
             </DeleteEmployeePopup>
             <EditEmployeePopup

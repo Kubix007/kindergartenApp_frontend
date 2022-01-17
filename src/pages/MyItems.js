@@ -8,7 +8,7 @@ import ItemCardList from '../components/MyItems/ItemCardList';
 import Repository from '../api/Repository';
 import Auth from '../api/Auth';
 
-const resourceItemsAPI = 'items';
+const resourceUsersColoringBooksAPI = 'users_coloring_books';
 const resourceUserDetailsAPI = 'user_details';
 
 
@@ -41,7 +41,7 @@ const Myitems = () => {
 
     const getItemsAPI = (userId) => {
         setIsLoading(true);
-        Repository.getById(resourceItemsAPI, userId).then(
+        Repository.getById(resourceUsersColoringBooksAPI, userId).then(
             (data) => {
                 setMyItems(data.data);
                 setIsLoading(false);

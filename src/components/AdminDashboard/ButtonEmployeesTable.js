@@ -1,12 +1,12 @@
 import React from 'react'
-import Button from '@mui/material/Button';
+import Button from '@material-ui/core/Button';
 import BadgeOutlinedIcon from '@mui/icons-material/BadgeOutlined';
 
 const ButtonEmployeesTable = ({ setIsUsersSelected, disabled }) => {
     return (
         <Button
             variant="contained"
-            color="info"
+            color="primary"
             startIcon={<BadgeOutlinedIcon />}
             onClick={() => setIsUsersSelected(prevState => !prevState)}
             disabled={disabled}

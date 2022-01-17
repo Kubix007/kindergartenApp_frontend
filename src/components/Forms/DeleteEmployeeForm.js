@@ -2,12 +2,13 @@ import React from 'react'
 import {
     Grid,
 } from '@material-ui/core';
-import Button from '@mui/material/Button';
+import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import Repository from '../../api/Repository';
 import { toast } from 'react-toastify';
 
 const resourceAPI = 'employees';
+const resourceUserDetails = 'user_details';
 
 const useStyles = makeStyles((theme) => ({
     gridButton: {
@@ -18,14 +19,49 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const DeleteEmployeeForm = ({ setOpenPopup, getEmployeesAPI, editedEmployee, setUpdatingStatusPopup }) => {
+const DeleteEmployeeForm = ({ setOpenPopup, getEmployeesAPI, editedEmployee, setUpdatingStatusPopup, activityLeadersId }) => {
     const classes = useStyles();
 
-    // eslint-disable-next-line no-unused-vars
-    const deleteEmployeesAPI = (id) => {
-        Repository.deleteRequest(resourceAPI, id).then(
+    const deleteEmployeesAPI = (employeeId) => {
+        let leadersId = activityLeadersId;
+        if (leadersId.filter(x => x.leader_id === editedEmployee.id).length > 0) {
+            setUpdatingStatusPopup(false);
+            toast.error(`Usuń najpierw zajęcia przypisane do pracownika`, {
+                position: "bottom-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+            });
+        } else {
+            setUpdatingStatusPopup(true);
+            Repository.deleteRequest(resourceAPI, employeeId).then(
+                () => {
+                    postUserDetailsAPI()
+                },
+                (error) => {
+                    console.log(error.response.data.message);
+                }
+            );
+        }
+    }
+
+    const postUserDetailsAPI = () => {
+        setUpdatingStatusPopup(false);
+        let data = {
+            user_id: editedEmployee.user_id,
+            first_name: editedEmployee.first_name,
+            surname: editedEmployee.surname,
+            parents_first_name: "",
+            parents_surname: "",
+            parents_phone: editedEmployee.phone,
+            town: editedEmployee.town,
+            points: 0
+        }
+        Repository.add(resourceUserDetails, data).then(
             () => {
-                setUpdatingStatusPopup(false);
                 toast.success(`Pomyślnie usunięto pracownika`, {
                     position: "bottom-center",
                     autoClose: 5000,
@@ -35,33 +71,7 @@ const DeleteEmployeeForm = ({ setOpenPopup, getEmployeesAPI, editedEmployee, set
                     draggable: true,
                     progress: undefined,
                 });
-            },
-            (error) => {
-                console.log(error);
-                console.log(error.response);
-            }
-        );
-    }
-
-    // eslint-disable-next-line no-unused-vars
-    const postUserDetailsAPI = (resourceAPI, data, actions) => {
-        Repository.add(resourceAPI, data).then(
-            () => {
-                toast.success(`Pomyślnie dodana aktualność`, {
-                    position: "bottom-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: false,
-                    draggable: true,
-                    progress: undefined,
-                });
-                actions.resetForm({
-                    values: {
-                        title: "",
-                        description: "",
-                    },
-                })
+                getEmployeesAPI();
             },
             (error) => {
                 console.log(error);
@@ -71,11 +81,8 @@ const DeleteEmployeeForm = ({ setOpenPopup, getEmployeesAPI, editedEmployee, set
     }
 
     const handleClick = () => {
-        //setOpenPopup(false);
-        ///setUpdatingStatusPopup(true);
-        //deleteEmployeesAPI(editedEmployee.id);
-        //getEmployeesAPI();
-        console.log(editedEmployee);
+        setOpenPopup(false);
+        deleteEmployeesAPI(editedEmployee.id);
     }
 
     return (
@@ -85,10 +92,10 @@ const DeleteEmployeeForm = ({ setOpenPopup, getEmployeesAPI, editedEmployee, set
             </Grid>
             <Grid container xs={true} sm={true} md={true} className={classes.gridButton}>
                 <Grid item xs={true} sm={true} md={true} className={classes.gridButton}>
-                    <Button onClick={() => handleClick()} variant="contained" color="success">Tak</Button>
+                    <Button onClick={() => handleClick()} variant="contained" color="primary">Tak</Button>
                 </Grid>
                 <Grid item xs={true} sm={true} md={true} className={classes.gridButton}>
-                    <Button onClick={() => setOpenPopup(false)} variant="contained" color="error">Nie</Button>
+                    <Button onClick={() => setOpenPopup(false)} variant="contained" color="primary">Nie</Button>
                 </Grid>
             </Grid>
         </Grid>

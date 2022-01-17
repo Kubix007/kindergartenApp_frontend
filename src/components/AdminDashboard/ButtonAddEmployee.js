@@ -1,5 +1,5 @@
 import React from 'react'
-import Button from '@mui/material/Button';
+import Button from '@material-ui/core/Button';
 import WorkOutlineOutlinedIcon from '@mui/icons-material/WorkOutlineOutlined';
 
 const ButtonAddEmployee = ({ setOpenPopup }) => {
@@ -7,11 +7,11 @@ const ButtonAddEmployee = ({ setOpenPopup }) => {
     return (
         <Button
             variant="contained"
-            color="success"
+            color="primary"
             startIcon={<WorkOutlineOutlinedIcon />}
             onClick={() => setOpenPopup(true)}
         >
-            Dodaj nauczyciela
+            Dodaj Nauczyciela
         </Button>
     );
 }

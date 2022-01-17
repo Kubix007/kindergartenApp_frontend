@@ -10,6 +10,7 @@ import News from './pages/News';
 import Shop from './pages/Shop';
 import Activities from './pages/Activities';
 import Myitems from './pages/MyItems';
+import MyCharacter from './pages/MyCharacter';
 import ColoringBook from './pages/ColoringBook';
 import AdminDashboard from './pages/AdminDashboard';
 
@@ -44,6 +45,7 @@ export const Router = () => {
                     <GuardedRoute exact path="/przedmioty" component={Myitems} meta={{ auth: true }} />
                     <GuardedRoute exact path="/kolorowanka" component={ColoringBook} meta={{ auth: true }} />
                     <GuardedRoute exact path="/panel" component={AdminDashboard} meta={{ auth: true }} />
+                    <GuardedRoute exact path="/postac" component={MyCharacter} meta={{ auth: true }} />
                     <GuardedRoute exact path="/" component={News} meta={{ auth: true }} />
                     <GuardedRoute path="*" component={Page404} />
                 </Switch>

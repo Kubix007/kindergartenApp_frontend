@@ -1,15 +1,15 @@
 import React from 'react'
-import Button from '@mui/material/Button';
+import Button from '@material-ui/core/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteActivityPopup from '../Popups/Popup';
 import DeleteActivityForm from '../Forms/DeleteActivityForm';
 
-const ButtonDeleteActivity = ({ setOpenPopup, getActivitiesAPI, activityId, openPopup }) => {
+const ButtonDeleteActivity = ({ setOpenPopup, getActivitiesAPI, activity, openPopup }) => {
     return (
         <>
             <Button
                 variant="contained"
-                color="error"
+                color="primary"
                 startIcon={<DeleteIcon />}
                 size="small"
                 onClick={() => setOpenPopup(true)}
@@ -24,7 +24,7 @@ const ButtonDeleteActivity = ({ setOpenPopup, getActivitiesAPI, activityId, open
                 <DeleteActivityForm
                     getActivitiesAPI={getActivitiesAPI}
                     setOpenPopup={setOpenPopup}
-                    activityId={activityId}
+                    activityId={activity.id}
                 />
             </DeleteActivityPopup>
         </>

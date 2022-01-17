@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import PeopleOutlineTwoToneIcon from '@material-ui/icons/PeopleOutlineTwoTone';
-import { Paper, makeStyles, TableBody, Toolbar, TextField, InputAdornment } from '@material-ui/core';
+import { Paper, makeStyles, TableBody, Toolbar } from '@material-ui/core';
 import PageHeader from '../components/PageHeader';
-import useTable from '../components/Tables/useTable';
 import TableRow from '@mui/material/TableRow';
+import Table from '@mui/material/Table';
 import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableContainer from '@mui/material/TableContainer';
 import Repository from '../api/Repository';
 import LoadingTable from '../components/Tables/LoadingTable';
-import { Skeleton } from '@mui/material';
-import { Search } from '@material-ui/icons';
 import ButtonAddActivity from '../components/Activities/ButtonAddActivity';
 import AddActivityForm from '../components/Forms/AddActivityForm';
 import AddActivityPopup from '../components/Popups/Popup';
@@ -35,15 +35,31 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         justifyContent: 'space-between'
     },
-    tabelCell: {
-    }
+    table: {
+        marginTop: theme.spacing(3),
+        display: 'table',
+        '& thead th': {
+            fontWeight: '600',
+            color: theme.palette.primary,
+            backgroundColor: theme.palette.grey[50],
+            boxShadow: '0 1px 1px 1px rgba(0, 0, 0, .1)',
+            minWidth: '100px'
+        },
+        '& tbody td': {
+            fontWeight: '300',
+        },
+        '& tbody tr:hover': {
+            backgroundColor: theme.palette.grey[50],
+            cursor: 'pointer',
+        },
+    },
 }))
 
 const headCells = [
-    { id: 'name', label: 'Nazwa zajęć:' },
-    { id: 'leader', label: 'Prowadzący:' },
-    { id: 'participantCount', label: 'Liczba uczestników:' },
-    { id: 'actions', label: 'Akcje:', disableSorting: true }
+    { id: 'name', label: 'Nazwa zajęć:', isAdmin: false, },
+    { id: 'leader', label: 'Prowadzący:', isAdmin: false, },
+    { id: 'participantCount', label: 'Liczba uczestników:', isAdmin: false, },
+    { id: 'actions', label: 'Akcje:', isAdmin: JSON.parse(Auth.getRole()) === "ADMIN" ? false : true }
 ]
 
 const Activities = () => {
@@ -57,13 +73,6 @@ const Activities = () => {
     const [openEditActivityPopup, setOpenEditActivityPopup] = useState(false);
     const [openDeleteActivityPopup, setOpenDeleteActivityPopup] = useState(false);
     const [editedGroup, setEditedGroup] = useState();
-    const [filter, setFilter] = useState({ filter: items => { return items; } });
-    const {
-        TableContainer,
-        HeadTable,
-        PaginationTable,
-        activitiesAfterPagingAndSorting,
-    } = useTable(activities, headCells, filter);
 
     const getActivitiesAPI = () => {
         setIsLoading(true);
@@ -92,21 +101,6 @@ const Activities = () => {
         )
     }
 
-    const handleSearch = (e) => {
-        let target = e.target;
-        setFilter({
-            filter: items => {
-                if (target.value === "") {
-                    return items;
-                }
-                else {
-                    return items.filter(x => x.name.toLowerCase().includes(target.value))
-                }
-            }
-        })
-
-    }
-
     useEffect(() => {
         getActivitiesAPI();
         getEmployeesAPI();
@@ -124,44 +118,35 @@ const Activities = () => {
                 {JSON.parse(Auth.getRole()) === "ADMIN" ? <Toolbar className={classes.buttons}>
                     <ButtonAddActivity setOpenPopup={setOpenAddActivityPopup} disabled={buttonDisabled} />
                 </Toolbar> : null}
-                <Toolbar className={classes.toolbar}>
-                    <TextField variant="outlined" label="Wyszukaj nazwę grupy"
-                        InputProps={{
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <Search />
-                                </InputAdornment>
-                            ),
-                        }}
-                        onChange={handleSearch}
-                    />
-                </Toolbar>
                 <TableContainer>
-                    <HeadTable />
-                    {!isLoading
-                        ? (<TableBody>
-                            {
-                                activitiesAfterPagingAndSorting().map(item =>
-                                (<TableRow key={item.id}>
-                                    <TableCell className={classes.tabelCell}>{item.name}</TableCell>
-                                    <TableCell className={classes.tabelCell}>{item.leader}</TableCell>
-                                    <TableCell className={classes.tabelCell}>{item.participantCount}/10</TableCell>
-                                    <TableCell className={classes.tabelCell}>{JSON.parse(Auth.getUserId()) === item.leader_id || JSON.parse(Auth.getRole()) === "ADMIN" ?
-                                        <Box sx={{ '& button': { m: 1 } }}>
-                                            <div style={{ justifyContent: 'center', display: 'flex' }}>
-                                                <ButtonEditActivity activity={item} setEditedGroup={setEditedGroup} setOpenPopup={setOpenEditActivityPopup} openPopup={openEditActivityPopup} />
-                                                <ButtonDeleteActivity activity={item} getActivitiesAPI={getActivitiesAPI} openPopup={openDeleteActivityPopup} setOpenPopup={setOpenDeleteActivityPopup} />
-                                            </div>
+                    <Table className={classes.table} sx={{ minWidth: 650 }} aria-label="simple table">
+                        <TableHead>
+                            <TableRow>
+                                {headCells.filter(headCell => headCell.isAdmin === false).map(headCell => (
+                                    <TableCell key={headCell.id}>{headCell.label}</TableCell>
+                                ))}
+                            </TableRow>
+                        </TableHead>
+                        {!isLoading ? <TableBody>
+                            {activities.map((activity) => (
+                                <TableRow
+                                    key={activity.id}
+                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                >
+                                    <TableCell>{activity.name}</TableCell>
+                                    <TableCell>{activity.leader}</TableCell>
+                                    <TableCell>{activity.participantCount}</TableCell>
+                                    <TableCell>{JSON.parse(Auth.getRole()) === "ADMIN" ?
+                                        <Box justifyContent="space-evenly" display="flex">
+                                            <ButtonEditActivity activity={activity} setEditedGroup={setEditedGroup} setOpenPopup={setOpenEditActivityPopup} openPopup={openEditActivityPopup} />
+                                            <ButtonDeleteActivity activity={activity} getActivitiesAPI={getActivitiesAPI} openPopup={openDeleteActivityPopup} setOpenPopup={setOpenDeleteActivityPopup} />
                                         </Box > : null}
                                     </TableCell>
-                                </TableRow>)
-                                )
-                            }
-                        </TableBody>)
-                        : <LoadingTable />
-                    }
+                                </TableRow>
+                            ))}
+                        </TableBody> : <LoadingTable />}
+                    </Table>
                 </TableContainer>
-                {!isLoading ? <PaginationTable /> : <Skeleton variant="rectangular" />}
             </Paper>
             <AddActivityPopup
                 openPopup={openAddActivityPopup}
@@ -178,6 +163,7 @@ const Activities = () => {
                 openPopup={openEditActivityPopup}
                 setOpenPopup={setOpenEditActivityPopup}
                 title="Edytuj grupę"
+                maxWidth="lg"
             >
                 <EditActivityForm
                     getActivitiesAPI={getActivitiesAPI}

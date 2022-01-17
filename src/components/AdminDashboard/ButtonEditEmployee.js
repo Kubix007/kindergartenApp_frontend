@@ -1,5 +1,5 @@
 import React from 'react'
-import IconButton from '@mui/material/IconButton';
+import Button from '@material-ui/core/Button';
 import ModeEditOutlinedIcon from '@mui/icons-material/ModeEditOutlined';
 
 const ButtonEditEmployee = ({ setOpenPopup, setEditedEmployee, employee }) => {
@@ -10,13 +10,15 @@ const ButtonEditEmployee = ({ setOpenPopup, setEditedEmployee, employee }) => {
     }
 
     return (
-        <IconButton
-            size='large'
-            style={{ backgroundColor: '#256CE1', color: 'white', }}
+        <Button
+            variant="contained"
+            color="primary"
+            startIcon={<ModeEditOutlinedIcon />}
             onClick={handleClick}
+            size='small'
         >
-            <ModeEditOutlinedIcon />
-        </IconButton>
+            Edytuj
+        </Button>
     );
 }
 

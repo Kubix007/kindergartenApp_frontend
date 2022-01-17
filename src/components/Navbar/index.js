@@ -39,8 +39,13 @@ const Navbar = () => {
             isAdmin: false,
         },
         {
-            menuTitle: "Moje przedmioty",
+            menuTitle: "Kolorowanki",
             pageURL: "/przedmioty",
+            isAdmin: false,
+        },
+        {
+            menuTitle: "Postać",
+            pageURL: "/postac",
             isAdmin: false,
         },
         {
@@ -109,7 +114,10 @@ const Navbar = () => {
                         Sklep
                     </NavLink>
                     <NavLink to="/przedmioty" >
-                        Moje przedmioty
+                        Kolorowanki
+                    </NavLink>
+                    <NavLink to="/postac" >
+                        Postać
                     </NavLink>
                     {JSON.parse(Auth.getRole()) === "ADMIN" ? <NavLink to="/panel" >
                         Panel administratora

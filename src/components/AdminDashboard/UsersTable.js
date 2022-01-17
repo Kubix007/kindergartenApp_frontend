@@ -44,8 +44,8 @@ const useStyles = makeStyles((theme) => ({
 
 const headCells = [
     { id: 'login', label: 'Login:', isAdmin: false, },
-    { id: 'childs_first_name', label: 'Imię:', isAdmin: false, },
-    { id: 'childs_surname', label: 'Nazwisko:', isAdmin: false, },
+    { id: 'first_name', label: 'Imię:', isAdmin: false, },
+    { id: 'surname', label: 'Nazwisko:', isAdmin: false, },
     { id: 'parents_first_name', label: 'Imię rodzica:', isAdmin: false, },
     { id: 'parents_surname', label: 'Nazwisko rodzica:', isAdmin: false, },
     { id: 'parents_phone', label: 'Telefon rodzica:', isAdmin: false, },
@@ -81,8 +81,8 @@ const UsersTable = ({ isLoading, userDetails, setUpdatingStatusPopup, setOpenEdi
                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
                             <TableCell >{row.user.login}</TableCell>
-                            <TableCell component="th" scope="row">{row.childs_first_name ? row.childs_first_name : "Brak imienia"}</TableCell>
-                            <TableCell >{row.childs_surname ? row.childs_surname : "Brak nazwiska"}</TableCell>
+                            <TableCell component="th" scope="row">{row.first_name ? row.first_name : "Brak imienia"}</TableCell>
+                            <TableCell >{row.surname ? row.surname : "Brak nazwiska"}</TableCell>
                             <TableCell >{row.parents_first_name ? row.parents_first_name : "Brak imienia rodziców"}</TableCell>
                             <TableCell >{row.parents_surname ? row.parents_surname : "Brak nazwiska rodziców"}</TableCell>
                             <TableCell >{row.parents_phone ? row.parents_phone : "Brak telefonu"}</TableCell>

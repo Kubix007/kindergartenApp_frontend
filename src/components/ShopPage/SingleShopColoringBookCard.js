@@ -5,17 +5,15 @@ import { CardActionArea, CardActions, Grid } from '@material-ui/core';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import ButtonColoringBook from './ButtonColoringBook';
-import ButtonPreviewColoringBook from './ButtonPreviewColoringBook';
-import PreviewColoringBookForm from '../Forms/PreviewColoringBookForm';
-import PreviewColoringBookPopup from './../Popups/Popup';
+import Auth from '../../api/Auth';
+import ButtonBuyItem from './ButtonBuyItem';
 
 const useStyles = makeStyles(() => ({
     card: {
         maxWidth: "100%",
     },
     media: {
-        height: 240
+        height: 240,
     },
     cardActions: {
         display: "flex",
@@ -28,9 +26,10 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-const SingleItemCard = ({ item }) => {
+
+const SingleShopColoringBookCard = ({ userPoints, userDetailsId, item, setBuyingStatusPopup, getUserDetailsAPI }) => {
     const classes = useStyles();
-    const [openPopup, setOpenPopup] = useState(false);
+    const [openBuyItemPopup, setOpenBuyItemPopup] = useState(false);
 
     return (
         <>
@@ -42,7 +41,6 @@ const SingleItemCard = ({ item }) => {
                             image={item.image}
                             title={item.item_name}
                             style={{ backgroundSize: "auto" }}
-
                         />
                         <CardContent>
                             <Typography gutterBottom variant="h5" component="h2">
@@ -51,29 +49,20 @@ const SingleItemCard = ({ item }) => {
                             <Typography gutterBottom variant="h7" component="h4">
                                 {item.category}
                             </Typography>
+                            <Typography variant="body2" color="textSecondary" component="p">
+                                Koszt: {item.cost} pkt.
+                            </Typography>
                         </CardContent>
-                        {item.category === "Kolorowanka" ? <CardActions className={classes.cardActions}>
-                            <ButtonColoringBook item={item} />
-                            <ButtonPreviewColoringBook item={item} setOpenPopup={setOpenPopup} />
-                        </CardActions> : null}
+                        <CardActions className={classes.cardActions}>
+                            <ButtonBuyItem getUserDetailsAPI={getUserDetailsAPI} setBuyingStatusPopup={setBuyingStatusPopup} item={item} userPoints={userPoints} userDetailsId={userDetailsId} openPopup={openBuyItemPopup} setOpenPopup={setOpenBuyItemPopup} />
+                        </CardActions>
                     </CardActionArea>
                 </Card>
             </Grid>
-            <PreviewColoringBookPopup
-                openPopup={openPopup}
-                setOpenPopup={setOpenPopup}
-                title="Podgląd kolorowanki"
-                maxWidth="lg"
-                onClose={() => setOpenPopup(false)}
-            >
-                <PreviewColoringBookForm
-                    setOpenPopup={setOpenPopup}
-                />
-            </PreviewColoringBookPopup>
         </>
     );
 }
 
-export default SingleItemCard;
+export default SingleShopColoringBookCard;
 
 

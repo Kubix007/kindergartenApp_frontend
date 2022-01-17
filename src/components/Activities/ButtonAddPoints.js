@@ -1,5 +1,5 @@
 import React from 'react'
-import Button from '@mui/material/Button';
+import Button from '@material-ui/core/Button';
 
 const ButtonAddPoints = ({ setOpenPopup, child, setKid }) => {
 
@@ -11,7 +11,7 @@ const ButtonAddPoints = ({ setOpenPopup, child, setKid }) => {
     return (
         <Button
             variant="contained"
-            color="info"
+            color="primary"
             size="small"
             onClick={handleClick}
         >

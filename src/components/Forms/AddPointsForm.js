@@ -4,7 +4,7 @@ import {
     TextField,
     Typography
 } from '@material-ui/core';
-import Button from '@mui/material/Button';
+import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -147,7 +147,7 @@ const AddPointsForm = ({ getActivitiesAPI, setOpenPopup, child, setEditActivityP
                     variant="inherit"
                     component="div"
                 >
-                    {`Imię i nazwisko:  ${child.childs_first_name} ${child.childs_surname}`}
+                    {`Imię i nazwisko:  ${child.first_name} ${child.surname}`}
                 </Typography>
                 <Typography
                     variant="inherit"
@@ -192,7 +192,7 @@ const AddPointsForm = ({ getActivitiesAPI, setOpenPopup, child, setEditActivityP
                             <Button
                                 type="submit"
                                 variant="contained"
-                                color="success"
+                                color="primary"
                             >
                                 Dodaj
                             </Button>
@@ -201,7 +201,7 @@ const AddPointsForm = ({ getActivitiesAPI, setOpenPopup, child, setEditActivityP
 
                             <Button
                                 variant="contained"
-                                color="error"
+                                color="primary"
                                 onClick={() => setOpenPopup(false)}
                             >
                                 Anuluj

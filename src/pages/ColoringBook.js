@@ -81,8 +81,8 @@ const ColoringBook = () => {
                     <Grid item >
                         <Grid container direction='column' justifyContent='center' alignItems='center'>
                             <HexColorPicker color={color} onChange={setColor} />
-                            <Grid item className={classes.buttonSave}><ButtonSaveImage coloringImage={coloringBook} /></Grid>
-
+                            <Grid item className={classes.buttonSave}>
+                                <ButtonSaveImage coloringImage={coloringBook} /></Grid>
                         </Grid>
                     </Grid>
                 </Grid>

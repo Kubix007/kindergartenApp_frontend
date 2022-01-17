@@ -8,7 +8,7 @@ import Repository from '../../api/Repository';
 import { toast } from 'react-toastify';
 
 const resourceUserDetailsAPI = 'user_details';
-const resourceItemsAPI = 'users_coloring_books';
+const resourceUserClothesAPI = 'users_clothes';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const BuyItemForm = ({ setOpenPopup, userPoints, userDetailsId, setBuyingStatusPopup, getUserDetailsAPI, item }) => {
+const BuyItemClothing = ({ setOpenPopup, userPoints, userDetailsId, setBuyingStatusPopup, getUserDetailsAPI, item }) => {
     const classes = useStyles();
 
     const handleClick = () => {
@@ -44,8 +44,7 @@ const BuyItemForm = ({ setOpenPopup, userPoints, userDetailsId, setBuyingStatusP
                 user_details_id: userDetailsId,
                 item_id: item.id,
                 category: item.category,
-                item_name: item.item_name,
-                source: item.source,
+                name: item.name,
                 cost: item.cost,
                 image: item.image,
             }
@@ -53,12 +52,13 @@ const BuyItemForm = ({ setOpenPopup, userPoints, userDetailsId, setBuyingStatusP
             updateUserDetailsAPI(userDetailsId, dataUserDetails, dataItems);
             setOpenPopup(false);
             getUserDetailsAPI();
+            //console.log(dataItems, item);
         }
     }
 
 
     const postItemsAPI = (data) => {
-        Repository.add(resourceItemsAPI, data).then(
+        Repository.add(resourceUserClothesAPI, data).then(
             () => {
                 setBuyingStatusPopup(false);
                 toast.success(`Pomyślnie kupiono przedmiot`, {
@@ -112,4 +112,4 @@ const BuyItemForm = ({ setOpenPopup, userPoints, userDetailsId, setBuyingStatusP
     );
 }
 
-export default BuyItemForm;
+export default BuyItemClothing;

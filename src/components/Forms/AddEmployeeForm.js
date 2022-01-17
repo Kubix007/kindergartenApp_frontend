@@ -3,7 +3,7 @@ import {
     Grid,
     TextField,
 } from '@material-ui/core';
-import Button from '@mui/material/Button';
+import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import Repository from '../../api/Repository';
 import { toast } from 'react-toastify';
@@ -42,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
 const AddEmployeeForm = ({ setOpenPopup, getUserDetailsAPI, userDetails, setUpdatingStatusPopup }) => {
     const classes = useStyles();
     const { user, setUser } = useContext(UserContext);
+    let data = null;
 
     const postEmployeesAPI = (data) => {
         setOpenPopup(false);
@@ -59,6 +60,7 @@ const AddEmployeeForm = ({ setOpenPopup, getUserDetailsAPI, userDetails, setUpda
         Repository.deleteRequest(resourceAPI, id).then(
             () => {
                 getUserDetailsAPI();
+                postEmployeesAPI(data);
                 toast.success(`Pomyślnie dodano pracownika`, {
                     position: "bottom-center",
                     autoClose: 5000,
@@ -107,10 +109,10 @@ const AddEmployeeForm = ({ setOpenPopup, getUserDetailsAPI, userDetails, setUpda
             town: "",
         },
         onSubmit: (values, actions) => {
-            let data = null;
-            let employee = userDetails.filter(x => x.id === values.user);
-            let employeeName = `${employee[0].childs_first_name}`;
-            let employeeSurname = `${employee[0].childs_surname}`;
+            data = null;
+            let employee = userDetails.filter(x => x.user_id === values.user);
+            let employeeName = `${employee[0].first_name}`;
+            let employeeSurname = `${employee[0].surname}`;
 
             if (typeof user !== "undefined") {
                 data = {
@@ -121,8 +123,7 @@ const AddEmployeeForm = ({ setOpenPopup, getUserDetailsAPI, userDetails, setUpda
                     phone: values.phone,
                     town: values.town,
                 }
-                postEmployeesAPI(data);
-                deleteUserDetailsAPI(values.user, actions);
+                deleteUserDetailsAPI(employee[0].id, actions);
             } else {
                 Auth.getUser().then(
                     (response) => {
@@ -135,8 +136,7 @@ const AddEmployeeForm = ({ setOpenPopup, getUserDetailsAPI, userDetails, setUpda
                             phone: values.phone,
                             town: values.town,
                         }
-                        postEmployeesAPI(data);
-                        deleteUserDetailsAPI(values.user, actions);
+                        deleteUserDetailsAPI(employee[0].id, actions);
                     },
                     (error) => {
                         console.log(error);
@@ -169,7 +169,7 @@ const AddEmployeeForm = ({ setOpenPopup, getUserDetailsAPI, userDetails, setUpda
                         onBlur={formik.handleBlur}
                     >
                         {userDetails.map(userDetails => (
-                            <MenuItem key={userDetails.id} value={userDetails.id}>{userDetails.childs_first_name} {userDetails.childs_surname}</MenuItem>
+                            <MenuItem key={userDetails.id} value={userDetails.user_id}>{userDetails.first_name} {userDetails.surname}</MenuItem>
                         ))}
                     </TextField>
                     <TextField
@@ -223,7 +223,7 @@ const AddEmployeeForm = ({ setOpenPopup, getUserDetailsAPI, userDetails, setUpda
                             <Button
                                 type="submit"
                                 variant="contained"
-                                color="success"
+                                color="primary"
                             >
                                 Dodaj
                             </Button>
@@ -232,7 +232,7 @@ const AddEmployeeForm = ({ setOpenPopup, getUserDetailsAPI, userDetails, setUpda
 
                             <Button
                                 variant="contained"
-                                color="error"
+                                color="primary"
                                 onClick={() => setOpenPopup(false)}
                             >
                                 Anuluj

@@ -3,7 +3,7 @@ import {
     Grid,
     TextField,
 } from '@material-ui/core';
-import Button from '@mui/material/Button';
+import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -35,30 +35,24 @@ const EditUserForm = ({ setOpenPopup, editedUser, getUserDetailsAPI, setUpdating
     const classes = useStyles();
 
     const validationSchema = yup.object({
-        childs_first_name: yup
-            .string()
-            .required("Pole wymagane"),
-        childs_surname: yup
-            .string()
-            .required("Pole wymagane"),
+        first_name: yup
+            .string(),
+        surname: yup
+            .string(),
         parents_first_name: yup
-            .string()
-            .required("Pole wymagane"),
+            .string(),
         parents_surname: yup
-            .string()
-            .required("Pole wymagane"),
+            .string(),
         parents_phone: yup
-            .string()
-            .required("Pole wymagane"),
+            .string(),
         town: yup
-            .string()
-            .required("Pole wymagane"),
+            .string(),
     });
 
     const formik = useFormik({
         initialValues: {
-            childs_first_name: editedUser.childs_first_name ? editedUser.childs_first_name : "",
-            childs_surname: editedUser.childs_surname ? editedUser.childs_surname : "",
+            first_name: editedUser.first_name ? editedUser.first_name : "",
+            surname: editedUser.surname ? editedUser.surname : "",
             parents_first_name: editedUser.parents_first_name ? editedUser.parents_first_name : "",
             parents_surname: editedUser.parents_surname ? editedUser.parents_surname : "",
             parents_phone: editedUser.parents_phone ? editedUser.parents_phone : "",
@@ -68,8 +62,8 @@ const EditUserForm = ({ setOpenPopup, editedUser, getUserDetailsAPI, setUpdating
             let data = null;
             if (typeof user !== "undefined") {
                 data = {
-                    childs_first_name: values.childs_first_name,
-                    childs_surname: values.childs_surname,
+                    first_name: values.first_name,
+                    surname: values.surname,
                     parents_first_name: values.parents_first_name,
                     parents_surname: values.parents_surname,
                     parents_phone: values.parents_phone,
@@ -82,8 +76,8 @@ const EditUserForm = ({ setOpenPopup, editedUser, getUserDetailsAPI, setUpdating
                 Auth.getUser().then(
                     () => {
                         data = {
-                            childs_first_name: values.childs_first_name,
-                            childs_surname: values.childs_surname,
+                            first_name: values.first_name,
+                            surname: values.surname,
                             parents_first_name: values.parents_first_name,
                             parents_surname: values.parents_surname,
                             parents_phone: values.parents_phone,
@@ -119,8 +113,8 @@ const EditUserForm = ({ setOpenPopup, editedUser, getUserDetailsAPI, setUpdating
                 });
                 actions.resetForm({
                     values: {
-                        childs_first_name: "",
-                        childs_surname: "",
+                        first_name: "",
+                        surname: "",
                         parents_first_name: "",
                         parents_surname: "",
                         parents_phone: "",
@@ -141,18 +135,17 @@ const EditUserForm = ({ setOpenPopup, editedUser, getUserDetailsAPI, setUpdating
             <Grid item xs={true} sm={true} md={true}>
                 <form className={classes.form} noValidate onSubmit={formik.handleSubmit}>
                     <TextField
-                        name="childs_first_name"
+                        name="first_name"
                         variant="outlined"
                         margin="normal"
                         required
                         fullWidth
-                        id="childs_first_name"
-                        label="Imię dziecka"
-                        autoFocus
-                        value={formik.values.childs_first_name}
+                        id="first_name"
+                        label="Imię"
+                        value={formik.values.first_name}
                         onChange={formik.handleChange}
-                        error={formik.touched.childs_first_name && Boolean(formik.errors.childs_first_name)}
-                        helperText={formik.touched.childs_first_name && formik.errors.childs_first_name}
+                        error={formik.touched.first_name && Boolean(formik.errors.first_name)}
+                        helperText={formik.touched.first_name && formik.errors.first_name}
                         onBlur={formik.handleBlur}
 
                     />
@@ -161,13 +154,13 @@ const EditUserForm = ({ setOpenPopup, editedUser, getUserDetailsAPI, setUpdating
                         margin="normal"
                         fullWidth
                         required
-                        id="childs_surname"
-                        label="Nazwisko dziecka"
-                        name="childs_surname"
-                        value={formik.values.childs_surname}
+                        id="surname"
+                        label="Nazwisko"
+                        name="surname"
+                        value={formik.values.surname}
                         onChange={formik.handleChange}
-                        error={formik.touched.childs_surname && Boolean(formik.errors.childs_surname)}
-                        helperText={formik.touched.childs_surname && formik.errors.childs_surname}
+                        error={formik.touched.surname && Boolean(formik.errors.surname)}
+                        helperText={formik.touched.surname && formik.errors.surname}
                         onBlur={formik.handleBlur}
                     />
                     <TextField
@@ -236,7 +229,7 @@ const EditUserForm = ({ setOpenPopup, editedUser, getUserDetailsAPI, setUpdating
                             <Button
                                 type="submit"
                                 variant="contained"
-                                color="success"
+                                color="primary"
                             >
                                 Edytuj
                             </Button>
@@ -245,7 +238,7 @@ const EditUserForm = ({ setOpenPopup, editedUser, getUserDetailsAPI, setUpdating
 
                             <Button
                                 variant="contained"
-                                color="error"
+                                color="primary"
                                 onClick={() => setOpenPopup(false)}
                             >
                                 Anuluj

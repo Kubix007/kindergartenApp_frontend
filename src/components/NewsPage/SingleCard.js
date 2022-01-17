@@ -12,6 +12,8 @@ import DeletePopup from '../Popups/Popup';
 import EditPopup from '../Popups/Popup';
 import EditNewsForm from '../Forms/EditNewsForm';
 import Auth from '../../api/Auth';
+import ImageInfo from '../../svg/NewsPage/info.svg';
+import ImageWarning from '../../svg/NewsPage/warning.svg';
 
 const useStyles = makeStyles(() => ({
     card: {
@@ -32,7 +34,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 
-const SingleCard = ({ image, title, date, description, newsId, getNewsAPI, }) => {
+const SingleCard = ({ image, title, date, description, newsId, getNewsAPI, type }) => {
     const classes = useStyles();
     const [openPopupEdit, setOpenPopupEdit] = useState(false);
     const [openPopupDelete, setOpenPopupDelete] = useState(false);
@@ -44,8 +46,9 @@ const SingleCard = ({ image, title, date, description, newsId, getNewsAPI, }) =>
                     <CardActionArea>
                         <CardMedia
                             className={classes.media}
-                            image="https://images.pexels.com/photos/1181263/pexels-photo-1181263.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"
+                            image={type === "Ostrzeżenie" ? ImageWarning : ImageInfo}
                             title="Contemplative Reptile"
+                            style={{ backgroundRepeat: "round", backgroundPosition: "initial" }}
                         />
                         <CardContent>
                             <Typography gutterBottom variant="h5" component="h2">
