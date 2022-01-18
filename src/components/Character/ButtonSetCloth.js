@@ -24,7 +24,7 @@ const ButtonSetCloth = ({ clothes, setOpenPopup, isEquipped, setIsEquipped, othe
     const test = () => {
         var el = document.getElementById('character').querySelector('svg');
         var className = clothes.name.replaceAll(" ", "");
-        var shapeGroup = d3.select(el).append("g").attr("class", className);
+        var shapeGroup = d3.select(el).append("g").attr("class", className).attr("transform", "translate(209.37 94.977)");
         const clothesDetails = clothes.clothes_details;
         for (var i = 0; i < clothesDetails.length; i++) {
             if (clothesDetails[i].type === "rect") {
