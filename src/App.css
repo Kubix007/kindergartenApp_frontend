@@ -10,3 +10,9 @@
 svg {
   pointer-events: all;
 }
+
+@media (max-width: 768px){
+  .svgImage {
+      width: 290px;
+  }
+}

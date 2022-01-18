@@ -19,7 +19,6 @@ export const NavLink = styled(Link)`
     padding 0 1rem;
     height: 100%;
     cursor: pointer;
-
     &.active{
         color: #15cdfc
     }
@@ -28,7 +27,6 @@ export const NavLink = styled(Link)`
 export const Bars = styled(FaBars)`
     display: none;
     color: #fff;
-
     @media screen and (max-width: 768px) {
         display: block;
         position: absolute;
@@ -46,7 +44,6 @@ export const NavMenu = styled.div`
     margin-right: -24px;
     width: 100vw;
     white-space: nowrap;
-
     @media screen and (max-width: 768px) {
         display: none;
     }
@@ -73,12 +70,9 @@ export const NavButtonLink = styled.button`
     cursor: pointer;
     transition: all 0.2s ease-in-out;
     text-decoration: none;
-
-
     &:hover {
         transition: all 0.2 ease-in-out;
         background: #fff;
         color: #010606;
     }
 `
-

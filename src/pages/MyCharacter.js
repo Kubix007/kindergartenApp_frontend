@@ -17,7 +17,6 @@ const resourceUserDetailsAPI = 'user_details';
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
-        margin: theme.spacing(3),
         justifyContent: "center",
         alignItems: "center",
     },

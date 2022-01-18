@@ -26,7 +26,6 @@ const resourceEmployeesAPI = 'employees';
 const useStyles = makeStyles(theme => ({
     pageContent: {
         margin: theme.spacing(5),
-        padding: theme.spacing(3),
     },
     toolbar: {
         padding: theme.spacing(3),

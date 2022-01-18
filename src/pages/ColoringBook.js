@@ -6,14 +6,10 @@ import { makeStyles } from '@material-ui/core/styles';
 import { ColoringBookContext } from '../context/ColoringBookContext';
 import { HexColorPicker } from "react-colorful";
 import ButtonSaveImage from '../components/ColoringBook/ButtonSaveImage';
-import './../App.css'
+import './../App.css';
 
 const useStyles = makeStyles(theme => ({
-    pageContent: {
-        margin: theme.spacing(5),
-    },
     colorPicker: {
-        margin: theme.spacing(5),
         justifyContent: 'center',
     },
     buttonSave: {
@@ -74,7 +70,7 @@ const ColoringBook = () => {
                 icon={<PaletteOutlinedIcon fontSize="large" />}
             />
             <Container maxWidth="lg" className={classes.blogsContainer}>
-                <Grid container justify="center" spacing={1} className={classes.pageContent}>
+                <Grid container justify="center" spacing={1}>
                     <Grid item >
                         <Paper elevation={6}><div id="coloring"></div></Paper>
                     </Grid>
