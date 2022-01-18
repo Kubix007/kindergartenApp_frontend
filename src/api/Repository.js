@@ -1,6 +1,6 @@
 import HttpRequest from '../api/HttpRequest';
 
-const API = "http://localhost:8000/api";
+const API = "http://localhost:8000/api/";
 
 const getAll = (resource) => {
     return HttpRequest.send("GET", `${API}${resource}`);
