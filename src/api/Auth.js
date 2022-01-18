@@ -2,7 +2,7 @@ import React from 'react';
 import httpRequest from '../api/HttpRequest';
 import { Redirect } from 'react-router';
 
-const API = "https://kindergarten-backend.herokuapp.com/api";
+const API = "http://localhost:8000/api";
 
 const login = (email, password) => {
     if (IsLogged()) {
