@@ -13,6 +13,7 @@ import { toast } from 'react-toastify';
 
 const resourceCharactersAPI = 'characters';
 const resourceUserClothes = 'users_clothes';
+const resourceUserDetailsAPI = 'user_details';
 
 const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -22,6 +23,8 @@ const useStyles = makeStyles(theme => ({
     },
     buttonSave: {
         margin: theme.spacing(1),
+    },
+    paper: {
     }
 }))
 
@@ -30,9 +33,9 @@ const MyCharacter = () => {
     const [character, setCharacter] = useState();
     const [userClothes, setUserClothes] = useState();
     const [updatingStatusPopup, setUpdatingStatusPopup] = useState(true);
-    const [isLoadingCharacter, setIsLoadingCharacter] = useState(true);
-    const [isLoadingClothes, setIsLoadingClothes] = useState(true);
     const [characterId, setCharacterId] = useState();
+    let userId = null;
+
 
     function render_xml(id, xml_string) {
         var el = document.getElementById(id)
@@ -57,8 +60,6 @@ const MyCharacter = () => {
             (data) => {
                 setCharacter(data.data[0].source);
                 setCharacterId(data.data[0].id);
-                setIsLoadingCharacter(false);
-                setUpdatingStatusPopup(false);
             },
             (error) => {
                 console.log(error);
@@ -66,11 +67,25 @@ const MyCharacter = () => {
         )
     }
 
-    const getUserClothesAPI = () => {
-        Repository.getAll(resourceUserClothes).then(
+    const getUserDetails = () => {
+        let id = parseInt(Auth.getUserId());
+        Repository.getById(resourceUserDetailsAPI, id).then(
+            (data) => {
+                userId = data.data.data.user_id;
+                getUserClothesAPI(userId);
+            },
+            (error) => {
+                console.log(error);
+            }
+        )
+    }
+
+    const getUserClothesAPI = (id) => {
+        Repository.getById(resourceUserClothes, id).then(
             (data) => {
                 setUserClothes(data.data);
-                setIsLoadingClothes(false);
+                setUpdatingStatusPopup(false);
+
             },
             (error) => {
                 console.log(error);
@@ -115,7 +130,7 @@ const MyCharacter = () => {
 
     useEffect(() => {
         getCharactersAPI();
-        getUserClothesAPI();
+        getUserDetails();
     }, []);
 
     return (
@@ -134,7 +149,7 @@ const MyCharacter = () => {
                     </Grid>
                     <Grid item xs={8}>
                         {character ? render_xml('character', character) : null}
-                        <Paper elevation={6}><div id="character"></div></Paper>
+                        <Paper elevation={6} className={classes.paper}><div id="character"></div></Paper>
                     </Grid>
                     {character ? <Button
                         variant="contained"
