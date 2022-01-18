@@ -53,6 +53,11 @@ const Navbar = () => {
             pageURL: "/panel",
             isAdmin: JSON.parse(Auth.getRole()) === "ADMIN" ? false : true
         },
+        {
+            menuTitle: "Wyloguj się",
+            pageURL: "/postac",
+            isAdmin: false,
+        },
     ];
 
     const logout = () => {
@@ -98,7 +103,7 @@ const Navbar = () => {
                 >
                     {menuItems.filter(menuItem => menuItem.isAdmin === false).map(menuItem => {
                         const { menuTitle, pageURL } = menuItem;
-                        return <MenuItem key={menuTitle} onClick={() => handleMenuClick(pageURL)}>
+                        return <MenuItem key={menuTitle} onClick={menuTitle === "Wyloguj się" ? logout : () => handleMenuClick(pageURL)}>
                             {menuTitle}
                         </MenuItem>
                     })}
