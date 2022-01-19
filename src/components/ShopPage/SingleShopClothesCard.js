@@ -5,7 +5,6 @@ import { CardActionArea, CardActions, Grid } from '@material-ui/core';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
-import Auth from '../../api/Auth';
 import ButtonBuyClothes from './ButtonBuyClothes';
 
 const useStyles = makeStyles(() => ({

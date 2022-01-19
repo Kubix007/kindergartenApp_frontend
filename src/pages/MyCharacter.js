@@ -130,6 +130,7 @@ const MyCharacter = () => {
     useEffect(() => {
         getCharactersAPI();
         getUserDetails();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

@@ -11,7 +11,6 @@ import { toast } from 'react-toastify';
 import Repository from '../../api/Repository';
 import { UserContext } from '../../context/UserContext';
 import Auth from '../../api/Auth';
-import useTable from '../Tables/useTable';
 import { Typography } from '@material-ui/core';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';

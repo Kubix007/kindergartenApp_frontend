@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import Button from '@material-ui/core/Button';
 import * as d3 from "d3";
 
-const ButtonSetCloth = ({ clothes, setOpenPopup, isEquipped, setIsEquipped, otherItems, setOtherItems }) => {
+const ButtonSetCloth = ({ clothes, isEquipped, setIsEquipped, otherItems, setOtherItems }) => {
 
 
     const checkUsedClothes = () => {
@@ -19,6 +19,7 @@ const ButtonSetCloth = ({ clothes, setOpenPopup, isEquipped, setIsEquipped, othe
 
     useEffect(() => {
         checkUsedClothes();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const test = () => {

@@ -14,6 +14,9 @@ import RobotLoginImage from '../svg/RobotLogin2.svg';
 import Auth from '../api/Auth';
 import { AuthContext } from '../context/AuthContext';
 import { UserContext } from '../context/UserContext';
+import { toast } from 'react-toastify';
+import { useHistory } from 'react-router-dom';
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -67,6 +70,7 @@ export default function Login(props) {
     const { auth, setAuth } = useContext(AuthContext);
     // eslint-disable-next-line no-unused-vars
     const { user, setUser } = useContext(UserContext);
+    const history = useHistory();
 
 
     const login = () => {
@@ -75,9 +79,35 @@ export default function Login(props) {
                 setAuth(Auth.IsLogged());
                 setUser(response.user);
                 props.history.push("/aktualnosci");
+                toast.success(`Zalogowano pomyślnie`, {
+                    position: "bottom-center",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                    toastId: "successfulLoginToast"
+
+                });
             },
             (error) => {
-                console.log(error);
+                if (error.response.data.message === "Bad creds") {
+                    Auth.reset();
+                    setAuth(Auth.IsLogged());
+                    history.push("/logowanie");
+                    toast.error(`Nieprawidłowe dane`, {
+                        position: "bottom-center",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: false,
+                        draggable: true,
+                        progress: undefined,
+                        toastId: "unsuccessfulLoginToast"
+
+                    });
+                }
             }
         );
     }
@@ -126,6 +156,7 @@ export default function Login(props) {
                         <Button
                             type="submit"
                             fullWidth
+                            id="loginButton"
                             variant="contained"
                             color="primary"
                             className={classes.submit}

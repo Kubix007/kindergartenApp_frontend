@@ -28,7 +28,6 @@ const useStyles = makeStyles(() => ({
 
 const SingleClothCard = ({ cloth, isBlouse, isPants, isHat, setIsBlouse, setIsHat, setIsPants }) => {
     const classes = useStyles();
-    const [openPopup, setOpenPopup] = useState(false);
     const [isEquipped, setIsEquipped] = useState(cloth.isEquipped);
 
     return (

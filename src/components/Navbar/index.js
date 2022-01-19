@@ -12,6 +12,7 @@ import { AuthContext } from '../../context/AuthContext';
 import { useHistory } from "react-router-dom";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from '@material-ui/core/MenuItem';
+import { toast } from 'react-toastify';
 
 const Navbar = () => {
     // eslint-disable-next-line no-unused-vars
@@ -65,6 +66,15 @@ const Navbar = () => {
             () => {
                 setAuth(Auth.IsLogged());
                 history.push("/logowanie")
+                toast.success(`Wylogowano pomyślnie`, {
+                    position: "bottom-center",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
             },
             (error) => {
                 console.log(error);

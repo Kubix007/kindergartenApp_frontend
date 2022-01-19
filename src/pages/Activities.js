@@ -64,7 +64,7 @@ const headCells = [
 const Activities = () => {
 
     const classes = useStyles();
-    const [activities, setActivities] = useState();
+    const [activities, setActivities] = useState([0]);
     const [employees, setEmployees] = useState();
     const [isLoading, setIsLoading] = useState(true);
     const [buttonDisabled, setButtonDisabled] = useState(true);
@@ -117,13 +117,14 @@ const Activities = () => {
                 {JSON.parse(Auth.getRole()) === "ADMIN" ? <Toolbar className={classes.buttons}>
                     <ButtonAddActivity setOpenPopup={setOpenAddActivityPopup} disabled={buttonDisabled} />
                 </Toolbar> : null}
+                {activities.length === 0 && !isLoading ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}><h1>Niestety żadne zajęcia nie zostały jeszcze stworzone ;(</h1></div> : null}
                 <TableContainer>
                     <Table className={classes.table} sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
                             <TableRow>
-                                {headCells.filter(headCell => headCell.isAdmin === false).map(headCell => (
+                                {activities.length !== 0 ? headCells.filter(headCell => headCell.isAdmin === false).map(headCell => (
                                     <TableCell key={headCell.id}>{headCell.label}</TableCell>
-                                ))}
+                                )) : null}
                             </TableRow>
                         </TableHead>
                         {!isLoading ? <TableBody>

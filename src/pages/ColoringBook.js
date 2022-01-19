@@ -7,6 +7,8 @@ import { ColoringBookContext } from '../context/ColoringBookContext';
 import { HexColorPicker } from "react-colorful";
 import ButtonSaveImage from '../components/ColoringBook/ButtonSaveImage';
 import './../App.css';
+import { toast } from 'react-toastify';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
     colorPicker: {
@@ -22,6 +24,8 @@ const ColoringBook = () => {
     // eslint-disable-next-line no-unused-vars
     const { coloringBook, setColoringBook } = useContext(ColoringBookContext);
     const [color, setColor] = useState("#aabbcc");
+    const history = useHistory();
+
 
     function showArea(event) {
         event.target.setAttribute("fill", color)
@@ -50,7 +54,24 @@ const ColoringBook = () => {
     }
 
     useEffect(() => {
-        render_xml(`coloring`, coloringBook.source);
+        const fetchColoringBook = async () => {
+            try {
+                render_xml(`coloring`, coloringBook.source);
+            } catch {
+                history.push("/przedmioty");
+                toast.error(`Wystąpił błąd, spróbuj ponownie`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+        }
+        fetchColoringBook();
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
