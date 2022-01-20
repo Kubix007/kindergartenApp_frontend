@@ -69,7 +69,7 @@ const newsType = [
     }
 ]
 
-const AddNewsForm = ({ getNewsAPI, setOpenPopup }) => {
+const AddNewsForm = ({ getNewsAPI, setOpenPopup, userDetailsId }) => {
     const classes = useStyles();
     const { user, setUser } = useContext(UserContext);
 
@@ -94,6 +94,7 @@ const AddNewsForm = ({ getNewsAPI, setOpenPopup }) => {
             let data = null;
             if (typeof user !== "undefined") {
                 data = {
+                    user_details_id: userDetailsId,
                     title: values.title,
                     description: values.description,
                     author: user.login,
@@ -108,6 +109,7 @@ const AddNewsForm = ({ getNewsAPI, setOpenPopup }) => {
                     (response) => {
                         setUser(response.data);
                         data = {
+                            user_details_id: userDetailsId,
                             title: values.title,
                             description: values.description,
                             author: response.data.login,

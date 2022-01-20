@@ -18,6 +18,7 @@ import PageHeader from '../components/PageHeader';
 
 
 const resourceAPI = 'news';
+const resourceUserDetailsAPI = 'user_details';
 
 const useStyles = makeStyles((theme) => ({
     blogsContainer: {
@@ -44,6 +45,8 @@ const News = () => {
     const classes = useStyles();
     const [openPopup, setOpenPopup] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    // eslint-disable-next-line no-unused-vars
+    const [userDetailsId, setUserDetailsId] = useState();
 
     const [news, setNews] = useState([0]);
     const getNewsAPI = () => {
@@ -61,7 +64,20 @@ const News = () => {
         )
     }
 
+    const getUserDetails = () => {
+        let id = parseInt(Auth.getUserId());
+        Repository.getById(resourceUserDetailsAPI, id).then(
+            (data) => {
+                setUserDetailsId(data.data.data.id);
+            },
+            (error) => {
+                console.log(error);
+            }
+        )
+    }
+
     useEffect(() => {
+        getUserDetails();
         getNewsAPI();
     }, []);
 
@@ -103,6 +119,7 @@ const News = () => {
                 <AddNewsForm
                     getNewsAPI={getNewsAPI}
                     setOpenPopup={setOpenPopup}
+                    userDetailsId={userDetailsId}
                 />
             </AddPopup>
         </>
