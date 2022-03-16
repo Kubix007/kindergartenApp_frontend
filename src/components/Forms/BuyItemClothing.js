@@ -38,7 +38,7 @@ const BuyItemClothing = ({ setOpenPopup, userPoints, userDetailsId, setBuyingSta
         } else {
             let pointsToUpdate = userPoints - item.cost;
             let dataUserDetails = {
-                points: pointsToUpdate,
+                points: pointsToUpdate * 1,
             }
             let dataItems = {
                 user_details_id: userDetailsId,
@@ -52,7 +52,6 @@ const BuyItemClothing = ({ setOpenPopup, userPoints, userDetailsId, setBuyingSta
             updateUserDetailsAPI(userDetailsId, dataUserDetails, dataItems);
             setOpenPopup(false);
             getUserDetailsAPI();
-            //console.log(dataItems, item);
         }
     }
 
@@ -89,6 +88,8 @@ const BuyItemClothing = ({ setOpenPopup, userPoints, userDetailsId, setBuyingSta
                     draggable: true,
                     progress: undefined,
                 });
+                setBuyingStatusPopup(false);
+
             }
         );
     }

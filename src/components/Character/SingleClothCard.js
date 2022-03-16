@@ -13,7 +13,7 @@ const useStyles = makeStyles(() => ({
         maxWidth: "100%",
     },
     media: {
-        height: 240,
+        height: 100,
     },
     cardActions: {
         display: "flex",
@@ -31,7 +31,7 @@ const SingleClothCard = ({ cloth, isBlouse, isPants, isHat, setIsBlouse, setIsHa
     const [isEquipped, setIsEquipped] = useState(cloth.isEquipped);
 
     return (
-        <Grid item style={{ padding: "5px" }}>
+        <Grid item style={{ padding: "3px" }}>
             <Card className={classes.card}>
                 <CardActionArea>
                     <CardMedia

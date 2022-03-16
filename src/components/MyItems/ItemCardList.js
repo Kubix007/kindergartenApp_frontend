@@ -1,7 +1,7 @@
 import React from 'react'
 import SingleItemCard from './SingleItemCard';
 
-const ItemCardList = ({ items }) => {
+const ItemCardList = ({ items, getItemsAPI, setUpdatingStatusPopup }) => {
     return (
         <>
             {items.map((item) => {
@@ -9,6 +9,8 @@ const ItemCardList = ({ items }) => {
                     <SingleItemCard
                         key={item.id}
                         item={item}
+                        getItemsAPI={getItemsAPI}
+                        setUpdatingStatusPopup={setUpdatingStatusPopup}
                     />)
             })}
         </>

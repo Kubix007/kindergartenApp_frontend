@@ -74,6 +74,8 @@ const Navbar = () => {
                     pauseOnHover: false,
                     draggable: true,
                     progress: undefined,
+                    toastId: "successfulLogoutToast"
+
                 });
             },
             (error) => {
@@ -119,27 +121,27 @@ const Navbar = () => {
                     })}
                 </Menu>
                 <NavMenu>
-                    <NavLink to="/aktualnosci" >
+                    <NavLink id="navLinkNews" to="/aktualnosci" >
                         Aktualności
                     </NavLink>
-                    <NavLink to="/zajecia" >
+                    <NavLink id="navLinkActivities" to="/zajecia" >
                         Zajęcia
                     </NavLink>
-                    <NavLink to="/sklep" >
+                    <NavLink id="navLinkShop" to="/sklep" >
                         Sklep
                     </NavLink>
-                    <NavLink to="/przedmioty" >
+                    <NavLink id="navLinkColoringBooks" to="/przedmioty" >
                         Kolorowanki
                     </NavLink>
-                    <NavLink to="/postac" >
+                    <NavLink id="navLinkCharacter" to="/postac" >
                         Postać
                     </NavLink>
-                    {JSON.parse(Auth.getRole()) === "ADMIN" ? <NavLink to="/panel" >
+                    {JSON.parse(Auth.getRole()) === "ADMIN" ? <NavLink id="navLinkAdminDashboard" to="/panel" >
                         Panel administratora
                     </NavLink> : null}
                 </NavMenu>
                 <NavButton>
-                    <NavButtonLink onClick={logout}>Wyloguj się</NavButtonLink>
+                    <NavButtonLink id="logoutButton" onClick={logout}>Wyloguj się</NavButtonLink>
                 </NavButton>
             </Nav>
         </>

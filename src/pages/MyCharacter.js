@@ -36,19 +36,19 @@ const MyCharacter = () => {
     let userId = null;
 
 
-    function render_xml(id, xml_string) {
-        var el = document.getElementById(id)
-        var doc = new DOMParser().parseFromString(xml_string, 'text/html');
-        if (el.hasChildNodes()) {
-            while (el.firstChild) {
-                el.removeChild(el.firstChild);
+    function renderCharacter(svgString) {
+        var container = document.getElementById('character')
+        var svg = new DOMParser().parseFromString(svgString, 'text/html');
+        if (container.hasChildNodes()) {
+            while (container.firstChild) {
+                container.removeChild(container.firstChild);
             }
-            el.appendChild(
-                el.ownerDocument.importNode(doc.documentElement, true),
+            container.appendChild(
+                container.ownerDocument.importNode(svg.documentElement, true),
             )
         } else {
-            el.appendChild(
-                el.ownerDocument.importNode(doc.documentElement, true),
+            container.appendChild(
+                container.ownerDocument.importNode(svg.documentElement, true),
             )
         }
     }
@@ -148,7 +148,7 @@ const MyCharacter = () => {
                         /> : null}
                     </Grid>
                     <Grid item xs={8}>
-                        {character ? render_xml('character', character) : null}
+                        {character ? renderCharacter(character) : null}
                         <Paper elevation={6} className={classes.paper}><div id="character"></div></Paper>
                     </Grid>
                     {character ? <Button

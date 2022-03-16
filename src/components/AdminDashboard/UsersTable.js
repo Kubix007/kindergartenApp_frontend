@@ -43,15 +43,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const headCells = [
-    { id: 'login', label: 'Login:', isAdmin: false, },
-    { id: 'first_name', label: 'Imię:', isAdmin: false, },
-    { id: 'surname', label: 'Nazwisko:', isAdmin: false, },
-    { id: 'parents_first_name', label: 'Imię rodzica:', isAdmin: false, },
-    { id: 'parents_surname', label: 'Nazwisko rodzica:', isAdmin: false, },
-    { id: 'parents_phone', label: 'Telefon rodzica:', isAdmin: false, },
-    { id: 'town', label: 'Miasto:', isAdmin: false, },
-    { id: 'points', label: 'Punkty:', isAdmin: false, },
-    { id: 'actions', label: 'Akcje:', isAdmin: JSON.parse(Auth.getRole()) === "ADMIN" ? false : true }
+    { id: 'login', label: 'Login:' },
+    { id: 'first_name', label: 'Imię:' },
+    { id: 'surname', label: 'Nazwisko:' },
+    { id: 'parents_first_name', label: 'Imię rodzica:' },
+    { id: 'parents_surname', label: 'Nazwisko rodzica:' },
+    { id: 'parents_phone', label: 'Telefon rodzica:' },
+    { id: 'town', label: 'Miasto:' },
+    { id: 'points', label: 'Punkty:' },
+    { id: 'actions', label: 'Akcje:', textAlign: "center" }
 ]
 
 const UsersTable = ({ isLoading, userDetails, setUpdatingStatusPopup, setOpenEditUserPopup, setOpenDeleteUserPopup, setEditedUser, setIsLoading, getUserDetailsAPI }) => {
@@ -69,8 +69,8 @@ const UsersTable = ({ isLoading, userDetails, setUpdatingStatusPopup, setOpenEdi
             <Table className={classes.table} sx={{ minWidth: 650 }} aria-label="simple table">
                 <TableHead>
                     <TableRow>
-                        {headCells.filter(headCell => headCell.isAdmin === false).map(headCell => (
-                            <TableCell key={headCell.id}>{headCell.label}</TableCell>
+                        {headCells.map(headCell => (
+                            <TableCell style={{ textAlign: headCell.textAlign }} key={headCell.id}>{headCell.label}</TableCell>
                         ))}
                     </TableRow>
                 </TableHead>
@@ -83,8 +83,8 @@ const UsersTable = ({ isLoading, userDetails, setUpdatingStatusPopup, setOpenEdi
                             <TableCell >{row.user.login}</TableCell>
                             <TableCell component="th" scope="row">{row.first_name ? row.first_name : "Brak imienia"}</TableCell>
                             <TableCell >{row.surname ? row.surname : "Brak nazwiska"}</TableCell>
-                            <TableCell >{row.parents_first_name ? row.parents_first_name : "Brak imienia rodziców"}</TableCell>
-                            <TableCell >{row.parents_surname ? row.parents_surname : "Brak nazwiska rodziców"}</TableCell>
+                            <TableCell >{row.parents_first_name ? row.parents_first_name : "-"}</TableCell>
+                            <TableCell >{row.parents_surname ? row.parents_surname : "-"}</TableCell>
                             <TableCell >{row.parents_phone ? row.parents_phone : "Brak telefonu"}</TableCell>
                             <TableCell >{row.town ? row.town : "Brak miasta"}</TableCell>
                             <TableCell >{row.points}</TableCell>

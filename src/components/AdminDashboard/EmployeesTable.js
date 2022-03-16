@@ -51,7 +51,7 @@ const headCells = [
     { id: 'phone', label: 'Telefon:', isAdmin: false, },
     { id: 'town', label: 'Miasto:', isAdmin: false, },
     { id: 'email', label: 'Email:', isAdmin: false, },
-    { id: 'actions', label: 'Akcje:', isAdmin: JSON.parse(Auth.getRole()) === "ADMIN" ? false : true }
+    { id: 'actions', label: 'Akcje:', isAdmin: false }
 ]
 
 const EmployeesTable = ({ isLoading, employees, setOpenEditEmployeePopup, setUpdatingStatusPopup, setOpenDeleteEmployeePopup, getEmployeesAPI, setEditedEmployee, setIsLoading }) => {

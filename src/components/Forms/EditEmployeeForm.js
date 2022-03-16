@@ -126,6 +126,8 @@ const EditUserForm = ({ setOpenPopup, editedEmployee, getEmployeesAPI, setUpdati
                         pauseOnHover: false,
                         draggable: true,
                         progress: undefined,
+                        toastId: "successfulEditedEmployeeToast"
+
                     });
                     actions.resetForm({
                         values: {
@@ -158,6 +160,8 @@ const EditUserForm = ({ setOpenPopup, editedEmployee, getEmployeesAPI, setUpdati
                     pauseOnHover: false,
                     draggable: true,
                     progress: undefined,
+                    toastId: "successfulEditedEmployeeToast"
+
                 });
                 actions.resetForm({
                     values: {
@@ -277,6 +281,7 @@ const EditUserForm = ({ setOpenPopup, editedEmployee, getEmployeesAPI, setUpdati
                                 type="submit"
                                 variant="contained"
                                 color="primary"
+                                id="confirmEditEmployeeButton"
                             >
                                 Edytuj
                             </Button>

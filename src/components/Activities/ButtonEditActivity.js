@@ -15,6 +15,7 @@ const ButtonEditActivity = ({ activity, setOpenPopup, openPopup, setEditedGroup 
             color="primary"
             startIcon={<EditIcon />}
             size="small"
+            id="editActivityButton"
             onClick={() => handleClick()}
         >
             Edytuj

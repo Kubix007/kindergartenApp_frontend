@@ -7,14 +7,12 @@ const ButtonSetCloth = ({ clothes, isEquipped, setIsEquipped, otherItems, setOth
 
     const checkUsedClothes = () => {
         let className = clothes.name.replaceAll(" ", "");
-        var el = document.getElementById('character').querySelectorAll('g');
-        el = Array.from(el).map(x => x.className.baseVal);
-        console.log(el);
-        if (typeof el.find(x => x === className) !== "undefined") {
+        var equippedClothes = document.getElementById('character').querySelectorAll('g');
+        equippedClothes = Array.from(equippedClothes).map(x => x.className.baseVal);
+        if (typeof equippedClothes.find(x => x === className) !== "undefined") {
             setIsEquipped(prevState => !prevState);
             setOtherItems(prevState => !prevState);
         }
-
     }
 
     useEffect(() => {
@@ -22,10 +20,10 @@ const ButtonSetCloth = ({ clothes, isEquipped, setIsEquipped, otherItems, setOth
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    const test = () => {
-        var el = document.getElementById('character').querySelector('svg');
+    const setClothes = () => {
+        var svgImage = document.getElementById('character').querySelector('svg');
         var className = clothes.name.replaceAll(" ", "");
-        var shapeGroup = d3.select(el).append("g").attr("class", className).attr("transform", "translate(209.37 94.977)");
+        var shapeGroup = d3.select(svgImage).append("g").attr("class", className).attr("transform", "translate(209.37 94.977)");
         const clothesDetails = clothes.clothes_details;
         for (var i = 0; i < clothesDetails.length; i++) {
             if (clothesDetails[i].type === "rect") {
@@ -39,7 +37,7 @@ const ButtonSetCloth = ({ clothes, isEquipped, setIsEquipped, otherItems, setOth
     }
 
     const handleClick = () => {
-        test();
+        setClothes();
         setIsEquipped(prevState => !prevState);
         setOtherItems(prevState => !prevState);
     }

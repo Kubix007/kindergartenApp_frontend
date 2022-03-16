@@ -56,10 +56,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const headCells = [
-    { id: 'first_name', label: 'Imię dziecka:', isAdmin: false, },
-    { id: 'surname', label: 'Nazwisko dziecka:', isAdmin: false, },
-    { id: 'points', label: 'Punkty:', isAdmin: false, },
-    { id: 'actions', label: 'Akcje:', isAdmin: JSON.parse(Auth.getRole()) === "ADMIN" ? false : true }
+    { id: 'first_name', label: 'Imię dziecka:' },
+    { id: 'surname', label: 'Nazwisko dziecka:' },
+    { id: 'points', label: 'Punkty:' },
+    { id: 'actions', label: 'Akcje:', textAlign: "center" }
 ]
 
 const postParticipantsAPI = (resourceAPI, data, actions) => {
@@ -73,6 +73,8 @@ const postParticipantsAPI = (resourceAPI, data, actions) => {
                 pauseOnHover: false,
                 draggable: true,
                 progress: undefined,
+                toastId: "successfulNewParticipantToast"
+
             });
             actions.resetForm({
                 values: {
@@ -201,8 +203,8 @@ const EditActivityForm = ({ getActivitiesAPI, setOpenPopup, editedGroup }) => {
                         <Table className={classes.table} sx={{ minWidth: 650 }} aria-label="simple table">
                             <TableHead>
                                 <TableRow>
-                                    {headCells.filter(headCell => headCell.isAdmin === false).map(headCell => (
-                                        <TableCell key={headCell.id}>{headCell.label}</TableCell>
+                                    {headCells.map(headCell => (
+                                        <TableCell style={{ textAlign: headCell.textAlign }} key={headCell.id}>{headCell.label}</TableCell>
                                     ))}
                                 </TableRow>
                             </TableHead>

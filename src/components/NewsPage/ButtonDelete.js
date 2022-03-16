@@ -8,7 +8,9 @@ const ButtonDelete = ({ setOpenPopup }) => {
         <Button variant="contained"
             color="primary"
             startIcon={<DeleteIcon />}
-            onClick={() => setOpenPopup(true)}>
+            onClick={() => setOpenPopup(true)}
+            id="deleteNewsButton"
+            >
             Usuń
         </Button>
     );

@@ -8,13 +8,14 @@ import {
 } from '@material-ui/core';
 import SingleCardList from '../components/NewsPage/SingleCardList';
 import Button from '@material-ui/core/Button';
-import { Skeleton } from '@mui/material';
 import AddCircleOutlineRoundedIcon from '@mui/icons-material/AddCircleOutlineRounded';
 import AnnouncementOutlinedIcon from '@mui/icons-material/AnnouncementOutlined';
 import AddPopup from '../components/Popups/Popup';
 import AddNewsForm from '../components/Forms/AddNewsForm';
 import Auth from '../api/Auth';
 import PageHeader from '../components/PageHeader';
+import UpdatingStatusPopup from '../components/Popups/Popup';
+import UpdatingStatusForm from '../components/Forms/UpdatingStatusForm';
 
 
 const resourceAPI = 'news';
@@ -44,18 +45,16 @@ const useStyles = makeStyles((theme) => ({
 const News = () => {
     const classes = useStyles();
     const [openPopup, setOpenPopup] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
     // eslint-disable-next-line no-unused-vars
     const [userDetailsId, setUserDetailsId] = useState();
-
+    const [updatingStatusPopup, setUpdatingStatusPopup] = useState(true);
     const [news, setNews] = useState([0]);
     const getNewsAPI = () => {
-        setIsLoading(true);
         Repository.getAll(resourceAPI).then(
             (data) => {
                 setTimeout(() => {
                     setNews(data.data);
-                    setIsLoading(false);
+                    setUpdatingStatusPopup(false);
                 }, 1000)
             },
             (error) => {
@@ -90,31 +89,18 @@ const News = () => {
             />
             <Container maxWidth="lg" className={classes.blogsContainer}>
                 {JSON.parse(Auth.getRole()) === "ADMIN" ? <Typography className={classes.button}>
-                    <Button variant="contained" color="primary" startIcon={<AddCircleOutlineRoundedIcon />} onClick={() => setOpenPopup(true)}>Dodaj aktualność</Button>
+                    <Button id="addNewsButton" variant="contained" color="primary" startIcon={<AddCircleOutlineRoundedIcon />} onClick={() => setOpenPopup(true)}>Dodaj ogłoszenie</Button>
                 </Typography> : null}
-                {news.length === 0 && !isLoading ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}><h1>Brak aktualności</h1></div> : null}
+                {news.length === 0 && !updatingStatusPopup ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}><h1>Brak aktualności</h1></div> : null}
                 <Grid container spacing={3}>
-                    {!isLoading ? <SingleCardList singleNews={news} getNewsAPI={getNewsAPI} setOpenPopup={setOpenPopup}
-                    /> :
-                        (
-                            <Grid container spacing={3}>
-                                <Grid item xs={12} sm={6} md={4}>
-                                    <Skeleton variant="rectangular" width={390} height={240} />
-                                </Grid>
-                                <Grid item xs={12} sm={6} md={4}>
-                                    <Skeleton variant="rectangular" width={390} height={240} />
-                                </Grid>
-                                <Grid item xs={12} sm={6} md={4}>
-                                    <Skeleton variant="rectangular" width={390} height={240} />
-                                </Grid>
-                            </Grid>
-                        )}
+                    {!updatingStatusPopup ? <SingleCardList singleNews={news} getNewsAPI={getNewsAPI} setOpenPopup={setOpenPopup}
+                    /> : null}
                 </Grid>
             </Container>
             <AddPopup
                 openPopup={openPopup}
                 setOpenPopup={setOpenPopup}
-                title="Dodaj nową aktualność"
+                title="Dodaj nowe ogłoszenie"
             >
                 <AddNewsForm
                     getNewsAPI={getNewsAPI}
@@ -122,6 +108,15 @@ const News = () => {
                     userDetailsId={userDetailsId}
                 />
             </AddPopup>
+            <UpdatingStatusPopup
+                openPopup={updatingStatusPopup}
+                setOpenPopup={setUpdatingStatusPopup}
+                isTitle={false}
+            >
+                <UpdatingStatusForm
+                    setOpenPopup={updatingStatusPopup}
+                />
+            </UpdatingStatusPopup>
         </>
     );
 }

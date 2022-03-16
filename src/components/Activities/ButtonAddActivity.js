@@ -7,6 +7,7 @@ const ButtonAddActivity = ({ setOpenPopup, disabled }) => {
         <Button
             variant="contained"
             color="primary"
+            id="addActivityButton"
             startIcon={<AddCircleOutlineRoundedIcon />}
             onClick={() => setOpenPopup(true)}
             disabled={disabled}

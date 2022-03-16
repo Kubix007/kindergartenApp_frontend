@@ -110,6 +110,8 @@ const EditUserForm = ({ setOpenPopup, editedUser, getUserDetailsAPI, setUpdating
                     pauseOnHover: false,
                     draggable: true,
                     progress: undefined,
+                    toastId: "successfulEditedUserToast"
+
                 });
                 actions.resetForm({
                     values: {
@@ -230,6 +232,7 @@ const EditUserForm = ({ setOpenPopup, editedUser, getUserDetailsAPI, setUpdating
                                 type="submit"
                                 variant="contained"
                                 color="primary"
+                                id="confirmEditUserButton" 
                             >
                                 Edytuj
                             </Button>

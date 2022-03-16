@@ -16,6 +16,8 @@ const ButtonEditEmployee = ({ setOpenPopup, setEditedEmployee, employee }) => {
             startIcon={<ModeEditOutlinedIcon />}
             onClick={handleClick}
             size='small'
+            id="editEmployeeButton"
+
         >
             Edytuj
         </Button>

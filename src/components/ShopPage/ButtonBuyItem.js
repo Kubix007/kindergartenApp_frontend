@@ -12,6 +12,7 @@ const ButtonBuyItem = ({ setOpenPopup, openPopup, userPoints, userDetailsId, ite
                 color="primary"
                 startIcon={<ShoppingCartOutlinedIcon />}
                 onClick={() => setOpenPopup(true)}
+                id="buyClothButton"
             >
                 Kup
             </Button>
