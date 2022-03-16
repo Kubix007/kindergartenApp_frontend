@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => ({
 const postNewsAPI = (resourceAPI, data, actions) => {
     Repository.add(resourceAPI, data).then(
         () => {
-            toast.success(`Pomyślnie dodana aktualność`, {
+            toast.success(`Pomyślnie dodano ogłoszenie`, {
                 position: "bottom-center",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -43,6 +43,8 @@ const postNewsAPI = (resourceAPI, data, actions) => {
                 pauseOnHover: false,
                 draggable: true,
                 progress: undefined,
+                toastId: "successfulNewsToast"
+
             });
             actions.resetForm({
                 values: {

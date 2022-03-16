@@ -1,24 +1,22 @@
-import React from 'react'
+import React from 'react';
 import Button from '@material-ui/core/Button';
 
-const ButtonAddPoints = ({ setOpenPopup, child, setKid }) => {
+const ButtonDeleteItem = ({ setOpenPopup }) => {
 
     const handleClick = () => {
-        setKid(child);
         setOpenPopup(true);
     }
 
     return (
         <Button
             variant="contained"
-            color="primary"
-            size="small"
+            color="secondary"
             onClick={handleClick}
-            id="addPointsButton"
+            id="deleteItemButton"
         >
-            Punkty
+            Usuń
         </Button>
     );
 }
 
-export default ButtonAddPoints;
+export default ButtonDeleteItem;

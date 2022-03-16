@@ -25,7 +25,7 @@ const login = (email, password) => {
 
 }
 
-const register = (login, email, password, passwordConfirmation) => {
+const register = (login, email, firstName, surname, parentsFirstName, parentsSurname, parentsPhone, town, street, password, passwordConfirmation) => {
     if (IsLogged()) {
         return <Redirect to="/logowanie" />;
     }
@@ -33,6 +33,13 @@ const register = (login, email, password, passwordConfirmation) => {
         return httpRequest.send("POST", `${API}/register`, {
             login: login,
             email: email,
+            first_name: firstName,
+            surname: surname,
+            parents_first_name: parentsFirstName,
+            parents_surname: parentsSurname,
+            parents_phone: parentsPhone,
+            town: town,
+            street: street,
             password: password,
             password_confirmation: passwordConfirmation
         })
@@ -41,6 +48,7 @@ const register = (login, email, password, passwordConfirmation) => {
             });
     }
 }
+
 
 const logout = () => {
     return httpRequest.send("POST", `${API}/logout`)

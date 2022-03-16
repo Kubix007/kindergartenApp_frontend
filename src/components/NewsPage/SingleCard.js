@@ -47,7 +47,6 @@ const SingleCard = ({ image, title, date, description, newsId, getNewsAPI, type 
                         <CardMedia
                             className={classes.media}
                             image={type === "Ostrzeżenie" ? ImageWarning : ImageInfo}
-                            title="Contemplative Reptile"
                             style={{ backgroundRepeat: "round", backgroundPosition: "initial" }}
                         />
                         <CardContent>
@@ -82,7 +81,7 @@ const SingleCard = ({ image, title, date, description, newsId, getNewsAPI, type 
             <EditPopup
                 openPopup={openPopupEdit}
                 setOpenPopup={setOpenPopupEdit}
-                title="Edytuj aktualność"
+                title="Edytuj ogłoszenie"
             >
                 <EditNewsForm
                     newsId={newsId}

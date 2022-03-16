@@ -18,6 +18,8 @@ import ButtonDeleteActivity from './../components/Activities/ButtonDeleteActivit
 import ButtonEditActivity from './../components/Activities/ButtonEditActivity';
 import Box from '@mui/material/Box';
 import Auth from '../api/Auth';
+import UpdatingStatusPopup from '../components/Popups/Popup';
+import UpdatingStatusForm from '../components/Forms/UpdatingStatusForm';
 
 const resourceActivitiesAPI = 'activities';
 const resourceEmployeesAPI = 'employees';
@@ -58,7 +60,7 @@ const headCells = [
     { id: 'name', label: 'Nazwa zajęć:', isAdmin: false, },
     { id: 'leader', label: 'Prowadzący:', isAdmin: false, },
     { id: 'participantCount', label: 'Liczba uczestników:', isAdmin: false, },
-    { id: 'actions', label: 'Akcje:', isAdmin: JSON.parse(Auth.getRole()) === "ADMIN" ? false : true }
+    { id: 'actions', label: 'Akcje:', isAdmin: false }
 ]
 
 const Activities = () => {
@@ -72,15 +74,14 @@ const Activities = () => {
     const [openEditActivityPopup, setOpenEditActivityPopup] = useState(false);
     const [openDeleteActivityPopup, setOpenDeleteActivityPopup] = useState(false);
     const [editedGroup, setEditedGroup] = useState();
+    const [updatingStatusPopup, setUpdatingStatusPopup] = useState(true);
+
 
     const getActivitiesAPI = () => {
-        setIsLoading(true);
         Repository.getAll(resourceActivitiesAPI).then(
             (data) => {
-                setTimeout(() => {
-                    setActivities(data.data.activities);
-                    setIsLoading(false);
-                }, 1000)
+                setActivities(data.data.activities);
+                setIsLoading(false);
             },
             (error) => {
                 console.log(error);
@@ -103,7 +104,10 @@ const Activities = () => {
     useEffect(() => {
         getActivitiesAPI();
         getEmployeesAPI();
-    }, []);
+        if (!buttonDisabled && !isLoading) {
+            setUpdatingStatusPopup(false);
+        }
+    }, [buttonDisabled, isLoading]);
 
     return (
         <>
@@ -117,7 +121,7 @@ const Activities = () => {
                 {JSON.parse(Auth.getRole()) === "ADMIN" ? <Toolbar className={classes.buttons}>
                     <ButtonAddActivity setOpenPopup={setOpenAddActivityPopup} disabled={buttonDisabled} />
                 </Toolbar> : null}
-                {activities.length === 0 && !isLoading ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}><h1>Niestety żadne zajęcia nie zostały jeszcze stworzone ;(</h1></div> : null}
+                {activities.length === 0 && !updatingStatusPopup ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}><h1>Niestety żadne zajęcia nie zostały jeszcze stworzone ;(</h1></div> : null}
                 <TableContainer>
                     <Table className={classes.table} sx={{ minWidth: 650 }} aria-label="simple table">
                         <TableHead>
@@ -127,7 +131,7 @@ const Activities = () => {
                                 )) : null}
                             </TableRow>
                         </TableHead>
-                        {!isLoading ? <TableBody>
+                        {!updatingStatusPopup ? <TableBody>
                             {activities.map((activity) => (
                                 <TableRow
                                     key={activity.id}
@@ -171,6 +175,15 @@ const Activities = () => {
                     editedGroup={editedGroup}
                 />
             </EditActivityPopup>
+            <UpdatingStatusPopup
+                openPopup={updatingStatusPopup}
+                setOpenPopup={setUpdatingStatusPopup}
+                isTitle={false}
+            >
+                <UpdatingStatusForm
+                    setOpenPopup={updatingStatusPopup}
+                />
+            </UpdatingStatusPopup>
         </>
     );
 }

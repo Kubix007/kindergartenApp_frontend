@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react'
 import PageHeader from '../components/PageHeader';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import { Grid, Container } from '@material-ui/core';
-import { Skeleton } from '@mui/material';
 import { makeStyles } from '@material-ui/core/styles';
 import ItemCardList from '../components/MyItems/ItemCardList';
 import Repository from '../api/Repository';
 import Auth from '../api/Auth';
+import UpdatingStatusPopup from '../components/Popups/Popup';
+import UpdatingStatusForm from '../components/Forms/UpdatingStatusForm';
 
 const resourceUsersColoringBooksAPI = 'users_coloring_books';
 const resourceUserDetailsAPI = 'user_details';
@@ -22,8 +23,8 @@ const useStyles = makeStyles(theme => ({
 
 const Myitems = () => {
     const classes = useStyles();
-    const [isLoading, setIsLoading] = useState(true);
     const [myItems, setMyItems] = useState([0, 0]);
+    const [updatingStatusPopup, setUpdatingStatusPopup] = useState(true);
     let userId = null;
 
     const getUserDetails = () => {
@@ -40,11 +41,10 @@ const Myitems = () => {
     }
 
     const getItemsAPI = (userId) => {
-        setIsLoading(true);
         Repository.getById(resourceUsersColoringBooksAPI, userId).then(
             (data) => {
                 setMyItems(data.data);
-                setIsLoading(false);
+                setUpdatingStatusPopup(false);
             },
             (error) => {
                 console.log(error);
@@ -64,26 +64,22 @@ const Myitems = () => {
                 subTitle="Lista Twoich przedmiotów"
                 icon={<ShoppingBagOutlinedIcon fontSize="large" />}
             />
-            {myItems.length === 0 ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}><h1>Brak przedmiotów</h1></div> : null}
+            {myItems.length === 0 ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}><h1 id="noItemsInfo">Brak przedmiotów</h1></div> : null}
             <Container maxWidth="lg" className={classes.blogsContainer}>
                 <Grid container spacing={3}>
-                    {!isLoading ? <ItemCardList items={myItems}
-                    /> :
-                        (
-                            <Grid container spacing={3}>
-                                <Grid item xs={12} sm={6} md={4}>
-                                    <Skeleton variant="rectangular" width={390} height={240} />
-                                </Grid>
-                                <Grid item xs={12} sm={6} md={4}>
-                                    <Skeleton variant="rectangular" width={390} height={240} />
-                                </Grid>
-                                <Grid item xs={12} sm={6} md={4}>
-                                    <Skeleton variant="rectangular" width={390} height={240} />
-                                </Grid>
-                            </Grid>
-                        )}
+                    {!updatingStatusPopup ? <ItemCardList setUpdatingStatusPopup={setUpdatingStatusPopup} getItemsAPI={getUserDetails} items={myItems}
+                    /> : null}
                 </Grid>
             </Container>
+            <UpdatingStatusPopup
+                openPopup={updatingStatusPopup}
+                setOpenPopup={setUpdatingStatusPopup}
+                isTitle={false}
+            >
+                <UpdatingStatusForm
+                    setOpenPopup={updatingStatusPopup}
+                />
+            </UpdatingStatusPopup>
         </>
     );
 };

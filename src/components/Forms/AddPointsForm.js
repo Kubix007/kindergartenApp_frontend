@@ -75,6 +75,8 @@ const AddPointsForm = ({ getActivitiesAPI, setOpenPopup, child, setEditActivityP
                     pauseOnHover: false,
                     draggable: true,
                     progress: undefined,
+                    toastId: "successfulAddPointsToast"
+
                 });
                 actions.resetForm({
                     values: {
@@ -193,6 +195,7 @@ const AddPointsForm = ({ getActivitiesAPI, setOpenPopup, child, setEditActivityP
                                 type="submit"
                                 variant="contained"
                                 color="primary"
+                                id="confirmAddingPointsButton"
                             >
                                 Dodaj
                             </Button>

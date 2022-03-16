@@ -29,6 +29,8 @@ const deleteActivityAPI = (id) => {
                 pauseOnHover: false,
                 draggable: true,
                 progress: undefined,
+                toastId: "successfulDeletedGroupToast"
+
             });
         },
         (error) => {
@@ -37,13 +39,25 @@ const deleteActivityAPI = (id) => {
         }
     );
 }
-const DeleteActivityForm = ({ setOpenPopup, getActivitiesAPI, activityId }) => {
+const DeleteActivityForm = ({ setOpenPopup, getActivitiesAPI, activityId, activityParticipants }) => {
     const classes = useStyles();
 
     const handleClick = () => {
-        deleteActivityAPI(activityId);
+        if (activityParticipants > 0) {
+            toast.error(`Grupa musi być pusta przed usunięciem`, {
+                position: "bottom-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+            });
+        } else {
+            deleteActivityAPI(activityId);
+            getActivitiesAPI();
+        }
         setOpenPopup(false);
-        getActivitiesAPI();
     }
 
     return (
@@ -53,7 +67,7 @@ const DeleteActivityForm = ({ setOpenPopup, getActivitiesAPI, activityId }) => {
             </Grid>
             <Grid container xs={true} sm={true} md={true} className={classes.gridButton}>
                 <Grid item xs={true} sm={true} md={true} className={classes.gridButton}>
-                    <Button onClick={() => handleClick()} variant="contained" color="primary">Tak</Button>
+                    <Button id="confirmDeleteGroupButton" onClick={() => handleClick()} variant="contained" color="primary">Tak</Button>
                 </Grid>
                 <Grid item xs={true} sm={true} md={true} className={classes.gridButton}>
                     <Button onClick={() => setOpenPopup(false)} variant="contained" color="primary">Nie</Button>

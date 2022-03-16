@@ -5,6 +5,7 @@ import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettin
 import {
     Paper,
     Grid,
+    Container
 } from '@material-ui/core';
 import Repository from '../api/Repository';
 import EditUserPopup from '../components/Popups/Popup';
@@ -122,36 +123,39 @@ const AdminDashboard = () => {
                 subTitle="Zarządzaj użytkownikami"
                 icon={<AdminPanelSettingsOutlinedIcon fontSize="large" />}
             />
-            <Grid container className={classes.gridButtons} spacing={1} >
-                <Grid item><ButtonUsersTable disabled={isUsersSelected} setIsUsersSelected={setIsUsersSelected} /></Grid>
-                <Grid item><ButtonEmployeesTable disabled={!isUsersSelected} setIsUsersSelected={setIsUsersSelected} /></Grid>
-            </Grid>
-            <Grid container className={classes.gridButtons} spacing={1} >
-                <Grid item><ButtonAddEmployee setOpenPopup={setOpenAddEmployeePopup} /></Grid>
-            </Grid>
-            <Paper elevation={6} className={classes.pageContent}>
-                {isUsersSelected ? <UsersTable
-                    isLoading={isLoadingUsers}
-                    userDetails={userDetails}
-                    setOpenEditUserPopup={setOpenEditUserPopup}
-                    setOpenDeleteUserPopup={setOpenDeleteUserPopup}
-                    setEditedUser={setEditedUser}
-                    getUserDetailsAPI={getUserDetailsAPI}
-                    setOpenSetAsEmployeePopup={setOpenAddEmployeePopup}
-                    setIsLoading={setIsLoadingUsers}
-                    setUpdatingStatusPopup={setUpdatingStatusPopup}
-                /> : <EmployeesTable
-                    isLoading={isLoadingEmployees}
-                    employees={employees}
-                    setOpenEditEmployeePopup={setOpenEditEmployeePopup}
-                    setOpenDeleteEmployeePopup={setOpenDeleteEmployeePopup}
-                    setEditedEmployee={setEditedEmployee}
-                    getEmployeesAPI={getEmployeesAPI}
-                    setIsLoading={setIsLoadingEmployees}
-                    setUpdatingStatusPopup={setUpdatingStatusPopup}
+            <Container maxWidth="lg" >
+                <Paper elevation={6} className={classes.pageContent}>
+                    <Grid container spacing={1} >
+                        <Grid item><ButtonUsersTable disabled={isUsersSelected} setIsUsersSelected={setIsUsersSelected} /></Grid>
+                        <Grid item><ButtonEmployeesTable disabled={!isUsersSelected} setIsUsersSelected={setIsUsersSelected} /></Grid>
+                    </Grid>
+                    <Grid container spacing={1} >
+                        <Grid item>{!isUsersSelected ? <ButtonAddEmployee setOpenPopup={setOpenAddEmployeePopup} /> : null}</Grid>
+                    </Grid>
+                    {isUsersSelected ? <UsersTable
+                        isLoading={isLoadingUsers}
+                        userDetails={userDetails}
+                        setOpenEditUserPopup={setOpenEditUserPopup}
+                        setOpenDeleteUserPopup={setOpenDeleteUserPopup}
+                        setEditedUser={setEditedUser}
+                        getUserDetailsAPI={getUserDetailsAPI}
+                        setOpenSetAsEmployeePopup={setOpenAddEmployeePopup}
+                        setIsLoading={setIsLoadingUsers}
+                        setUpdatingStatusPopup={setUpdatingStatusPopup}
+                    /> : <EmployeesTable
+                        isLoading={isLoadingEmployees}
+                        employees={employees}
+                        setOpenEditEmployeePopup={setOpenEditEmployeePopup}
+                        setOpenDeleteEmployeePopup={setOpenDeleteEmployeePopup}
+                        setEditedEmployee={setEditedEmployee}
+                        getEmployeesAPI={getEmployeesAPI}
+                        setIsLoading={setIsLoadingEmployees}
+                        setUpdatingStatusPopup={setUpdatingStatusPopup}
 
-                />}
-            </Paper>
+                    />}
+                </Paper>
+            </Container>
+
             <EditUserPopup
                 openPopup={openEditUserPopup}
                 setOpenPopup={setOpenEditUserPopup}
@@ -205,7 +209,7 @@ const AdminDashboard = () => {
             <EditEmployeePopup
                 openPopup={openEditEmployeePopup}
                 setOpenPopup={setOpenEditEmployeePopup}
-                title="Edytuj pracownika"
+                title="Edytuj nauczyciela"
                 maxWidth="sm"
             >
                 <EditEmployeeForm
@@ -218,7 +222,7 @@ const AdminDashboard = () => {
             <AddEmployeePopup
                 openPopup={openAddEmployeePopup}
                 setOpenPopup={setOpenAddEmployeePopup}
-                title="Dodaj jako pracownika"
+                title="Dodaj jako nauczyciela"
                 maxWidth="sm"
             >
                 <AddEmployeeForm

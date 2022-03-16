@@ -16,6 +16,7 @@ const ButtonDeleteUser = ({ setOpenPopup, setEditedUser, user }) => {
             startIcon={<DeleteIcon />}
             onClick={handleClick}
             size='small'
+            id="deleteUserButton"
         >
             Usuń
         </Button>

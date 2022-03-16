@@ -27,36 +27,36 @@ const ColoringBook = () => {
     const history = useHistory();
 
 
-    function showArea(event) {
+    function setColorEventHandler(event) {
         event.target.setAttribute("fill", color)
     };
 
-    function render_xml(id, xml_string) {
-        var el = document.getElementById(id)
-        var doc = new DOMParser().parseFromString(xml_string, 'text/html');
-        if (el.hasChildNodes()) {
-            while (el.firstChild) {
-                el.removeChild(el.firstChild);
+    function renderColoringBook(svgString) {
+        var container = document.getElementById("coloring")
+        var svg = new DOMParser().parseFromString(svgString, 'text/html');
+        if (container.hasChildNodes()) {
+            while (container.firstChild) {
+                container.removeChild(container.firstChild);
             }
-            el.appendChild(
-                el.ownerDocument.importNode(doc.documentElement, true),
+            container.appendChild(
+                container.ownerDocument.importNode(svg.documentElement, true),
             )
         } else {
-            el.appendChild(
-                el.ownerDocument.importNode(doc.documentElement, true),
+            container.appendChild(
+                container.ownerDocument.importNode(svg.documentElement, true),
             )
         }
 
-        var elements = Array.from(document.getElementsByClassName('paint'));
-        elements.forEach(function (el) {
-            el.addEventListener("click", showArea, false);
+        var elementsOfSvg = Array.from(document.getElementsByClassName('paint'));
+        elementsOfSvg.forEach(function (el) {
+            el.addEventListener("click", setColorEventHandler, false);
         })
     }
 
     useEffect(() => {
         const fetchColoringBook = async () => {
             try {
-                render_xml(`coloring`, coloringBook.source);
+                renderColoringBook(coloringBook.source);
             } catch {
                 history.push("/przedmioty");
                 toast.error(`Wystąpił błąd, spróbuj ponownie`, {
@@ -78,7 +78,7 @@ const ColoringBook = () => {
     useEffect(() => {
         var elements = Array.from(document.getElementsByClassName('paint'));
         elements.forEach(function (el) {
-            el.addEventListener("click", showArea, false);
+            el.addEventListener("click", setColorEventHandler, false);
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [color]);

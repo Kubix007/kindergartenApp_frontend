@@ -10,6 +10,7 @@ const ButtonEmployeesTable = ({ setIsUsersSelected, disabled }) => {
             startIcon={<BadgeOutlinedIcon />}
             onClick={() => setIsUsersSelected(prevState => !prevState)}
             disabled={disabled}
+            id="showEmployeesButton"
         >
             Nauczyciele
         </Button>

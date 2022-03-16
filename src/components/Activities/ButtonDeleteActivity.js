@@ -13,6 +13,7 @@ const ButtonDeleteActivity = ({ setOpenPopup, getActivitiesAPI, activity, openPo
                 startIcon={<DeleteIcon />}
                 size="small"
                 onClick={() => setOpenPopup(true)}
+                id="deleteActivityButton"
             >
                 Usuń
             </Button>
@@ -25,6 +26,7 @@ const ButtonDeleteActivity = ({ setOpenPopup, getActivitiesAPI, activity, openPo
                     getActivitiesAPI={getActivitiesAPI}
                     setOpenPopup={setOpenPopup}
                     activityId={activity.id}
+                    activityParticipants={activity.participantCount}
                 />
             </DeleteActivityPopup>
         </>

@@ -7,7 +7,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Repository from '../../api/Repository';
 import { toast } from 'react-toastify';
 
-const resourceAPI = 'news';
+const resourceUsersColoringBooksAPI = 'users_coloring_books';
+
 const useStyles = makeStyles((theme) => ({
     gridButton: {
         alignItems: "center",
@@ -17,10 +18,10 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const deleteNewsAPI = (id) => {
-    Repository.deleteRequest(resourceAPI, id).then(
+const deleteItemsAPI = (id) => {
+    Repository.deleteRequest(resourceUsersColoringBooksAPI, id).then(
         () => {
-            toast.success(`Pomyślnie usunięto ogłoszenie`, {
+            toast.success(`Pomyślnie usunięto przedmiot`, {
                 position: "bottom-center",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -28,7 +29,7 @@ const deleteNewsAPI = (id) => {
                 pauseOnHover: false,
                 draggable: true,
                 progress: undefined,
-                toastId: "successfulDeletedNewsToast"
+                toastId: "successfulDeletedItemToast"
 
             });
         },
@@ -38,22 +39,24 @@ const deleteNewsAPI = (id) => {
         }
     );
 }
-const DeleteNewsForm = ({ setOpenPopup, getNewsAPI, newsId }) => {
+const DeleteItemForm = ({ setOpenPopup, getItemsAPI, itemId, setUpdatingStatusPopup }) => {
     const classes = useStyles();
 
     const handleClick = () => {
-        deleteNewsAPI(newsId);
-        getNewsAPI();
+        deleteItemsAPI(itemId);
+        getItemsAPI();
+        setOpenPopup(false);
+        setUpdatingStatusPopup(true);
     }
 
     return (
         <Grid container component="main" direction="column" xs={12} sm={true} md={true}>
             <Grid item xs={true} sm={true} md={true}>
-                <label>Czy na pewno chcesz usunąć to ogłoszenie?</label>
+                <label>Czy na pewno chcesz usunąć ten przedmiot?</label>
             </Grid>
             <Grid container xs={true} sm={true} md={true} className={classes.gridButton}>
                 <Grid item xs={true} sm={true} md={true} className={classes.gridButton}>
-                    <Button id="confirmDeleteNewsButton" onClick={() => handleClick()} variant="contained" color="primary">Tak</Button>
+                    <Button id="confirmDeleteItemButton" onClick={() => handleClick()} variant="contained" color="primary">Tak</Button>
                 </Grid>
                 <Grid item xs={true} sm={true} md={true} className={classes.gridButton}>
                     <Button onClick={() => setOpenPopup(false)} variant="contained" color="primary">Nie</Button>
@@ -63,4 +66,4 @@ const DeleteNewsForm = ({ setOpenPopup, getNewsAPI, newsId }) => {
     );
 }
 
-export default DeleteNewsForm;
+export default DeleteItemForm;

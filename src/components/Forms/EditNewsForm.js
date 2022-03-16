@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 const updateNewsAPI = (resourceAPI, newsId, data, actions) => {
     Repository.update(resourceAPI, newsId, data).then(
         () => {
-            toast.success(`Pomyślnie zmieniono aktualność`, {
+            toast.success(`Pomyślnie zmieniono ogłoszenie`, {
                 position: "bottom-center",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -42,6 +42,8 @@ const updateNewsAPI = (resourceAPI, newsId, data, actions) => {
                 pauseOnHover: false,
                 draggable: true,
                 progress: undefined,
+                toastId: "successfulEditedNewsToast"
+
             });
             actions.resetForm({
                 values: {
@@ -68,6 +70,7 @@ const EditNewsForm = ({ getNewsAPI, newsId, setOpenPopup, newsTitle, newsDescrip
             .required("Pole wymagane"),
         description: yup
             .string()
+            .max(250, "Maksymalna długość to 250 znaków"),
     });
 
     const formik = useFormik({
@@ -106,7 +109,6 @@ const EditNewsForm = ({ getNewsAPI, newsId, setOpenPopup, newsTitle, newsDescrip
             }
         },
         validationSchema: validationSchema,
-
     });
 
     return (
@@ -130,20 +132,25 @@ const EditNewsForm = ({ getNewsAPI, newsId, setOpenPopup, newsTitle, newsDescrip
 
                     />
                     <TextField
-                        variant="outlined"
                         margin="normal"
+                        variant='outlined'
                         fullWidth
                         id="description"
-                        maxRows={11}
                         multiline
-                        minRows={7}
+                        maxRows={6}
+                        minRows={6}
                         label="Opis"
                         name="description"
                         value={formik.values.description}
-                        onChange={formik.handleChange}
+                        onChange={e => {
+                            if (e.nativeEvent.inputType === "insertLineBreak") return;
+                            formik.handleChange(e)
+
+                        }}
                         error={formik.touched.description && Boolean(formik.errors.description)}
                         helperText={formik.touched.description && formik.errors.description}
                         onBlur={formik.handleBlur}
+                        inputProps={{ maxLength: 250 }}
                     />
                     <Grid className={classes.grid} container xs={12} sm={true} md={true}>
                         <Grid className={classes.grid} item xs={true} sm={true} md={true}>
@@ -152,6 +159,7 @@ const EditNewsForm = ({ getNewsAPI, newsId, setOpenPopup, newsTitle, newsDescrip
                                 type="submit"
                                 variant="contained"
                                 color="primary"
+                                id="saveEditedNewsButton"
                             >
                                 Edytuj
                             </Button>

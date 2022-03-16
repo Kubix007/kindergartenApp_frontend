@@ -43,6 +43,8 @@ const postActivityAPI = (resourceAPI, data, actions) => {
                 pauseOnHover: false,
                 draggable: true,
                 progress: undefined,
+                toastId: "successfulNewGroupToast"
+
             });
             actions.resetForm({
                 values: {

@@ -17,6 +17,8 @@ const ButtonSaveImage = ({ coloringImage }) => {
                     pauseOnHover: false,
                     draggable: true,
                     progress: undefined,
+                    toastId: "successfulSavedColoringBookToast"
+
                 });
             },
             () => {

@@ -8,7 +8,9 @@ const ButtonEdit = ({ setOpenPopup }) => {
         <Button variant="contained"
             color="primary"
             startIcon={<EditIcon />}
-            onClick={() => setOpenPopup(true)}>
+            onClick={() => setOpenPopup(true)}
+            id="editNewsButton"
+        >
             Edytuj
         </Button>
     );

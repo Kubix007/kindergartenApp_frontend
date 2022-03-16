@@ -1,6 +1,5 @@
 import React, { useContext } from 'react'
 import Button from '@material-ui/core/Button';
-import PaletteOutlinedIcon from '@mui/icons-material/PaletteOutlined';
 import { NavLink } from "react-router-dom";
 import { ColoringBookContext } from '../../context/ColoringBookContext';
 
@@ -17,8 +16,9 @@ const ButtonColoringBook = ({ item }) => {
             <Button
                 variant="contained"
                 color="primary"
-                startIcon={<PaletteOutlinedIcon />}
+                //startIcon={<PaletteOutlinedIcon />}
                 onClick={handleClick}
+                id="coloringButton"
             >
                 Koloruj
             </Button>

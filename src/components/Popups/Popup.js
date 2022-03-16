@@ -20,6 +20,7 @@ const Popup = (props) => {
         <Dialog open={openPopup} maxWidth={maxWidth} xs={12} sm={6} md={4}>
             {isTitle ? <DialogTitle> {onClose ? (
                 <IconButton
+                    id="previewCloseButton"
                     aria-label="close"
                     onClick={onClose}
                     sx={{

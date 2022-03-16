@@ -4,12 +4,13 @@ import StoreOutlinedIcon from '@mui/icons-material/StoreOutlined';
 import { Grid, Container, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Repository from './../api/Repository';
-import { Skeleton } from '@mui/material';
 import ShopColoringBooksCardList from '../components/ShopPage/ShopColoringBooksCardList';
 import ShopClothesCardList from '../components/ShopPage/ShopClothesCardList';
 import Auth from '../api/Auth';
 import BuyingStatusPopup from '../components/Popups/Popup';
 import BuyingStatusForm from '../components/Forms/BuyingStatusForm';
+import UpdatingStatusPopup from '../components/Popups/Popup';
+import UpdatingStatusForm from '../components/Forms/UpdatingStatusForm';
 
 const resourceShopColoringBooksAPI = 'shop_coloring_books';
 const resourceUserDetailsAPI = 'user_details';
@@ -35,15 +36,14 @@ const Shop = () => {
     const [itemShop, setItemShop] = useState();
     const [clothesFromShop, setClothesFromShop] = useState();
     const [buyingStatusPopup, setBuyingStatusPopup] = useState();
+    const [updatingStatusPopup, setUpdatingStatusPopup] = useState(true);
+
 
     const getShopAPI = () => {
-        setIsLoadingColoringBooks(true);
         Repository.getAll(resourceShopColoringBooksAPI).then(
             (data) => {
-                setTimeout(() => {
-                    setItemShop(data.data);
-                    setIsLoadingColoringBooks(false);
-                }, 1000)
+                setItemShop(data.data);
+                setIsLoadingColoringBooks(false);
             },
             (error) => {
                 console.log(error);
@@ -52,15 +52,13 @@ const Shop = () => {
     }
 
     const getUserDetails = () => {
-        setIsPointsLoading(true);
         let id = parseInt(Auth.getUserId());
+        setUserDetailsId(parseInt(Auth.getUserId()));
         Repository.getById(resourceUserDetailsAPI, id).then(
             (data) => {
-                setTimeout(() => {
-                    setUserPoints(data.data.data.points);
-                    setUserDetailsId(data.data.data.user_id);
-                    setIsPointsLoading(false);
-                }, 1000)
+                setUserPoints(data.data.data.points);
+                //setUserDetailsId(data.data.data.user_id);
+                setIsPointsLoading(false);
             },
             (error) => {
                 console.log(error);
@@ -69,13 +67,10 @@ const Shop = () => {
     }
 
     const getShopClothesAPI = () => {
-        setIsLoadingClothes(true);
         Repository.getAll(resourceShopClothesAPI).then(
             (data) => {
-                setTimeout(() => {
-                    setClothesFromShop(data.data);
-                    setIsLoadingClothes(false);
-                }, 1000)
+                setClothesFromShop(data.data);
+                setIsLoadingClothes(false);
             },
             (error) => {
                 console.log(error);
@@ -87,7 +82,10 @@ const Shop = () => {
         getShopAPI();
         getUserDetails();
         getShopClothesAPI();
-    }, []);
+        if (!isPointsLoading && !isLoadingColoringBooks && !isLoadingClothes) {
+            setUpdatingStatusPopup(false);
+        }
+    }, [isLoadingClothes, isLoadingColoringBooks, isPointsLoading]);
 
     return (
         <>
@@ -97,27 +95,13 @@ const Shop = () => {
                 icon={<StoreOutlinedIcon fontSize="large" />}
             />
             <Container maxWidth="lg" className={classes.blogsContainer}>
-                {!isPointsLoading ? <Typography variant="h5" component="h2">
+                {!updatingStatusPopup? <Typography variant="h5" component="h2">
                     Twoje punkty: {userPoints} pkt.
-                </Typography> : <Typography variant="h5" component="h2">
-                    Twoje punkty: Ładowanie...
-                </Typography>}
+                </Typography> : null}
                 <Grid container spacing={3} style={{ paddingTop: "10px" }}>
-                    {!isLoadingColoringBooks && !isLoadingClothes ? <><ShopColoringBooksCardList getUserDetailsAPI={getUserDetails} setBuyingStatusPopup={setBuyingStatusPopup} userPoints={userPoints} userDetailsId={userDetailsId} singleShopItem={itemShop} getShopAPI={getShopAPI} setOpenPopup={setOpenPopup}
+                    {!updatingStatusPopup ? <><ShopColoringBooksCardList getUserDetailsAPI={getUserDetails} setBuyingStatusPopup={setBuyingStatusPopup} userPoints={userPoints} userDetailsId={userDetailsId} singleShopItem={itemShop} getShopAPI={getShopAPI} setOpenPopup={setOpenPopup}
                     /><ShopClothesCardList getUserDetailsAPI={getUserDetails} setBuyingStatusPopup={setBuyingStatusPopup} userPoints={userPoints} userDetailsId={userDetailsId} singleShopItem={clothesFromShop} getShopAPI={getShopAPI} setOpenPopup={setOpenPopup} /> </> :
-                        (
-                            <Grid container spacing={3}>
-                                <Grid item xs={12} sm={6} md={4}>
-                                    <Skeleton variant="rectangular" width={390} height={240} />
-                                </Grid>
-                                <Grid item xs={12} sm={6} md={4}>
-                                    <Skeleton variant="rectangular" width={390} height={240} />
-                                </Grid>
-                                <Grid item xs={12} sm={6} md={4}>
-                                    <Skeleton variant="rectangular" width={390} height={240} />
-                                </Grid>
-                            </Grid>
-                        )}
+                        null}
                 </Grid>
             </Container>
             <BuyingStatusPopup
@@ -130,6 +114,15 @@ const Shop = () => {
                     setOpenPopup={buyingStatusPopup}
                 />
             </BuyingStatusPopup>
+            <UpdatingStatusPopup
+                openPopup={updatingStatusPopup}
+                setOpenPopup={setUpdatingStatusPopup}
+                isTitle={false}
+            >
+                <UpdatingStatusForm
+                    setOpenPopup={updatingStatusPopup}
+                />
+            </UpdatingStatusPopup>
         </>
     );
 };

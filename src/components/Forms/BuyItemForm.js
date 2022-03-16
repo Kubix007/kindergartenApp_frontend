@@ -38,7 +38,7 @@ const BuyItemForm = ({ setOpenPopup, userPoints, userDetailsId, setBuyingStatusP
         } else {
             let pointsToUpdate = userPoints - item.cost;
             let dataUserDetails = {
-                points: pointsToUpdate,
+                points: parseInt(pointsToUpdate),
             }
             let dataItems = {
                 user_details_id: userDetailsId,
@@ -69,8 +69,10 @@ const BuyItemForm = ({ setOpenPopup, userPoints, userDetailsId, setBuyingStatusP
                     pauseOnHover: false,
                     draggable: true,
                     progress: undefined,
-                });
-            },
+                    toastId: "successfulPurchasedItemToast"
+                },
+                );
+            }
         );
     }
 
@@ -101,7 +103,7 @@ const BuyItemForm = ({ setOpenPopup, userPoints, userDetailsId, setBuyingStatusP
                 </Grid>
                 <Grid container xs={true} sm={true} md={true} className={classes.gridButton}>
                     <Grid item xs={true} sm={true} md={true} className={classes.gridButton}>
-                        <Button onClick={() => handleClick()} variant="contained" color="primary">Tak</Button>
+                        <Button id="confirmBuyItemButton" onClick={() => handleClick()} variant="contained" color="primary">Tak</Button>
                     </Grid>
                     <Grid item xs={true} sm={true} md={true} className={classes.gridButton}>
                         <Button onClick={() => setOpenPopup(false)} variant="contained" color="primary">Nie</Button>

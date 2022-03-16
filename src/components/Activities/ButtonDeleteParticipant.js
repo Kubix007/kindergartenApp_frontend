@@ -18,6 +18,8 @@ const ButtonDeleteParticipant = ({ activityId, participantId, getActivitiesAPI, 
                     pauseOnHover: false,
                     draggable: true,
                     progress: undefined,
+                    toastId: "successfulDeleteParticipantToast"
+
                 });
             },
             (error) => {
@@ -45,6 +47,7 @@ const ButtonDeleteParticipant = ({ activityId, participantId, getActivitiesAPI, 
             variant="contained"
             color="primary"
             size="medium"
+            id="deleteParticipantButton"
             onClick={handleClick}
         >
             Usuń
