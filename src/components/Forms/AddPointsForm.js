@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import {
     Grid,
     TextField,
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-const AddPointsForm = ({ getActivitiesAPI, setOpenPopup, child, setEditActivityPopup }) => {
+const AddPointsForm = ({ getActivitiesAPI, setOpenPopup, child, setEditActivityPopup, setUpdatingStatusPopup, refreshAfterNewPoints }) => {
     const classes = useStyles();
     const { user, setUser } = useContext(UserContext);
 
@@ -42,32 +42,26 @@ const AddPointsForm = ({ getActivitiesAPI, setOpenPopup, child, setEditActivityP
         points: yup
             .number().integer("Liczba musi być całkowita")
             .required("Pole wymagane")
+            .max(1000, "Maksymalnie 1000 pkt.")
             .typeError("Pole musi być liczbą"),
         description: yup
             .string()
-            .required("Pole wymagane")
+            .max(250, "Pole może składać się maksymalnie z 250 znaków")
+            .required("Pole wymagane"),
     });
 
-    const putUserDetailsAPI = (resourceAPI, id, data) => {
+    const putUserDetailsAPI = (resourceAPI, id, data, resourcePointsHistoryAPI, pointsHistoryData, actions) => {
+        setUpdatingStatusPopup(true);
+        setOpenPopup(false);
+        setEditActivityPopup(false);
         Repository.update(resourceAPI, id, data).then(
             () => {
-                console.log();
+                postHistoryPointsAPI(resourcePointsHistoryAPI, pointsHistoryData, actions);
             },
             (error) => {
                 console.log(error);
                 console.log(error.response);
-            }
-        );
-    }
-
-    useEffect(() => {
-        console.log("AddPointsform");
-    }, []);
-
-    const postHistoryPointsAPI = (resourceAPI, data, actions) => {
-        Repository.add(resourceAPI, data).then(
-            () => {
-                toast.success(`Pomyślnie zaktualizowano punkty`, {
+                toast.error(`Nie udało się zaktualizować punktów`, {
                     position: "bottom-center",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -75,9 +69,17 @@ const AddPointsForm = ({ getActivitiesAPI, setOpenPopup, child, setEditActivityP
                     pauseOnHover: false,
                     draggable: true,
                     progress: undefined,
-                    toastId: "successfulAddPointsToast"
-
                 });
+                setUpdatingStatusPopup(false);
+
+            }
+        );
+    }
+
+    const postHistoryPointsAPI = (resourceAPI, data, actions) => {
+        Repository.add(resourceAPI, data).then(
+            () => {
+                refreshAfterNewPoints();
                 actions.resetForm({
                     values: {
                         points: "",
@@ -88,6 +90,16 @@ const AddPointsForm = ({ getActivitiesAPI, setOpenPopup, child, setEditActivityP
             (error) => {
                 console.log(error);
                 console.log(error.response);
+                toast.error(`Nie udało się zaktualizować punktów`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
             }
         );
     }
@@ -109,11 +121,7 @@ const AddPointsForm = ({ getActivitiesAPI, setOpenPopup, child, setEditActivityP
                     points: values.points,
                     description: values.description,
                 }
-                putUserDetailsAPI(resourceUserDetailsAPI, child.id, userDetailsData);
-                postHistoryPointsAPI(resourcePointsHistoryAPI, pointsHistoryData, actions);
-                getActivitiesAPI();
-                setOpenPopup(false);
-                setEditActivityPopup(false);
+                putUserDetailsAPI(resourceUserDetailsAPI, child.id, userDetailsData, resourcePointsHistoryAPI, pointsHistoryData, actions);
             } else {
                 Auth.getUser().then(
                     (response) => {
@@ -126,14 +134,21 @@ const AddPointsForm = ({ getActivitiesAPI, setOpenPopup, child, setEditActivityP
                             points: values.points,
                             description: values.description,
                         }
-                        putUserDetailsAPI(resourceUserDetailsAPI, child.id, userDetailsData);
-                        postHistoryPointsAPI(resourcePointsHistoryAPI, pointsHistoryData, actions);
-                        getActivitiesAPI();
-                        setOpenPopup(false);
-                        setEditActivityPopup(false);
+                        putUserDetailsAPI(resourceUserDetailsAPI, child.id, userDetailsData, resourcePointsHistoryAPI, pointsHistoryData, actions);
                     },
                     (error) => {
                         console.log(error);
+                        toast.error(`Nie udało się zaktualizować punktów`, {
+                            position: "bottom-center",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: false,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                        setUpdatingStatusPopup(false);
+
                     }
                 )
             }
@@ -173,20 +188,25 @@ const AddPointsForm = ({ getActivitiesAPI, setOpenPopup, child, setEditActivityP
                         onBlur={formik.handleBlur}
                     />
                     <TextField
-                        variant="outlined"
                         margin="normal"
+                        variant='outlined'
                         fullWidth
                         id="description"
-                        maxRows={11}
                         multiline
-                        minRows={7}
+                        maxRows={6}
+                        minRows={6}
                         label="Opis"
                         name="description"
                         value={formik.values.description}
-                        onChange={formik.handleChange}
+                        onChange={e => {
+                            if (e.nativeEvent.inputType === "insertLineBreak") return;
+                            formik.handleChange(e)
+
+                        }}
                         error={formik.touched.description && Boolean(formik.errors.description)}
                         helperText={formik.touched.description && formik.errors.description}
                         onBlur={formik.handleBlur}
+                        inputProps={{ maxLength: 250 }}
                     />
                     <Grid className={classes.grid} container xs={12} sm={true} md={true}>
                         <Grid className={classes.grid} item xs={true} sm={true} md={true}>

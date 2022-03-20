@@ -27,7 +27,7 @@ const login = (email, password) => {
 
 const register = (login, email, firstName, surname, parentsFirstName, parentsSurname, parentsPhone, town, street, password, passwordConfirmation) => {
     if (IsLogged()) {
-        return <Redirect to="/logowanie" />;
+        return <Redirect to="/aktualnosci" />;
     }
     else {
         return httpRequest.send("POST", `${API}/register`, {
@@ -72,6 +72,8 @@ const getUserRole = () => {
 
 const reset = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("role");
+    localStorage.removeItem("id");
 }
 
 const IsLogged = () => localStorage.getItem("user");

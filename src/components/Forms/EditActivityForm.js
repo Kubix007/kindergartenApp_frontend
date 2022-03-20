@@ -12,20 +12,12 @@ import Repository from '../../api/Repository';
 import { UserContext } from '../../context/UserContext';
 import Auth from '../../api/Auth';
 import { Typography } from '@material-ui/core';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableRow from '@mui/material/TableRow';
 import ButtonDeleteParticipant from './../Activities/ButtonDeleteParticipant';
-import Box from '@mui/material/Box';
-import MenuItem from '@mui/material/MenuItem';
 import { Skeleton } from '@mui/material';
 import ButtonAddPoints from '../Activities/ButtonAddPoints';
 import AddPointsForm from '../Forms/AddPointsForm';
 import AddPointsPopup from '../Popups/Popup';
-import Table from '@mui/material/Table';
-import TableHead from '@mui/material/TableHead';
-import LoadingTable from '../Tables/LoadingTable';
-import TableContainer from '@mui/material/TableContainer';
+import LoadingTableParticipants from '../Tables/LoadingTableParticipants';
 
 const resourceParticpantsAPI = 'participants';
 const resourceUserDetailsAPI = 'user_details';
@@ -40,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: theme.spacing(0)
+        padding: theme.spacing(1)
     },
     grid2: {
         display: 'flex',
@@ -59,51 +51,13 @@ const headCells = [
     { id: 'first_name', label: 'Imię dziecka:' },
     { id: 'surname', label: 'Nazwisko dziecka:' },
     { id: 'points', label: 'Punkty:' },
-    { id: 'actions', label: 'Akcje:', textAlign: "center" }
+    { id: 'actions', label: '' },
+    { id: 'actions', label: '' }
+
 ]
 
-const postParticipantsAPI = (resourceAPI, data, actions) => {
-    Repository.add(resourceAPI, data).then(
-        () => {
-            toast.success(`Pomyślnie dodano członka do grupy`, {
-                position: "bottom-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: false,
-                draggable: true,
-                progress: undefined,
-                toastId: "successfulNewParticipantToast"
 
-            });
-            actions.resetForm({
-                values: {
-                    particpant: "",
-                },
-            })
-
-        },
-        (error) => {
-            console.log('Error', error)
-            toast.error(`Nie udało się dodać członka do grupy`, {
-                position: "bottom-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: false,
-                draggable: true,
-                progress: undefined,
-            });
-            actions.resetForm({
-                values: {
-                    particpant: "",
-                },
-            })
-        }
-    );
-}
-
-const EditActivityForm = ({ getActivitiesAPI, setOpenPopup, editedGroup }) => {
+const EditActivityForm = ({ getActivitiesAPI, setOpenPopup, editedGroup, setUpdatingStatusPopup, refreshAfterNewParticipant, refreshAfterNewPoints, refreshAfterDeleteParticipant }) => {
     const classes = useStyles();
     const { user, setUser } = useContext(UserContext);
     const [userDetails, setUserDetails] = useState();
@@ -121,6 +75,39 @@ const EditActivityForm = ({ getActivitiesAPI, setOpenPopup, editedGroup }) => {
 
     });
 
+    const postParticipantsAPI = (resourceAPI, data, actions) => {
+        setOpenPopup(false);
+        setUpdatingStatusPopup(true);
+        Repository.add(resourceAPI, data).then(
+            () => {
+                refreshAfterNewParticipant();
+                actions.resetForm({
+                    values: {
+                        particpant: "",
+                    },
+                })
+
+            },
+            (error) => {
+                console.log('Error', error)
+                toast.error(`Nie udało się dodać członka do grupy`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                actions.resetForm({
+                    values: {
+                        particpant: "",
+                    },
+                })
+            }
+        );
+    }
+
     const formik = useFormik({
         initialValues: {
             particpant: "",
@@ -134,8 +121,6 @@ const EditActivityForm = ({ getActivitiesAPI, setOpenPopup, editedGroup }) => {
                     user_details_id: values.particpant,
                 }
                 postParticipantsAPI(resourceParticpantsAPI, data, actions);
-                setOpenPopup(false);
-                getActivitiesAPI();
             } else {
                 Auth.getUser().then(
                     (response) => {
@@ -145,8 +130,6 @@ const EditActivityForm = ({ getActivitiesAPI, setOpenPopup, editedGroup }) => {
                             user_details_id: values.particpant,
                         }
                         postParticipantsAPI(resourceParticpantsAPI, data, actions);
-                        setOpenPopup(false);
-                        getActivitiesAPI();
                     },
                     (error) => {
                         console.log(error.response);
@@ -174,7 +157,6 @@ const EditActivityForm = ({ getActivitiesAPI, setOpenPopup, editedGroup }) => {
 
     useEffect(() => {
         getUserDetailsAPI();
-        console.log("EditActivityForm")
     }, []);
 
     return (
@@ -199,43 +181,6 @@ const EditActivityForm = ({ getActivitiesAPI, setOpenPopup, editedGroup }) => {
                     >
                         {`Liczba członków: ${editedGroup.participantCount}`}
                     </Typography>
-                    <TableContainer>
-                        <Table className={classes.table} sx={{ minWidth: 650 }} aria-label="simple table">
-                            <TableHead>
-                                <TableRow>
-                                    {headCells.map(headCell => (
-                                        <TableCell style={{ textAlign: headCell.textAlign }} key={headCell.id}>{headCell.label}</TableCell>
-                                    ))}
-                                </TableRow>
-                            </TableHead>
-                            {!isLoading ? <TableBody>
-                                {editedGroup.participants.map((participant) => (
-                                    <TableRow
-                                        key={participant.id}
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                    >
-                                        <TableCell>{participant.first_name}</TableCell>
-                                        <TableCell>{participant.surname}</TableCell>
-                                        <TableCell>{participant.points}</TableCell>
-                                        <TableCell className={classes.tabelCell}>
-                                            <Box sx={{ '& button': { m: 1 } }}>
-                                                <div style={{ justifyContent: 'center', display: 'flex' }}>
-                                                    <ButtonAddPoints
-                                                        setOpenPopup={setOpenAddPointsPopup}
-                                                        openPopup={openAddPointsPopup}
-                                                        getActivitiesAPI={getActivitiesAPI}
-                                                        child={participant}
-                                                        setKid={setKid}
-                                                    />
-                                                    <ButtonDeleteParticipant activityId={editedGroup.id} setOpenPopup={setOpenPopup} getActivitiesAPI={getActivitiesAPI} participantId={participant.id} />
-                                                </div>
-                                            </Box >
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody> : <LoadingTable />}
-                        </Table>
-                    </TableContainer>
                     <Typography
                         variant="h6"
                         component="div"
@@ -259,8 +204,8 @@ const EditActivityForm = ({ getActivitiesAPI, setOpenPopup, editedGroup }) => {
                             helperText={formik.touched.particpant && formik.errors.particpant}
                             onBlur={formik.handleBlur}
                         >
-                            {userDetails.map(userDetails => (
-                                <MenuItem key={userDetails.id} value={userDetails.id}>{userDetails.first_name} {userDetails.surname}</MenuItem>
+                            {userDetails.filter((row) => row.user.role === "USER" || row.user.role === "ADMIN" ).map(userDetails => (
+                                <option style={{ fontSize: "20px" }} key={userDetails.id} value={userDetails.id}>{userDetails.first_name} {userDetails.surname}</option>
                             ))}
                         </TextField> : <TextField
                             name="particpant"
@@ -286,19 +231,43 @@ const EditActivityForm = ({ getActivitiesAPI, setOpenPopup, editedGroup }) => {
                                 </Button>
                             </Grid>
                         </Grid>
-                        <Grid className={classes.grid} container xs={12} sm={true} md={true}>
-                            <Grid className={classes.grid} item xs={true} sm={true} md={true}>
-
-                                <Button
-                                    variant="contained"
-                                    color="primary"
-                                    onClick={() => setOpenPopup(false)}
-                                >
-                                    Zamknij
-                                </Button>
-                            </Grid>
-                        </Grid>
                     </form>
+                    < table class="employeesDashboard" >
+                        <caption class="employeesDashboard" >UCZESTNICY</caption>
+                        <thead class="employeesDashboard">
+                            <tr>
+                                {headCells.map(headCell => (
+                                    <th scope="col" key={headCell.id}>{headCell.label}</th>
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {!isLoading ? editedGroup.participants.map((participant) => (
+                                <tr class="employeesDashboard"
+                                    key={participant.id}
+                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                >
+                                    <td class="employeesDashboard" data-label="Imię">{participant.first_name}</td>
+                                    <td class="employeesDashboard" data-label="Nazwisko">{participant.surname}</td>
+                                    <td class="employeesDashboard" data-label="Stanowisko">{participant.points}</td>
+                                    <td class="employeesDashboard" id="employeesActionsWindow">{JSON.parse(Auth.getRole()) === "ADMIN" ?
+                                        <ButtonAddPoints
+                                            setOpenPopup={setOpenAddPointsPopup}
+                                            openPopup={openAddPointsPopup}
+                                            getActivitiesAPI={getActivitiesAPI}
+                                            child={participant}
+                                            setKid={setKid}
+                                        />
+                                        : null}
+                                    </td>
+                                    <td class="employeesDashboard" id="employeesActionsWindow">{JSON.parse(Auth.getRole()) === "ADMIN" ?
+                                        <ButtonDeleteParticipant activityId={editedGroup.id} setUpdatingStatusPopup={setUpdatingStatusPopup} setOpenPopup={setOpenPopup} refreshAfterDeleteParticipant={refreshAfterDeleteParticipant} participantId={participant.id} />
+                                        : null}
+                                    </td>
+                                </tr>
+                            )) : <LoadingTableParticipants />}
+                        </tbody>
+                    </table >
                 </Grid>
             </Grid>
             <AddPointsPopup
@@ -310,7 +279,10 @@ const EditActivityForm = ({ getActivitiesAPI, setOpenPopup, editedGroup }) => {
                     getActivitiesAPI={getActivitiesAPI}
                     setOpenPopup={setOpenAddPointsPopup}
                     setEditActivityPopup={setOpenPopup}
+                    setUpdatingStatusPopup={setUpdatingStatusPopup}
+                    refreshAfterNewPoints={refreshAfterNewPoints}
                     child={kid}
+
                 />
             </AddPointsPopup>
         </>

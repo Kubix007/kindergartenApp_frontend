@@ -17,33 +17,37 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const deleteNewsAPI = (id) => {
-    Repository.deleteRequest(resourceAPI, id).then(
-        () => {
-            toast.success(`Pomyślnie usunięto ogłoszenie`, {
-                position: "bottom-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: false,
-                draggable: true,
-                progress: undefined,
-                toastId: "successfulDeletedNewsToast"
 
-            });
-        },
-        (error) => {
-            console.log(error);
-            console.log(error.response);
-        }
-    );
-}
-const DeleteNewsForm = ({ setOpenPopup, getNewsAPI, newsId }) => {
+const DeleteNewsForm = ({ setOpenPopup, getNewsAPI, newsId, setUpdatingStatusPopup }) => {
     const classes = useStyles();
+
+    const deleteNewsAPI = (id) => {
+        setOpenPopup(false);
+        setUpdatingStatusPopup(true);
+        Repository.deleteRequest(resourceAPI, id).then(
+            () => {
+                getNewsAPI();
+
+            },
+            (error) => {
+                console.log(error);
+                console.log(error.response);
+                toast.error(`Nie udało się usunąć ogłoszenia`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
+            }
+        );
+    }
 
     const handleClick = () => {
         deleteNewsAPI(newsId);
-        getNewsAPI();
     }
 
     return (

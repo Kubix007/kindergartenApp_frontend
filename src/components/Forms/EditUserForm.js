@@ -36,17 +36,26 @@ const EditUserForm = ({ setOpenPopup, editedUser, getUserDetailsAPI, setUpdating
 
     const validationSchema = yup.object({
         first_name: yup
-            .string(),
+            .string()
+            .max(20, "Pole może składać się maksymalnie z 20 znaków"),
         surname: yup
-            .string(),
+            .string()
+            .max(20, "Pole może składać się maksymalnie z 20 znaków"),
         parents_first_name: yup
-            .string(),
+            .string()
+            .max(20, "Pole może składać się maksymalnie z 20 znaków"),
         parents_surname: yup
-            .string(),
+            .string()
+            .max(20, "Pole może składać się maksymalnie z 20 znaków"),
         parents_phone: yup
-            .string(),
+            .string()
+            .max(20, "Pole może składać się maksymalnie z 20 znaków"),
         town: yup
-            .string(),
+            .string()
+            .max(20, "Pole może składać się maksymalnie z 20 znaków"),
+        street: yup
+            .string()
+            .max(20, "Pole może składać się maksymalnie z 20 znaków"),
     });
 
     const formik = useFormik({
@@ -57,6 +66,8 @@ const EditUserForm = ({ setOpenPopup, editedUser, getUserDetailsAPI, setUpdating
             parents_surname: editedUser.parents_surname ? editedUser.parents_surname : "",
             parents_phone: editedUser.parents_phone ? editedUser.parents_phone : "",
             town: editedUser.town ? editedUser.town : "",
+            street: editedUser.street ? editedUser.street : "",
+
         },
         onSubmit: (values, actions) => {
             let data = null;
@@ -68,10 +79,9 @@ const EditUserForm = ({ setOpenPopup, editedUser, getUserDetailsAPI, setUpdating
                     parents_surname: values.parents_surname,
                     parents_phone: values.parents_phone,
                     town: values.town,
+                    street: values.street,
                 }
                 updateUserDetailsAPI(editedUser.id, data, actions);
-                setOpenPopup(false);
-                getUserDetailsAPI();
             } else {
                 Auth.getUser().then(
                     () => {
@@ -82,10 +92,10 @@ const EditUserForm = ({ setOpenPopup, editedUser, getUserDetailsAPI, setUpdating
                             parents_surname: values.parents_surname,
                             parents_phone: values.parents_phone,
                             town: values.town,
+                            street: values.street,
+
                         }
                         updateUserDetailsAPI(editedUser.id, data, actions);
-                        setOpenPopup(false);
-                        getUserDetailsAPI();
                     },
                     (error) => {
                         console.log(error);
@@ -99,20 +109,10 @@ const EditUserForm = ({ setOpenPopup, editedUser, getUserDetailsAPI, setUpdating
 
     const updateUserDetailsAPI = (userId, data, actions) => {
         setUpdatingStatusPopup(true);
+        setOpenPopup(false);
         Repository.update(resourceUserDetailsAPI, userId, data).then(
             () => {
-                setUpdatingStatusPopup(false);
-                toast.success(`Pomyślnie zmieniono użytkownika`, {
-                    position: "bottom-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: false,
-                    draggable: true,
-                    progress: undefined,
-                    toastId: "successfulEditedUserToast"
-
-                });
+                getUserDetailsAPI();
                 actions.resetForm({
                     values: {
                         first_name: "",
@@ -121,6 +121,7 @@ const EditUserForm = ({ setOpenPopup, editedUser, getUserDetailsAPI, setUpdating
                         parents_surname: "",
                         parents_phone: "",
                         town: "",
+                        street: "",
                     },
                 })
 
@@ -128,6 +129,16 @@ const EditUserForm = ({ setOpenPopup, editedUser, getUserDetailsAPI, setUpdating
             (error) => {
                 console.log(error);
                 console.log(error.response);
+                toast.error(`Nie udało się zmienić użytkownika`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
             }
         );
     }
@@ -225,6 +236,21 @@ const EditUserForm = ({ setOpenPopup, editedUser, getUserDetailsAPI, setUpdating
                         onBlur={formik.handleBlur}
 
                     />
+                    <TextField
+                        name="street"
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="street"
+                        label="Ulica"
+                        value={formik.values.street}
+                        onChange={formik.handleChange}
+                        error={formik.touched.street && Boolean(formik.errors.street)}
+                        helperText={formik.touched.street && formik.errors.street}
+                        onBlur={formik.handleBlur}
+
+                    />
                     <Grid className={classes.grid} container xs={12} sm={true} md={true}>
                         <Grid className={classes.grid} item xs={true} sm={true} md={true}>
 
@@ -232,7 +258,7 @@ const EditUserForm = ({ setOpenPopup, editedUser, getUserDetailsAPI, setUpdating
                                 type="submit"
                                 variant="contained"
                                 color="primary"
-                                id="confirmEditUserButton" 
+                                id="confirmEditUserButton"
                             >
                                 Edytuj
                             </Button>

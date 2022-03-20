@@ -16,6 +16,7 @@ import Auth from '../api/Auth';
 import PageHeader from '../components/PageHeader';
 import UpdatingStatusPopup from '../components/Popups/Popup';
 import UpdatingStatusForm from '../components/Forms/UpdatingStatusForm';
+import { toast } from 'react-toastify';
 
 
 const resourceAPI = 'news';
@@ -48,23 +49,164 @@ const News = () => {
     // eslint-disable-next-line no-unused-vars
     const [userDetailsId, setUserDetailsId] = useState();
     const [updatingStatusPopup, setUpdatingStatusPopup] = useState(true);
-    const [news, setNews] = useState([0]);
+    const [news, setNews] = useState([]);
     const getNewsAPI = () => {
+        setUpdatingStatusPopup(true);
         Repository.getAll(resourceAPI).then(
             (data) => {
-                setTimeout(() => {
-                    setNews(data.data);
-                    setUpdatingStatusPopup(false);
-                }, 1000)
+                setNews(data.data);
+                getUser();
             },
             (error) => {
                 console.log(error);
+                toast.error(`Nie udało się załadować ogłoszeń`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
             }
         )
     }
 
-    const getUserDetails = () => {
-        let id = parseInt(Auth.getUserId());
+    const refreshNewsAfterAdd = () => {
+        Repository.getAll(resourceAPI).then(
+            (data) => {
+                setNews(data.data);
+                setUpdatingStatusPopup(false);
+                toast.success(`Pomyślnie dodano ogłoszenie`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                    toastId: "successfulNewsToast"
+
+                });
+            },
+            (error) => {
+                console.log(error);
+                toast.error(`Nie udało się dodać ogłoszenia`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
+            }
+        )
+    }
+
+    const refreshNewsAfterEdit = () => {
+        Repository.getAll(resourceAPI).then(
+            (data) => {
+                setNews(data.data);
+                setUpdatingStatusPopup(false);
+                toast.success(`Pomyślnie zmieniono ogłoszenie`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                    toastId: "successfulNewsToast"
+
+                });
+            },
+            (error) => {
+                console.log(error);
+                toast.error(`Nie udało się zmienić ogłoszenia`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
+            }
+        )
+    }
+
+    const refreshNewsAfterDelete = () => {
+        Repository.getAll(resourceAPI).then(
+            (data) => {
+                setNews(data.data);
+                setUpdatingStatusPopup(false);
+                toast.success(`Pomyślnie usunięto ogłoszenie`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                    toastId: "successfulNewsToast"
+
+                });
+            },
+            (error) => {
+                console.log(error);
+                toast.error(`Nie udało się usunąć ogłoszenia`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
+            }
+        )
+    }
+
+    const getUser = () => {
+        Auth.getUser().then(
+            (data) => {
+                try {
+                    getUserDetails(data.data.id);
+                    setUpdatingStatusPopup(false);
+
+                } catch (error) {
+                    Auth.reset();
+                    toast.error(`Nie udało się załadować ogłoszeń`, {
+                        position: "bottom-center",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: false,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                }
+            },
+            (error) => {
+                console.log(error);
+                toast.error(`Nie udało się załadować ogłoszeń`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+            }
+        )
+    }
+
+    const getUserDetails = (id) => {
         Repository.getById(resourceUserDetailsAPI, id).then(
             (data) => {
                 setUserDetailsId(data.data.data.id);
@@ -76,8 +218,8 @@ const News = () => {
     }
 
     useEffect(() => {
-        getUserDetails();
         getNewsAPI();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
@@ -89,11 +231,11 @@ const News = () => {
             />
             <Container maxWidth="lg" className={classes.blogsContainer}>
                 {JSON.parse(Auth.getRole()) === "ADMIN" ? <Typography className={classes.button}>
-                    <Button id="addNewsButton" variant="contained" color="primary" startIcon={<AddCircleOutlineRoundedIcon />} onClick={() => setOpenPopup(true)}>Dodaj ogłoszenie</Button>
+                    <Button disabled={userDetailsId && !updatingStatusPopup? false : true} id="addNewsButton" variant="contained" color="primary" startIcon={<AddCircleOutlineRoundedIcon />} onClick={() => setOpenPopup(true)}>Dodaj ogłoszenie</Button>
                 </Typography> : null}
-                {news.length === 0 && !updatingStatusPopup ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}><h1>Brak aktualności</h1></div> : null}
+                {!updatingStatusPopup && news.length === 0 ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}><h1>Brak ogłoszeń</h1></div> : null}
                 <Grid container spacing={3}>
-                    {!updatingStatusPopup ? <SingleCardList singleNews={news} getNewsAPI={getNewsAPI} setOpenPopup={setOpenPopup}
+                    {!updatingStatusPopup && news ? <SingleCardList refreshNewsAfterEdit={refreshNewsAfterEdit} setUpdatingStatusPopup={setUpdatingStatusPopup} refreshNewsAfterDelete={refreshNewsAfterDelete} singleNews={news} getNewsAPI={getNewsAPI} setOpenPopup={setOpenPopup}
                     /> : null}
                 </Grid>
             </Container>
@@ -103,9 +245,10 @@ const News = () => {
                 title="Dodaj nowe ogłoszenie"
             >
                 <AddNewsForm
-                    getNewsAPI={getNewsAPI}
+                    getNewsAPI={refreshNewsAfterAdd}
                     setOpenPopup={setOpenPopup}
                     userDetailsId={userDetailsId}
+                    setUpdatingStatusPopup={setUpdatingStatusPopup}
                 />
             </AddPopup>
             <UpdatingStatusPopup

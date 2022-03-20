@@ -8,7 +8,8 @@ import Repository from '../../api/Repository';
 import { toast } from 'react-toastify';
 
 const resourceAPI = 'employees';
-const resourceUserDetails = 'user_details';
+const resourceUserAPI = 'user';
+const resourceUserDetailsAPI = 'user_details';
 
 const useStyles = makeStyles((theme) => ({
     gridButton: {
@@ -22,8 +23,14 @@ const useStyles = makeStyles((theme) => ({
 const DeleteEmployeeForm = ({ setOpenPopup, getEmployeesAPI, editedEmployee, setUpdatingStatusPopup, activityLeadersId }) => {
     const classes = useStyles();
 
-    const deleteEmployeesAPI = (employeeId) => {
+    const deleteEmployeesAPI = (employeeId, userId) => {
         let leadersId = activityLeadersId;
+        let dataToUpdate =
+        {
+            first_name: editedEmployee.first_name,
+            surname: editedEmployee.surname,
+            parents_phone: editedEmployee.phone,
+        }
         if (leadersId.filter(x => x.leader_id === editedEmployee.id).length > 0) {
             setUpdatingStatusPopup(false);
             toast.error(`Usuń najpierw zajęcia przypisane do pracownika`, {
@@ -39,30 +46,34 @@ const DeleteEmployeeForm = ({ setOpenPopup, getEmployeesAPI, editedEmployee, set
             setUpdatingStatusPopup(true);
             Repository.deleteRequest(resourceAPI, employeeId).then(
                 () => {
-                    postUserDetailsAPI()
+                    updateUserDetails(userId, { role: "USER" }, dataToUpdate);
                 },
                 (error) => {
                     console.log(error.response.data.message);
+                    toast.error(`Nie udało się usunąć nauczyciela`, {
+                        position: "bottom-center",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: false,
+                        draggable: true,
+                        progress: undefined,
+                    });
+                    setUpdatingStatusPopup(false);
                 }
             );
         }
     }
 
-    const postUserDetailsAPI = () => {
-        setUpdatingStatusPopup(false);
-        let data = {
-            user_id: editedEmployee.user_id,
-            first_name: editedEmployee.first_name,
-            surname: editedEmployee.surname,
-            parents_first_name: "",
-            parents_surname: "",
-            parents_phone: editedEmployee.phone,
-            town: editedEmployee.town,
-            points: 0
-        }
-        Repository.add(resourceUserDetails, data).then(
+    const updateUserDetails = (id, editRole, dataToUpdate) => {
+        Repository.update(resourceUserAPI, id, editRole).then(
             () => {
-                toast.success(`Pomyślnie usunięto pracownika`, {
+                updateUser(id, dataToUpdate);
+            },
+            (error) => {
+                console.log(error);
+                console.log(error.response);
+                toast.error(`Nie udało się usunąć nauczyciela`, {
                     position: "bottom-center",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -71,18 +82,38 @@ const DeleteEmployeeForm = ({ setOpenPopup, getEmployeesAPI, editedEmployee, set
                     draggable: true,
                     progress: undefined,
                 });
+                setUpdatingStatusPopup(false);
+
+            }
+        );
+    }
+
+    const updateUser = (id, dataToUpdate) => {
+        Repository.update(resourceUserDetailsAPI, id, dataToUpdate).then(
+            () => {
                 getEmployeesAPI();
             },
             (error) => {
                 console.log(error);
                 console.log(error.response);
+                toast.error(`Nie udało się usunąć nauczyciela`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
+
             }
         );
     }
 
     const handleClick = () => {
         setOpenPopup(false);
-        deleteEmployeesAPI(editedEmployee.id);
+        deleteEmployeesAPI(editedEmployee.id, editedEmployee.user_id);
     }
 
     return (

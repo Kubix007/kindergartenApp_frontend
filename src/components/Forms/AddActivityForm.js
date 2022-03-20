@@ -11,7 +11,6 @@ import { toast } from 'react-toastify';
 import Repository from '../../api/Repository';
 import { UserContext } from '../../context/UserContext';
 import Auth from '../../api/Auth';
-import MenuItem from '@mui/material/MenuItem';
 
 const resourceAPI = 'activities';
 
@@ -24,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: theme.spacing(0)
+        padding: theme.spacing(1)
     },
     form: {
         width: '100%',
@@ -32,67 +31,69 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const postActivityAPI = (resourceAPI, data, actions) => {
-    Repository.add(resourceAPI, data).then(
-        () => {
-            toast.success(`Pomyślnie dodano grupę`, {
-                position: "bottom-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: false,
-                draggable: true,
-                progress: undefined,
-                toastId: "successfulNewGroupToast"
 
-            });
-            actions.resetForm({
-                values: {
-                    name: "",
-                    leader: "",
-                },
-            })
-
-        },
-        (error) => {
-            console.log('Error', error)
-            toast.error(`Nie udało się dodać grupy`, {
-                position: "bottom-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: false,
-                draggable: true,
-                progress: undefined,
-            });
-            actions.resetForm({
-                values: {
-                    name: "",
-                    leader: "",
-                },
-            })
-        }
-    );
-}
-
-const AddActivityForm = ({ getActivitiesAPI, setOpenPopup, employees }) => {
+const AddActivityForm = ({ getActivitiesAPI, setOpenPopup, employees, setUpdatingStatusPopup }) => {
     const classes = useStyles();
     const { user, setUser } = useContext(UserContext);
 
     const validationSchema = yup.object({
         name: yup
             .string("Pole musi byc napisem")
+            .max(20, "Pole może składać się maksymalnie z 20 znaków")
             .required("Pole wymagane"),
         leader: yup
             .string("Pole musi byc napisem")
             .required("Pole wymagane"),
+        description: yup
+            .string("Pole musi byc napisem")
+            .max(250, "Pole może składać się maksymalnie z 250 znaków")
+            .required("Pole wymagane"),
 
     });
+
+    const postActivityAPI = (resourceAPI, data, actions) => {
+        setOpenPopup(false);
+        setUpdatingStatusPopup(true);
+        Repository.add(resourceAPI, data).then(
+            () => {
+                getActivitiesAPI();
+                actions.resetForm({
+                    values: {
+                        name: "",
+                        leader: "",
+                        description: "",
+                    },
+                })
+
+            },
+            (error) => {
+                console.log(error.response);
+                toast.error(`Nie udało się dodać grupy`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                actions.resetForm({
+                    values: {
+                        name: "",
+                        leader: "",
+                        description: "",
+                    },
+                })
+            }
+        );
+    }
 
     const formik = useFormik({
         initialValues: {
             name: "",
             leader: "",
+            description: "",
+
         },
         onSubmit: (values, actions) => {
             let data = null;
@@ -103,11 +104,9 @@ const AddActivityForm = ({ getActivitiesAPI, setOpenPopup, employees }) => {
                     name: values.name,
                     leader: leaderName,
                     leader_id: values.leader,
+                    description: values.description
                 }
-                console.log(data)
                 postActivityAPI(resourceAPI, data, actions);
-                setOpenPopup(false);
-                getActivitiesAPI();
             } else {
                 Auth.getUser().then(
                     (response) => {
@@ -116,11 +115,10 @@ const AddActivityForm = ({ getActivitiesAPI, setOpenPopup, employees }) => {
                             name: values.name,
                             leader: leaderName,
                             leader_id: values.leader,
+                            description: values.description
+
                         }
                         postActivityAPI(resourceAPI, data, actions);
-                        console.log(data)
-                        setOpenPopup(false);
-                        getActivitiesAPI();
                     },
                     (error) => {
                         console.log(error.response);
@@ -152,6 +150,28 @@ const AddActivityForm = ({ getActivitiesAPI, setOpenPopup, employees }) => {
 
                     />
                     <TextField
+                        margin="normal"
+                        variant='outlined'
+                        fullWidth
+                        id="description"
+                        multiline
+                        required
+                        maxRows={6}
+                        minRows={6}
+                        label="Opis"
+                        name="description"
+                        value={formik.values.description}
+                        onChange={e => {
+                            if (e.nativeEvent.inputType === "insertLineBreak") return;
+                            formik.handleChange(e)
+
+                        }}
+                        error={formik.touched.description && Boolean(formik.errors.description)}
+                        helperText={formik.touched.description && formik.errors.description}
+                        onBlur={formik.handleBlur}
+                        inputProps={{ maxLength: 250 }}
+                    />
+                    <TextField
                         name="leader"
                         variant="outlined"
                         margin="normal"
@@ -168,10 +188,10 @@ const AddActivityForm = ({ getActivitiesAPI, setOpenPopup, employees }) => {
                         onBlur={formik.handleBlur}
                     >
                         {employees.length > 0 ? employees.map(employee => (
-                            <MenuItem key={employee.id} value={employee.id}>{employee.first_name} {employee.surname}</MenuItem>
-                        )) : <MenuItem>Brak dostępnych prowadzących</MenuItem>}
+                            <option key={employee.id} value={employee.id}>{employee.first_name} {employee.surname}</option>
+                        )) : <option>Brak dostępnych prowadzących</option>}
                     </TextField>
-                    <Grid className={classes.grid} container xs={12} sm={true} md={true}>
+                    <Grid className={classes.grid} container xs={12}>
                         <Grid className={classes.grid} item xs={true} sm={true} md={true}>
                             <Button
                                 variant="contained"

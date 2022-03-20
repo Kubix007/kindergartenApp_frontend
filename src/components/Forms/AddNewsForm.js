@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import {
     Grid,
-    TextField,
 } from '@material-ui/core';
+import TextField from '@mui/material/TextField';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import { useFormik } from 'formik';
@@ -11,7 +11,9 @@ import { toast } from 'react-toastify';
 import Repository from '../../api/Repository';
 import { UserContext } from '../../context/UserContext';
 import Auth from '../../api/Auth';
-import MenuItem from '@mui/material/MenuItem';
+import RadioGroup from '@mui/material/RadioGroup';
+import Radio from '@mui/material/Radio';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 const resourceAPI = 'news';
 
@@ -24,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: theme.spacing(0)
     },
     form: {
         width: '100%',
@@ -32,65 +33,60 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const postNewsAPI = (resourceAPI, data, actions) => {
-    Repository.add(resourceAPI, data).then(
-        () => {
-            toast.success(`Pomyślnie dodano ogłoszenie`, {
-                position: "bottom-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: false,
-                draggable: true,
-                progress: undefined,
-                toastId: "successfulNewsToast"
 
-            });
-            actions.resetForm({
-                values: {
-                    title: "",
-                    description: "",
-                },
-            })
-        },
-        (error) => {
-            console.log(error);
-            console.log(error.response);
-        }
-    );
-}
-
-const newsType = [
-    {
-        id: "1",
-        value: "Ostrzeżenie",
-    },
-    {
-        id: "2",
-        value: "Informacja",
-    }
-]
-
-const AddNewsForm = ({ getNewsAPI, setOpenPopup, userDetailsId }) => {
+const AddNewsForm = ({ getNewsAPI, setOpenPopup, userDetailsId, setUpdatingStatusPopup }) => {
     const classes = useStyles();
     const { user, setUser } = useContext(UserContext);
 
     const validationSchema = yup.object({
         title: yup
             .string()
+            .max(15, "Pole może składać się maksymalnie z 15 znaków")
             .required("Pole wymagane"),
         description: yup
-            .string(),
+            .string()
+            .max(250, "Pole może składać się maksymalnie z 250 znaków"),
         type: yup
             .string()
             .required("Pole wymagane"),
     });
 
+    const postNewsAPI = (resourceAPI, data, actions) => {
+        setOpenPopup(false);
+        setUpdatingStatusPopup(true);
+        Repository.add(resourceAPI, data).then(
+            () => {
+                getNewsAPI();
+                actions.resetForm({
+                    values: {
+                        title: "",
+                        description: "",
+                    },
+                })
+            },
+            (error) => {
+                console.log(error);
+                console.log(error.response);
+                toast.error(`Nie udało się dodać ogłoszenia`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
+            }
+        );
+    }
+
     const formik = useFormik({
         initialValues: {
             title: "",
             description: "",
-            type: "",
+            type: "Ostrzeżenie",
+
         },
         onSubmit: (values, actions) => {
             let data = null;
@@ -104,8 +100,6 @@ const AddNewsForm = ({ getNewsAPI, setOpenPopup, userDetailsId }) => {
 
                 }
                 postNewsAPI(resourceAPI, data, actions);
-                setOpenPopup(false);
-                getNewsAPI();
             } else {
                 Auth.getUser().then(
                     (response) => {
@@ -118,8 +112,6 @@ const AddNewsForm = ({ getNewsAPI, setOpenPopup, userDetailsId }) => {
                             type: values.type,
                         }
                         postNewsAPI(resourceAPI, data, actions);
-                        setOpenPopup(false);
-                        getNewsAPI();
                     },
                     (error) => {
                         console.log(error);
@@ -132,8 +124,8 @@ const AddNewsForm = ({ getNewsAPI, setOpenPopup, userDetailsId }) => {
     });
 
     return (
-        <Grid container component="main" xs={12} sm={true} md={true}>
-            <Grid item xs={true} sm={true} md={true}>
+        <Grid container component="main" xs={12}>
+            <Grid item xs={12}>
                 <form className={classes.form} noValidate onSubmit={formik.handleSubmit}>
                     <TextField
                         name="title"
@@ -151,42 +143,40 @@ const AddNewsForm = ({ getNewsAPI, setOpenPopup, userDetailsId }) => {
 
                     />
                     <TextField
-                        variant="outlined"
                         margin="normal"
+                        variant='outlined'
                         fullWidth
                         id="description"
-                        maxRows={11}
                         multiline
-                        minRows={7}
+                        maxRows={6}
+                        minRows={6}
                         label="Opis"
                         name="description"
                         value={formik.values.description}
-                        onChange={formik.handleChange}
+                        onChange={e => {
+                            if (e.nativeEvent.inputType === "insertLineBreak") return;
+                            formik.handleChange(e)
+
+                        }}
                         error={formik.touched.description && Boolean(formik.errors.description)}
                         helperText={formik.touched.description && formik.errors.description}
                         onBlur={formik.handleBlur}
+                        inputProps={{ maxLength: 250 }}
                     />
-                    <TextField
+                    <RadioGroup
                         name="type"
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
                         id="type"
-                        label="Typ aktualności"
-                        select
+                        style={{ padding: 10 }}
                         value={formik.values.type}
                         onChange={formik.handleChange}
-                        error={formik.touched.type && Boolean(formik.errors.type)}
-                        helperText={formik.touched.type && formik.errors.type}
-                        onBlur={formik.handleBlur}
+                        error={formik.touched.description && Boolean(formik.errors.description)}
+                        helperText={formik.touched.description && formik.errors.description}
                     >
-                        {newsType.map(type => (
-                            <MenuItem key={type.id} value={type.value}>{type.value}</MenuItem>
-                        ))}
-                    </TextField>
-                    <Grid className={classes.grid} container xs={12} sm={true} md={true}>
-                        <Grid className={classes.grid} item xs={true} sm={true} md={true}>
+                        <FormControlLabel value="Ostrzeżenie" control={<Radio />} label="Ostrzeżenie" />
+                        <FormControlLabel value="Informacja" control={<Radio />} label="Informacja" />
+                    </RadioGroup>
+                    <Grid className={classes.grid} container xs={12}>
+                        <Grid className={classes.grid} item xs={12} sm={true} md={true}>
                             <Button variant="contained"
                                 color="primary"
                                 type="submit"

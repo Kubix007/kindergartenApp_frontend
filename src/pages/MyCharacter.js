@@ -59,6 +59,7 @@ const MyCharacter = () => {
             (data) => {
                 setCharacter(data.data[0].source);
                 setCharacterId(data.data[0].id);
+                getUserDetails();
             },
             (error) => {
                 console.log(error);
@@ -84,7 +85,6 @@ const MyCharacter = () => {
             (data) => {
                 setUserClothes(data.data);
                 setUpdatingStatusPopup(false);
-
             },
             (error) => {
                 console.log(error);
@@ -129,7 +129,6 @@ const MyCharacter = () => {
 
     useEffect(() => {
         getCharactersAPI();
-        getUserDetails();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -144,7 +143,7 @@ const MyCharacter = () => {
                 <Grid container spacing={1} className={classes.pageContent} direction='column'>
                     <Grid item xs={12}>
                         {userClothes ? <ClothesCardList
-                            clothes={userClothes}
+                            clothes={userClothes} setUpdatingStatusPopup={setUpdatingStatusPopup}
                         /> : null}
                     </Grid>
                     <Grid item xs={8}>

@@ -18,29 +18,32 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const deleteActivityAPI = (id) => {
-    Repository.deleteRequest(resourceAPI, id).then(
-        () => {
-            toast.success(`Pomyślnie usunięto grupę`, {
-                position: "bottom-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: false,
-                draggable: true,
-                progress: undefined,
-                toastId: "successfulDeletedGroupToast"
-
-            });
-        },
-        (error) => {
-            console.log(error);
-            console.log(error.response);
-        }
-    );
-}
-const DeleteActivityForm = ({ setOpenPopup, getActivitiesAPI, activityId, activityParticipants }) => {
+const DeleteActivityForm = ({ setOpenPopup, refreshAfterDeleteActivity, activityId, activityParticipants, setUpdatingStatusPopup }) => {
     const classes = useStyles();
+
+
+    const deleteActivityAPI = (id) => {
+        setUpdatingStatusPopup(true);
+        Repository.deleteRequest(resourceAPI, id).then(
+            () => {
+                refreshAfterDeleteActivity();
+            },
+            (error) => {
+                console.log(error);
+                console.log(error.response);
+                toast.error(`Nie udało się usunąć grupy`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
+            }
+        );
+    }
 
     const handleClick = () => {
         if (activityParticipants > 0) {
@@ -55,7 +58,6 @@ const DeleteActivityForm = ({ setOpenPopup, getActivitiesAPI, activityId, activi
             });
         } else {
             deleteActivityAPI(activityId);
-            getActivitiesAPI();
         }
         setOpenPopup(false);
     }

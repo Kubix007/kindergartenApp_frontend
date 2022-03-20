@@ -7,6 +7,7 @@ import {
     Grid,
     Container
 } from '@material-ui/core';
+import { toast } from 'react-toastify';
 import Repository from '../api/Repository';
 import EditUserPopup from '../components/Popups/Popup';
 import EditUserForm from '../components/Forms/EditUserForm';
@@ -91,6 +92,102 @@ const AdminDashboard = () => {
         )
     }
 
+    const refreshUsersAfterDelete = () => {
+        Repository.getAll(resourceUserDetailsAPI).then(
+            (data) => {
+                setUserDetails(data.data);
+                setIsLoadingUsers(false);
+                setUpdatingStatusPopup(false);
+                toast.success(`Pomyślnie usunięto użytkownika`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+            },
+            (error) => {
+                console.log(error);
+                toast.error(`Nie udało się usunąć użytkownika`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
+            }
+        )
+    }
+
+    const refreshUsersAfterEdit = () => {
+        Repository.getAll(resourceUserDetailsAPI).then(
+            (data) => {
+                setUserDetails(data.data);
+                setIsLoadingUsers(false);
+                setUpdatingStatusPopup(false);
+                toast.success(`Pomyślnie zmieniono użytkownika`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+            },
+            (error) => {
+                console.log(error);
+                toast.error(`Nie udało się zmienić użytkownika`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
+            }
+        )
+    }
+
+    const refreshUsersAfterDeleteEmployee = () => {
+        Repository.getAll(resourceUserDetailsAPI).then(
+            (data) => {
+                setUserDetails(data.data);
+                setIsLoadingUsers(false);
+                setUpdatingStatusPopup(false);
+                toast.success(`Pomyślnie usunięto nauczyciela`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+            },
+            (error) => {
+                console.log(error);
+                toast.error(`Nie udało się usunąć nauczyciela`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
+            }
+        )
+    }
+
     const getActivityLeadersId = () => {
         Repository.getAll(resourceActivitiesAPI).then(
             (data) => {
@@ -98,6 +195,16 @@ const AdminDashboard = () => {
             },
             (error) => {
                 console.log(error);
+                toast.error(`Nie udało się pobrać użytkowników`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
             }
         )
     }
@@ -112,6 +219,97 @@ const AdminDashboard = () => {
             },
             (error) => {
                 console.log(error);
+            }
+        )
+    }
+
+    const refreshEmployeesAfterAddEmployees = () => {
+        Repository.getAll(resourceEmployeesAPI).then(
+            (data) => {
+                setEmployees(data.data);
+                setIsLoadingEmployees(false);
+                setUpdatingStatusPopup(false);
+                toast.success(`Pomyślnie dodano nauczyciela`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+            },
+            (error) => {
+                console.log(error);
+                toast.error(`Nie udało się dodać nauczyciela`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
+
+            }
+        )
+    }
+
+    const refreshEmployeesAfterDeleteEmployees = () => {
+        Repository.getAll(resourceEmployeesAPI).then(
+            (data) => {
+                setEmployees(data.data);
+                setIsLoadingEmployees(false);
+                setUpdatingStatusPopup(false);
+                refreshUsersAfterDeleteEmployee();
+            },
+            (error) => {
+                console.log(error);
+                toast.error(`Nie udało się usunąć nauczyciela`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
+
+            }
+        )
+    }
+
+    const refreshEmployeesAfterEdit = () => {
+        Repository.getAll(resourceEmployeesAPI).then(
+            (data) => {
+                setEmployees(data.data);
+                setIsLoadingEmployees(false);
+                setUpdatingStatusPopup(false);
+                toast.success(`Pomyślnie zmieniono nauczyciela`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+            },
+            (error) => {
+                console.log(error);
+                toast.error(`Nie udało się zmienić nauczyciela`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
+
             }
         )
     }
@@ -164,7 +362,7 @@ const AdminDashboard = () => {
             >
                 <EditUserForm
                     setOpenPopup={setOpenEditUserPopup}
-                    getUserDetailsAPI={getUserDetailsAPI}
+                    getUserDetailsAPI={refreshUsersAfterEdit}
                     editedUser={editedUser}
                     setUpdatingStatusPopup={setUpdatingStatusPopup}
                 />
@@ -186,7 +384,7 @@ const AdminDashboard = () => {
             >
                 <DeleteUserForm
                     setOpenPopup={setOpenDeleteUserPopup}
-                    getUserDetailsAPI={getUserDetailsAPI}
+                    getUserDetailsAPI={refreshUsersAfterDelete}
                     editedUser={editedUser}
                     setUpdatingStatusPopup={setUpdatingStatusPopup}
                 />
@@ -195,12 +393,12 @@ const AdminDashboard = () => {
                 openPopup={openDeleteEmployeePopup}
                 setOpenPopup={setOpenDeleteEmployeePopup}
                 getActivityLeadersId={getActivityLeadersId}
-                title="Usuń pracownika"
+                title="Usuń nauczyciela"
                 maxWidth="sm"
             >
                 <DeleteEmployeeForm
                     setOpenPopup={setOpenDeleteEmployeePopup}
-                    getEmployeesAPI={getEmployeesAPI}
+                    getEmployeesAPI={refreshEmployeesAfterDeleteEmployees}
                     editedEmployee={editedEmployee}
                     setUpdatingStatusPopup={setUpdatingStatusPopup}
                     activityLeadersId={activityLeadersId}
@@ -214,7 +412,7 @@ const AdminDashboard = () => {
             >
                 <EditEmployeeForm
                     setOpenPopup={setOpenEditEmployeePopup}
-                    getEmployeesAPI={getEmployeesAPI}
+                    getEmployeesAPI={refreshEmployeesAfterEdit}
                     editedEmployee={editedEmployee}
                     setUpdatingStatusPopup={setUpdatingStatusPopup}
                 />
@@ -228,6 +426,7 @@ const AdminDashboard = () => {
                 <AddEmployeeForm
                     setOpenPopup={setOpenAddEmployeePopup}
                     getUserDetailsAPI={getUserDetailsAPI}
+                    getEmployeesAPI={refreshEmployeesAfterAddEmployees}
                     userDetails={userDetails}
                     setUpdatingStatusPopup={setUpdatingStatusPopup}
                 />

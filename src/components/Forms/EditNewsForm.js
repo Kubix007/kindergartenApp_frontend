@@ -31,36 +31,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const updateNewsAPI = (resourceAPI, newsId, data, actions) => {
-    Repository.update(resourceAPI, newsId, data).then(
-        () => {
-            toast.success(`Pomyślnie zmieniono ogłoszenie`, {
-                position: "bottom-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: false,
-                draggable: true,
-                progress: undefined,
-                toastId: "successfulEditedNewsToast"
-
-            });
-            actions.resetForm({
-                values: {
-                    title: "",
-                    description: "",
-                },
-            })
-
-        },
-        (error) => {
-            console.log(error);
-            console.log(error.response);
-        }
-    );
-}
-
-const EditNewsForm = ({ getNewsAPI, newsId, setOpenPopup, newsTitle, newsDescription }) => {
+const EditNewsForm = ({ getNewsAPI, newsId, setOpenPopup, newsTitle, newsDescription, setUpdatingStatusPopup }) => {
     const classes = useStyles();
     const { user, setUser } = useContext(UserContext);
 
@@ -72,6 +43,37 @@ const EditNewsForm = ({ getNewsAPI, newsId, setOpenPopup, newsTitle, newsDescrip
             .string()
             .max(250, "Maksymalna długość to 250 znaków"),
     });
+
+    const updateNewsAPI = (resourceAPI, newsId, data, actions) => {
+        setOpenPopup(false);
+        setUpdatingStatusPopup(true);
+        Repository.update(resourceAPI, newsId, data).then(
+            () => {
+                getNewsAPI();
+                actions.resetForm({
+                    values: {
+                        title: "",
+                        description: "",
+                    },
+                })
+
+            },
+            (error) => {
+                console.log(error);
+                console.log(error.response);
+                toast.error(`Nie udało się zmienić ogłoszenia`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
+            }
+        );
+    }
 
     const formik = useFormik({
         initialValues: {
@@ -87,8 +89,6 @@ const EditNewsForm = ({ getNewsAPI, newsId, setOpenPopup, newsTitle, newsDescrip
                     author: user.login,
                 }
                 updateNewsAPI(resourceAPI, newsId, data, actions);
-                setOpenPopup(false);
-                getNewsAPI();
             } else {
                 Auth.getUser().then(
                     (response) => {
@@ -99,8 +99,6 @@ const EditNewsForm = ({ getNewsAPI, newsId, setOpenPopup, newsTitle, newsDescrip
                             author: response.data.login,
                         }
                         updateNewsAPI(resourceAPI, newsId, data, actions);
-                        setOpenPopup(false);
-                        getNewsAPI();
                     },
                     (error) => {
                         console.log(error);

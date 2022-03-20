@@ -92,7 +92,7 @@ export default function Login(props) {
                 });
             },
             (error) => {
-                if (error.response.data.message === "Bad creds") {
+                if (error.response.data.message === "Bad credentials") {
                     Auth.reset();
                     setAuth(Auth.IsLogged());
                     history.push("/logowanie");
@@ -105,7 +105,6 @@ export default function Login(props) {
                         draggable: true,
                         progress: undefined,
                         toastId: "unsuccessfulLoginToast"
-
                     });
                 }
             }

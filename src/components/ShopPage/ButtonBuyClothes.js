@@ -4,7 +4,7 @@ import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import BuyItemPopup from '../../components/Popups/Popup';
 import BuyItemClothing from '../../components/Forms/BuyItemClothing';
 
-const ButtonBuyClothes = ({ setOpenPopup, openPopup, userPoints, userDetailsId, item, setBuyingStatusPopup, getUserDetailsAPI }) => {
+const ButtonBuyClothes = ({ setOpenPopup, openPopup, userPoints, userDetailsId, item, setBuyingStatusPopup, getUserDetailsAPI, userClothes }) => {
     return (
         <>
             <Button
@@ -27,6 +27,7 @@ const ButtonBuyClothes = ({ setOpenPopup, openPopup, userPoints, userDetailsId, 
                     userDetailsId={userDetailsId}
                     setBuyingStatusPopup={setBuyingStatusPopup}
                     getUserDetailsAPI={getUserDetailsAPI}
+                    userClothes={userClothes}
                 />
             </BuyItemPopup>
         </>

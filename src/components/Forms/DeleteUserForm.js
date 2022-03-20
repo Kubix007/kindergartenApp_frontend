@@ -30,15 +30,7 @@ const DeleteUserForm = ({ setOpenPopup, getUserDetailsAPI, editedUser, setUpdati
             (error) => {
                 console.log(error);
                 console.log(error.response);
-            }
-        );
-    }
-
-    const deleteUserAPI = (id) => {
-        Repository.deleteRequest(resourceUserAPI, id).then(
-            () => {
-                setUpdatingStatusPopup(false);
-                toast.success(`Pomyślnie usunięto użytkownika`, {
+                toast.error(`Nie udało się usunąć użytkownika`, {
                     position: "bottom-center",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -47,10 +39,29 @@ const DeleteUserForm = ({ setOpenPopup, getUserDetailsAPI, editedUser, setUpdati
                     draggable: true,
                     progress: undefined,
                 });
+                setUpdatingStatusPopup(false);
+            }
+        );
+    }
+
+    const deleteUserAPI = (id) => {
+        Repository.deleteRequest(resourceUserAPI, id).then(
+            () => {
+                getUserDetailsAPI();
             },
             (error) => {
                 console.log(error);
                 console.log(error.response);
+                toast.error(`Nie udało się usunąć użytkownika`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
             }
         );
     }
@@ -59,7 +70,6 @@ const DeleteUserForm = ({ setOpenPopup, getUserDetailsAPI, editedUser, setUpdati
         setOpenPopup(false);
         setUpdatingStatusPopup(true);
         deleteUserDetailsAPI(editedUser.id);
-        getUserDetailsAPI();
     }
 
     return (
