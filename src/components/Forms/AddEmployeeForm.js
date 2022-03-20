@@ -11,10 +11,10 @@ import { UserContext } from '../../context/UserContext';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import Auth from '../../api/Auth';
-import MenuItem from '@mui/material/MenuItem';
 
-const resourceAPI = 'user_details';
 const resourceEmployeesAPI = 'employees';
+const resourceUserAPI = 'user';
+
 
 const useStyles = makeStyles((theme) => ({
     gridButton: {
@@ -39,29 +39,23 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const AddEmployeeForm = ({ setOpenPopup, getUserDetailsAPI, userDetails, setUpdatingStatusPopup }) => {
+const AddEmployeeForm = ({ setOpenPopup, getUserDetailsAPI, userDetails, setUpdatingStatusPopup, getEmployeesAPI }) => {
     const classes = useStyles();
     const { user, setUser } = useContext(UserContext);
     let data = null;
 
-    const postEmployeesAPI = (data) => {
+    const postEmployeesAPI = (data, employeeId, actions) => {
         setOpenPopup(false);
         setUpdatingStatusPopup(true);
         Repository.add(resourceEmployeesAPI, data).then(
             () => {
+                updateUserDetails(employeeId, actions);
+                console.log("ID", employeeId);
             },
             (error) => {
                 console.log(error);
                 console.log(error.response);
-            }
-        );
-    }
-    const deleteUserDetailsAPI = (id, actions) => {
-        Repository.deleteRequest(resourceAPI, id).then(
-            () => {
-                getUserDetailsAPI();
-                postEmployeesAPI(data);
-                toast.success(`Pomyślnie dodano pracownika`, {
+                toast.error(`Nie udało się dodać nauczyciela`, {
                     position: "bottom-center",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -70,18 +64,37 @@ const AddEmployeeForm = ({ setOpenPopup, getUserDetailsAPI, userDetails, setUpda
                     draggable: true,
                     progress: undefined,
                 });
+                setUpdatingStatusPopup(false);
+
+            }
+        );
+    }
+
+    const updateUserDetails = (id, actions) => {
+        Repository.update(resourceUserAPI, id, { role: "EMPLOYEE" }).then(
+            () => {
+                getEmployeesAPI();
                 actions.resetForm({
                     values: {
                         user: "",
                         position_name: "",
-                        phone: "",
-                        town: "",
                     },
                 })
             },
             (error) => {
                 console.log(error);
                 console.log(error.response);
+                toast.error(`Nie udało się dodać nauczyciela`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
+
             }
         );
     }
@@ -92,21 +105,14 @@ const AddEmployeeForm = ({ setOpenPopup, getUserDetailsAPI, userDetails, setUpda
             .required("Pole wymagane"),
         position_name: yup
             .string()
-            .required("Pole wymagane"),
-        phone: yup
-            .string()
-            .required("Pole wymagane"),
-        town: yup
-            .string()
+            .max(20, "Pole może składać się maksymalnie z 20 znaków")
             .required("Pole wymagane"),
     });
 
     const formik = useFormik({
         initialValues: {
-            user: "",
+            user: "Wybierz użytkownika",
             position_name: "",
-            phone: "",
-            town: "",
         },
         onSubmit: (values, actions) => {
             data = null;
@@ -120,10 +126,11 @@ const AddEmployeeForm = ({ setOpenPopup, getUserDetailsAPI, userDetails, setUpda
                     first_name: employeeName !== null ? employeeName : "Brak imienia",
                     surname: employeeSurname !== null ? employeeSurname : "Brak nazwiska",
                     position_name: values.position_name,
-                    phone: values.phone,
-                    town: values.town,
+                    phone: employee[0].parents_phone,
+                    town: employee[0].town,
+                    street: employee[0].street,
                 }
-                deleteUserDetailsAPI(employee[0].id, actions);
+                postEmployeesAPI(data, employee[0].user.id, actions);
             } else {
                 Auth.getUser().then(
                     (response) => {
@@ -133,13 +140,28 @@ const AddEmployeeForm = ({ setOpenPopup, getUserDetailsAPI, userDetails, setUpda
                             first_name: employeeName,
                             surname: employeeSurname,
                             position_name: values.position_name,
-                            phone: values.phone,
-                            town: values.town,
+                            phone: employee[0].parents_phone,
+                            town: employee[0].town,
+                            street: employee[0].street,
+
                         }
-                        deleteUserDetailsAPI(employee[0].id, actions);
+                        postEmployeesAPI(data, employee[0].user.id, actions);
+                        //(data); - userID
+                        //(employee[0].id) -- userdetailsID
                     },
                     (error) => {
                         console.log(error);
+                        toast.error(`Nie udało się dodać nauczyciela`, {
+                            position: "bottom-center",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: false,
+                            draggable: true,
+                            progress: undefined,
+                        });
+                        setUpdatingStatusPopup(false);
+
                     }
                 )
             }
@@ -157,19 +179,20 @@ const AddEmployeeForm = ({ setOpenPopup, getUserDetailsAPI, userDetails, setUpda
                         variant="outlined"
                         margin="normal"
                         required
-                        fullWidth
                         id="user"
                         label="Użytkownik"
                         select
-                        in
+                        fullWidth
                         value={formik.values.user}
                         onChange={formik.handleChange}
                         error={formik.touched.user && Boolean(formik.errors.user)}
                         helperText={formik.touched.user && formik.errors.user}
                         onBlur={formik.handleBlur}
                     >
-                        {userDetails.map(userDetails => (
-                            <MenuItem key={userDetails.id} value={userDetails.user_id}>{userDetails.first_name} {userDetails.surname}</MenuItem>
+                        {userDetails.filter((row) => row.user.role === "USER" || row.user.role === "ADMIN").map(userDetails => (
+                            <option style={{ fontSize: "20px" }} key={userDetails.id} value={userDetails.user_id}>
+                                {userDetails.first_name} {userDetails.surname}
+                            </option>
                         ))}
                     </TextField>
                     <TextField
@@ -187,36 +210,7 @@ const AddEmployeeForm = ({ setOpenPopup, getUserDetailsAPI, userDetails, setUpda
                         onBlur={formik.handleBlur}
 
                     />
-                    <TextField
-                        name="phone"
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="phone"
-                        label="Telefon"
-                        value={formik.values.phone}
-                        onChange={formik.handleChange}
-                        error={formik.touched.phone && Boolean(formik.errors.phone)}
-                        helperText={formik.touched.phone && formik.errors.phone}
-                        onBlur={formik.handleBlur}
 
-                    />
-                    <TextField
-                        name="town"
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="town"
-                        label="Miasto"
-                        value={formik.values.town}
-                        onChange={formik.handleChange}
-                        error={formik.touched.town && Boolean(formik.errors.town)}
-                        helperText={formik.touched.town && formik.errors.town}
-                        onBlur={formik.handleBlur}
-
-                    />
                     <Grid className={classes.grid} container xs={12} sm={true} md={true}>
                         <Grid className={classes.grid} item xs={true} sm={true} md={true}>
 
@@ -241,7 +235,7 @@ const AddEmployeeForm = ({ setOpenPopup, getUserDetailsAPI, userDetails, setUpda
                     </Grid>
                 </form>
             </Grid>
-        </Grid>
+        </Grid >
     );
 }
 

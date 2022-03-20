@@ -37,17 +37,27 @@ const Navbar = () => {
         {
             menuTitle: "Sklep",
             pageURL: "/sklep",
-            isAdmin: false,
+            isAdmin: JSON.parse(Auth.getRole()) === "ADMIN" ? true : false
         },
         {
             menuTitle: "Kolorowanki",
             pageURL: "/przedmioty",
-            isAdmin: false,
+            isAdmin: JSON.parse(Auth.getRole()) === "ADMIN" ? true : false
         },
         {
             menuTitle: "Postać",
             pageURL: "/postac",
-            isAdmin: false,
+            isAdmin: JSON.parse(Auth.getRole()) === "ADMIN" ? true : false
+        },
+        {
+            menuTitle: "Historia punktów",
+            pageURL: "/punkty",
+            isAdmin: JSON.parse(Auth.getRole()) === "ADMIN" ? true : false
+        },
+        {
+            menuTitle: "Historia punktów",
+            pageURL: "/historia",
+            isAdmin: JSON.parse(Auth.getRole()) === "ADMIN" || JSON.parse(Auth.getRole()) === "EMPLOYEE" ? false : true
         },
         {
             menuTitle: "Panel administratora",
@@ -127,15 +137,21 @@ const Navbar = () => {
                     <NavLink id="navLinkActivities" to="/zajecia" >
                         Zajęcia
                     </NavLink>
-                    <NavLink id="navLinkShop" to="/sklep" >
+                    {JSON.parse(Auth.getRole()) !== "ADMIN" ? <NavLink id="navLinkShop" to="/sklep" >
                         Sklep
-                    </NavLink>
-                    <NavLink id="navLinkColoringBooks" to="/przedmioty" >
+                    </NavLink> : null}
+                    {JSON.parse(Auth.getRole()) !== "ADMIN" ? <NavLink id="navLinkColoringBooks" to="/przedmioty" >
                         Kolorowanki
-                    </NavLink>
-                    <NavLink id="navLinkCharacter" to="/postac" >
+                    </NavLink> : null}
+                    {JSON.parse(Auth.getRole()) !== "ADMIN" ? <NavLink id="navLinkCharacter" to="/postac" >
                         Postać
-                    </NavLink>
+                    </NavLink> : null}
+                    {JSON.parse(Auth.getRole()) === "USER" ? <NavLink id="navLinkHistory" to="/punkty" >
+                        Historia punktów
+                    </NavLink> : null}
+                    {JSON.parse(Auth.getRole()) === "ADMIN" || JSON.parse(Auth.getRole()) === "EMPLOYEE" ? <NavLink id="navLinkAdminHistory" to="/historia" >
+                        Historia punktów
+                    </NavLink> : null}
                     {JSON.parse(Auth.getRole()) === "ADMIN" ? <NavLink id="navLinkAdminDashboard" to="/panel" >
                         Panel administratora
                     </NavLink> : null}

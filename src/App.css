@@ -16,3 +16,11 @@ svg {
       width: 290px;
   }
 }
+
+option:hover {
+  box-shadow: 0 0 10px 100px #F5F5F5 inset;
+}
+
+option {
+  margin: 5px;
+}

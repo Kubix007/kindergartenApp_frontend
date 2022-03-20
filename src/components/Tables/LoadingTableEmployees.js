@@ -2,10 +2,11 @@ import React from 'react'
 import { Skeleton } from '@mui/material';
 
 
-const LoadingTable = () => {
+const LoadingTableEmployees = () => {
     return (
         <>
             <tr>
+                <td><Skeleton variant="rectangular" /></td>
                 <td><Skeleton variant="rectangular" /></td>
                 <td><Skeleton variant="rectangular" /></td>
                 <td><Skeleton variant="rectangular" /></td>
@@ -16,4 +17,4 @@ const LoadingTable = () => {
     );
 }
 
-export default LoadingTable;
+export default LoadingTableEmployees;

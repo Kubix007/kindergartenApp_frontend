@@ -39,21 +39,25 @@ const EditUserForm = ({ setOpenPopup, editedEmployee, getEmployeesAPI, setUpdati
     const validationSchema = yup.object({
         first_name: yup
             .string()
+            .max(20, "Pole może składać się maksymalnie z 20 znaków")
+
             .required("Pole wymagane"),
         surname: yup
             .string()
+            .max(20, "Pole może składać się maksymalnie z 20 znaków")
+
             .required("Pole wymagane"),
         position_name: yup
             .string()
+            .max(20, "Pole może składać się maksymalnie z 20 znaków")
             .required("Pole wymagane"),
         phone: yup
             .string()
-            .required("Pole wymagane"),
-        town: yup
-            .string()
+            .max(9, "Numer telefon musi składać się z 9 cyfr")
             .required("Pole wymagane"),
         email: yup
             .string()
+            .email("Wprowadź prawidłowy email")
             .required("Pole wymagane"),
     });
 
@@ -63,7 +67,6 @@ const EditUserForm = ({ setOpenPopup, editedEmployee, getEmployeesAPI, setUpdati
             surname: editedEmployee.surname ? editedEmployee.surname : "",
             position_name: editedEmployee.position_name ? editedEmployee.position_name : "",
             phone: editedEmployee.phone ? editedEmployee.phone : "",
-            town: editedEmployee.town ? editedEmployee.town : "",
             email: editedEmployee.user.email ? editedEmployee.user.email : "",
         },
         onSubmit: (values, actions) => {
@@ -74,14 +77,11 @@ const EditUserForm = ({ setOpenPopup, editedEmployee, getEmployeesAPI, setUpdati
                     surname: values.surname,
                     position_name: values.position_name,
                     phone: values.phone,
-                    town: values.town,
                 }
                 dataUser = {
                     email: values.email,
                 }
                 updateEmployeesAPI(editedEmployee.id, data, actions, values);
-                setOpenPopup(false);
-                getEmployeesAPI();
             } else {
                 Auth.getUser().then(
                     () => {
@@ -96,8 +96,6 @@ const EditUserForm = ({ setOpenPopup, editedEmployee, getEmployeesAPI, setUpdati
                             email: values.email,
                         }
                         updateEmployeesAPI(editedEmployee.id, data, actions, values);
-                        setOpenPopup(false);
-                        getEmployeesAPI();
                     },
                     (error) => {
                         console.log(error);
@@ -111,31 +109,20 @@ const EditUserForm = ({ setOpenPopup, editedEmployee, getEmployeesAPI, setUpdati
 
     const updateEmployeesAPI = (employeeId, data, actions, values) => {
         setUpdatingStatusPopup(true);
+        setOpenPopup(false);
         Repository.update(resourceEmployeesAPI, employeeId, data).then(
             () => {
                 if (editedEmployee.user.email !== values.email) {
                     updateUserAPI(editedEmployee.user_id, dataUser, actions);
-                    getEmployeesAPI();
                 }
                 else {
-                    toast.success(`Pomyślnie zmieniono pracownika`, {
-                        position: "bottom-center",
-                        autoClose: 5000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: false,
-                        draggable: true,
-                        progress: undefined,
-                        toastId: "successfulEditedEmployeeToast"
-
-                    });
+                    getEmployeesAPI();
                     actions.resetForm({
                         values: {
                             first_name: "",
                             surname: "",
                             position_name: "",
                             phone: "",
-                            town: "",
                             email: "",
                         }
                     })
@@ -144,15 +131,7 @@ const EditUserForm = ({ setOpenPopup, editedEmployee, getEmployeesAPI, setUpdati
             (error) => {
                 console.log(error);
                 console.log(error.response);
-            }
-        );
-    }
-
-    const updateUserAPI = (userId, data, actions) => {
-        Repository.update(resourceUserAPI, userId, data).then(
-            () => {
-                setUpdatingStatusPopup(false);
-                toast.success(`Pomyślnie zmieniono pracownika`, {
+                toast.error(`Nie udało się zmienić nauczyciela`, {
                     position: "bottom-center",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -160,16 +139,22 @@ const EditUserForm = ({ setOpenPopup, editedEmployee, getEmployeesAPI, setUpdati
                     pauseOnHover: false,
                     draggable: true,
                     progress: undefined,
-                    toastId: "successfulEditedEmployeeToast"
-
                 });
+                setUpdatingStatusPopup(false);
+            }
+        );
+    }
+
+    const updateUserAPI = (userId, data, actions) => {
+        Repository.update(resourceUserAPI, userId, data).then(
+            () => {
+                getEmployeesAPI();
                 actions.resetForm({
                     values: {
                         first_name: "",
                         surname: "",
                         position_name: "",
                         phone: "",
-                        town: "",
                         email: "",
                     }
                 })
@@ -177,6 +162,16 @@ const EditUserForm = ({ setOpenPopup, editedEmployee, getEmployeesAPI, setUpdati
             (error) => {
                 console.log(error);
                 console.log(error.response);
+                toast.error(`Nie udało się zmienić nauczyciela`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
             }
         );
     }
@@ -241,21 +236,6 @@ const EditUserForm = ({ setOpenPopup, editedEmployee, getEmployeesAPI, setUpdati
                         onChange={formik.handleChange}
                         error={formik.touched.phone && Boolean(formik.errors.phone)}
                         helperText={formik.touched.phone && formik.errors.phone}
-                        onBlur={formik.handleBlur}
-
-                    />
-                    <TextField
-                        name="town"
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="town"
-                        label="Miasto"
-                        value={formik.values.town}
-                        onChange={formik.handleChange}
-                        error={formik.touched.town && Boolean(formik.errors.town)}
-                        helperText={formik.touched.town && formik.errors.town}
                         onBlur={formik.handleBlur}
 
                     />

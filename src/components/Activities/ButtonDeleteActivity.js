@@ -4,7 +4,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteActivityPopup from '../Popups/Popup';
 import DeleteActivityForm from '../Forms/DeleteActivityForm';
 
-const ButtonDeleteActivity = ({ setOpenPopup, getActivitiesAPI, activity, openPopup }) => {
+const ButtonDeleteActivity = ({ setOpenPopup, refreshAfterDeleteActivity, activity, openPopup, setUpdatingStatusPopup }) => {
     return (
         <>
             <Button
@@ -23,8 +23,9 @@ const ButtonDeleteActivity = ({ setOpenPopup, getActivitiesAPI, activity, openPo
                 title="Potwierdzenie akcji"
             >
                 <DeleteActivityForm
-                    getActivitiesAPI={getActivitiesAPI}
                     setOpenPopup={setOpenPopup}
+                    refreshAfterDeleteActivity={refreshAfterDeleteActivity}
+                    setUpdatingStatusPopup={setUpdatingStatusPopup}
                     activityId={activity.id}
                     activityParticipants={activity.participantCount}
                 />

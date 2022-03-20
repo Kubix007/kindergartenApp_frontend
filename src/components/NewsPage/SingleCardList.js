@@ -1,7 +1,7 @@
 import React from 'react'
 import SingleCard from './SingleCard';
 
-const SingleCardList = ({ singleNews, getNewsAPI, setOpenPopup }) => {
+const SingleCardList = ({ singleNews, getNewsAPI, setOpenPopup, refreshNewsAfterEdit, refreshNewsAfterDelete, setUpdatingStatusPopup }) => {
     return (
         <>
             {singleNews.map((news) => (
@@ -14,6 +14,9 @@ const SingleCardList = ({ singleNews, getNewsAPI, setOpenPopup }) => {
                     description={news.description}
                     getNewsAPI={getNewsAPI}
                     setOpenPopup={setOpenPopup}
+                    setUpdatingStatusPopup={setUpdatingStatusPopup}
+                    refreshNewsAfterDelete={refreshNewsAfterDelete}
+                    refreshNewsAfterEdit={refreshNewsAfterEdit}
                 />
             ))}
         </>

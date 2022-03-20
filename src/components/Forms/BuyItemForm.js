@@ -50,9 +50,8 @@ const BuyItemForm = ({ setOpenPopup, userPoints, userDetailsId, setBuyingStatusP
                 image: item.image,
             }
             setBuyingStatusPopup(true);
-            updateUserDetailsAPI(userDetailsId, dataUserDetails, dataItems);
             setOpenPopup(false);
-            getUserDetailsAPI();
+            updateUserDetailsAPI(userDetailsId, dataUserDetails, dataItems);
         }
     }
 
@@ -61,6 +60,7 @@ const BuyItemForm = ({ setOpenPopup, userPoints, userDetailsId, setBuyingStatusP
         Repository.add(resourceItemsAPI, data).then(
             () => {
                 setBuyingStatusPopup(false);
+                getUserDetailsAPI();
                 toast.success(`Pomyślnie kupiono przedmiot`, {
                     position: "bottom-center",
                     autoClose: 5000,
@@ -70,8 +70,7 @@ const BuyItemForm = ({ setOpenPopup, userPoints, userDetailsId, setBuyingStatusP
                     draggable: true,
                     progress: undefined,
                     toastId: "successfulPurchasedItemToast"
-                },
-                );
+                });
             }
         );
     }

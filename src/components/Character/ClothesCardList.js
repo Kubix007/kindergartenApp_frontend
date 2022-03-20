@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 
-const ClothesCardList = ({ clothes }) => {
+const ClothesCardList = ({ clothes, setUpdatingStatusPopup }) => {
     const classes = useStyles();
     const [isBlouse, setIsBlouse] = useState(false);
     const [isHat, setIsHat] = useState(false);
@@ -38,6 +38,7 @@ const ClothesCardList = ({ clothes }) => {
                                     setIsBlouse={setIsBlouse}
                                     setIsHat={setIsHat}
                                     setIsPants={setIsPants}
+                                    setUpdatingStatusPopup={setUpdatingStatusPopup}
                                 />)
                         })}
                     </ListItem>

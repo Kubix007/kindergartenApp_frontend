@@ -11,10 +11,12 @@ import BuyingStatusPopup from '../components/Popups/Popup';
 import BuyingStatusForm from '../components/Forms/BuyingStatusForm';
 import UpdatingStatusPopup from '../components/Popups/Popup';
 import UpdatingStatusForm from '../components/Forms/UpdatingStatusForm';
+import { toast } from 'react-toastify';
 
 const resourceShopColoringBooksAPI = 'shop_coloring_books';
 const resourceUserDetailsAPI = 'user_details';
 const resourceShopClothesAPI = 'shop_clothes';
+const resourceUserClothes = 'users_clothes';
 
 const useStyles = makeStyles(theme => ({
 
@@ -28,14 +30,12 @@ const Shop = () => {
     const classes = useStyles();
     // eslint-disable-next-line no-unused-vars
     const [openPopup, setOpenPopup] = useState(false);
-    const [isLoadingColoringBooks, setIsLoadingColoringBooks] = useState(true);
-    const [isLoadingClothes, setIsLoadingClothes] = useState(true);
-    const [isPointsLoading, setIsPointsLoading] = useState(true);
     const [userPoints, setUserPoints] = useState();
     const [userDetailsId, setUserDetailsId] = useState();
     const [itemShop, setItemShop] = useState();
     const [clothesFromShop, setClothesFromShop] = useState();
     const [buyingStatusPopup, setBuyingStatusPopup] = useState();
+    const [userClothes, setUserClothes] = useState([]);
     const [updatingStatusPopup, setUpdatingStatusPopup] = useState(true);
 
 
@@ -43,10 +43,20 @@ const Shop = () => {
         Repository.getAll(resourceShopColoringBooksAPI).then(
             (data) => {
                 setItemShop(data.data);
-                setIsLoadingColoringBooks(false);
+                getUserDetails();
             },
             (error) => {
                 console.log(error);
+                toast.error(`Nie udało się załadować sklepu`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
             }
         )
     }
@@ -57,11 +67,20 @@ const Shop = () => {
         Repository.getById(resourceUserDetailsAPI, id).then(
             (data) => {
                 setUserPoints(data.data.data.points);
-                //setUserDetailsId(data.data.data.user_id);
-                setIsPointsLoading(false);
+                getShopClothesAPI();
             },
             (error) => {
                 console.log(error);
+                toast.error(`Nie udało się załadować sklepu`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
             }
         )
     }
@@ -70,22 +89,130 @@ const Shop = () => {
         Repository.getAll(resourceShopClothesAPI).then(
             (data) => {
                 setClothesFromShop(data.data);
-                setIsLoadingClothes(false);
+                getUserClothesAPI(userDetailsId);
             },
             (error) => {
                 console.log(error);
+                toast.error(`Nie udało się załadować sklepu`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
             }
         )
     }
 
+    const getUserClothesAPI = (id) => {
+        Repository.getById(resourceUserClothes, id).then(
+            (data) => {
+                setUserClothes(data.data);
+                setUpdatingStatusPopup(false);
+            },
+            (error) => {
+                console.log(error);
+                toast.error(`Nie udało się załadować sklepu`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
+
+            }
+        )
+    }
+    ///////////////////////////////////////////////////////////////////
+
+    const getUserDetailsRefresh = () => {
+        setUpdatingStatusPopup(true);
+        let id = parseInt(Auth.getUserId());
+        setUserDetailsId(parseInt(Auth.getUserId()));
+        Repository.getById(resourceUserDetailsAPI, id).then(
+            (data) => {
+                setUserPoints(data.data.data.points);
+                getShopClothesAPIRefresh();
+            },
+            (error) => {
+                console.log(error);
+                toast.error(`Nie udało się załadować sklepu`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
+            }
+        )
+    }
+
+    const getShopClothesAPIRefresh = () => {
+        Repository.getAll(resourceShopClothesAPI).then(
+            (data) => {
+                setClothesFromShop(data.data);
+                getUserClothesAPIRefresh(userDetailsId);
+            },
+            (error) => {
+                console.log(error);
+                toast.error(`Nie udało się załadować sklepu`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
+            }
+        )
+    }
+
+    const getUserClothesAPIRefresh = (id) => {
+        Repository.getById(resourceUserClothes, id).then(
+            (data) => {
+                setUserClothes(data.data);
+                setUpdatingStatusPopup(false);
+                toast.success(`Pomyślnie kupiono przedmiot`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+            },
+            (error) => {
+                console.log(error);
+                toast.error(`Nie udało się kupić przedmiotu`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
+
+            }
+        )
+    }
     useEffect(() => {
         getShopAPI();
-        getUserDetails();
-        getShopClothesAPI();
-        if (!isPointsLoading && !isLoadingColoringBooks && !isLoadingClothes) {
-            setUpdatingStatusPopup(false);
-        }
-    }, [isLoadingClothes, isLoadingColoringBooks, isPointsLoading]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     return (
         <>
@@ -95,12 +222,12 @@ const Shop = () => {
                 icon={<StoreOutlinedIcon fontSize="large" />}
             />
             <Container maxWidth="lg" className={classes.blogsContainer}>
-                {!updatingStatusPopup? <Typography variant="h5" component="h2">
+                {!updatingStatusPopup ? <Typography variant="h5" component="h2">
                     Twoje punkty: {userPoints} pkt.
                 </Typography> : null}
                 <Grid container spacing={3} style={{ paddingTop: "10px" }}>
                     {!updatingStatusPopup ? <><ShopColoringBooksCardList getUserDetailsAPI={getUserDetails} setBuyingStatusPopup={setBuyingStatusPopup} userPoints={userPoints} userDetailsId={userDetailsId} singleShopItem={itemShop} getShopAPI={getShopAPI} setOpenPopup={setOpenPopup}
-                    /><ShopClothesCardList getUserDetailsAPI={getUserDetails} setBuyingStatusPopup={setBuyingStatusPopup} userPoints={userPoints} userDetailsId={userDetailsId} singleShopItem={clothesFromShop} getShopAPI={getShopAPI} setOpenPopup={setOpenPopup} /> </> :
+                    /><ShopClothesCardList userClothes={userClothes} getUserDetailsAPI={getUserDetailsRefresh} setBuyingStatusPopup={setBuyingStatusPopup} userPoints={userPoints} userDetailsId={userDetailsId} singleShopItem={clothesFromShop} getShopAPI={getShopAPI} setOpenPopup={setOpenPopup} /> </> :
                         null}
                 </Grid>
             </Container>

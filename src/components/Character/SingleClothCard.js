@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@mui/material/Card';
-import { CardActionArea, CardActions, Grid } from '@material-ui/core';
+import { CardActions, Grid } from '@material-ui/core';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
@@ -13,7 +13,7 @@ const useStyles = makeStyles(() => ({
         maxWidth: "100%",
     },
     media: {
-        height: 100,
+        height: 120,
     },
     cardActions: {
         display: "flex",
@@ -28,12 +28,12 @@ const useStyles = makeStyles(() => ({
 
 const SingleClothCard = ({ cloth, isBlouse, isPants, isHat, setIsBlouse, setIsHat, setIsPants }) => {
     const classes = useStyles();
-    const [isEquipped, setIsEquipped] = useState(cloth.isEquipped);
+    const [isEquipped, setIsEquipped] = useState(false);
 
     return (
-        <Grid item style={{ padding: "3px" }}>
-            <Card className={classes.card}>
-                <CardActionArea>
+        <>
+            <Grid item style={{ padding: "2px" }}>
+                <Card className={classes.card}>
                     <CardMedia
                         className={classes.media}
                         image={cloth.image}
@@ -65,9 +65,9 @@ const SingleClothCard = ({ cloth, isBlouse, isPants, isHat, setIsBlouse, setIsHa
                                 <ButtonRemoveCloth clothes={cloth} isEquipped={isEquipped} otherItems={isBlouse} setOtherItems={setIsBlouse} setIsEquipped={setIsEquipped} />
                             </> : null}
                     </CardActions>
-                </CardActionArea>
-            </Card>
-        </Grid>
+                </Card>
+            </Grid>
+        </>
     );
 }
 

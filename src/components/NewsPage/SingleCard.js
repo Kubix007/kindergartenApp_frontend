@@ -34,7 +34,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 
-const SingleCard = ({ image, title, date, description, newsId, getNewsAPI, type }) => {
+const SingleCard = ({ refreshNewsAfterEdit, title, date, description, newsId, getNewsAPI, type, refreshNewsAfterDelete, setUpdatingStatusPopup }) => {
     const classes = useStyles();
     const [openPopupEdit, setOpenPopupEdit] = useState(false);
     const [openPopupDelete, setOpenPopupDelete] = useState(false);
@@ -74,8 +74,9 @@ const SingleCard = ({ image, title, date, description, newsId, getNewsAPI, type 
             >
                 <DeleteNewsForm
                     newsId={newsId}
-                    getNewsAPI={getNewsAPI}
+                    getNewsAPI={refreshNewsAfterDelete}
                     setOpenPopup={setOpenPopupDelete}
+                    setUpdatingStatusPopup={setUpdatingStatusPopup}
                 />
             </DeletePopup>
             <EditPopup
@@ -85,10 +86,11 @@ const SingleCard = ({ image, title, date, description, newsId, getNewsAPI, type 
             >
                 <EditNewsForm
                     newsId={newsId}
-                    getNewsAPI={getNewsAPI}
+                    getNewsAPI={refreshNewsAfterEdit}
                     newsTitle={title}
                     newsDescription={description}
                     setOpenPopup={setOpenPopupEdit}
+                    setUpdatingStatusPopup={setUpdatingStatusPopup}
                 />
             </EditPopup>
         </>

@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const BuyItemClothing = ({ setOpenPopup, userPoints, userDetailsId, setBuyingStatusPopup, getUserDetailsAPI, item }) => {
+const BuyItemClothing = ({ setOpenPopup, userPoints, userDetailsId, setBuyingStatusPopup, getUserDetailsAPI, item, userClothes }) => {
     const classes = useStyles();
 
     const handleClick = () => {
@@ -35,7 +35,21 @@ const BuyItemClothing = ({ setOpenPopup, userPoints, userDetailsId, setBuyingSta
                 progress: undefined,
             });
             setOpenPopup(false);
-        } else {
+        } else if (userClothes.filter((cloth) => cloth.item_id === item.id).length > 0) {
+            toast.info(`Posiadasz już ten przedmiot`, {
+                position: "bottom-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+            });
+            setOpenPopup(false);
+            console.log(userClothes);
+
+        }
+        else {
             let pointsToUpdate = userPoints - item.cost;
             let dataUserDetails = {
                 points: pointsToUpdate * 1,
@@ -51,7 +65,6 @@ const BuyItemClothing = ({ setOpenPopup, userPoints, userDetailsId, setBuyingSta
             setBuyingStatusPopup(true);
             updateUserDetailsAPI(userDetailsId, dataUserDetails, dataItems);
             setOpenPopup(false);
-            getUserDetailsAPI();
         }
     }
 
@@ -60,7 +73,10 @@ const BuyItemClothing = ({ setOpenPopup, userPoints, userDetailsId, setBuyingSta
         Repository.add(resourceUserClothesAPI, data).then(
             () => {
                 setBuyingStatusPopup(false);
-                toast.success(`Pomyślnie kupiono przedmiot`, {
+                getUserDetailsAPI();
+            },
+            () => {
+                toast.error(`Nie udało się kupić przedmiotu`, {
                     position: "bottom-center",
                     autoClose: 5000,
                     hideProgressBar: false,
@@ -69,7 +85,9 @@ const BuyItemClothing = ({ setOpenPopup, userPoints, userDetailsId, setBuyingSta
                     draggable: true,
                     progress: undefined,
                 });
-            },
+                setBuyingStatusPopup(false);
+
+            }
         );
     }
 

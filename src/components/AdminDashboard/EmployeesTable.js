@@ -1,47 +1,9 @@
 import React, { useEffect } from 'react'
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import Auth from '../../api/Auth';
-import LoadingTableUsers from '../Tables/LoadingTableUsers';
-import { makeStyles } from '@material-ui/core/styles';
+import LoadingTableEmployees from '../Tables/LoadingTableEmployees';
 import ButtonDeleteEmployee from './ButtonDeleteEmployee';
 import ButtonEditEmployee from './ButtonEditEmployee';
-import {
-    Box,
-} from '@material-ui/core';
-
-const useStyles = makeStyles((theme) => ({
-    pageContent: {
-        margin: theme.spacing(5),
-        padding: theme.spacing(3),
-    },
-    gridButtons: {
-        margin: theme.spacing(5),
-    },
-    table: {
-        marginTop: theme.spacing(3),
-        display: 'table',
-        '& thead th': {
-            fontWeight: '600',
-            color: theme.palette.primary,
-            backgroundColor: theme.palette.grey[50],
-            boxShadow: '0 1px 1px 1px rgba(0, 0, 0, .1)',
-            minWidth: '100px'
-
-        },
-        '& tbody td': {
-            fontWeight: '300',
-        },
-        '& tbody tr:hover': {
-            backgroundColor: theme.palette.grey[50],
-            cursor: 'pointer',
-        },
-    },
-}));
+import './EmployeesDashboardTables.css';
 
 const headCells = [
     { id: 'first_name', label: 'Imię:', isAdmin: false, },
@@ -49,13 +11,13 @@ const headCells = [
     { id: 'position_name', label: 'Stanowisko:', isAdmin: false, },
     { id: 'activities', label: 'Prowadzi zajęcia:', isAdmin: false, },
     { id: 'phone', label: 'Telefon:', isAdmin: false, },
-    { id: 'town', label: 'Miasto:', isAdmin: false, },
     { id: 'email', label: 'Email:', isAdmin: false, },
-    { id: 'actions', label: 'Akcje:', isAdmin: false }
+    { id: 'actions', label: '', isAdmin: false },
+    { id: 'actions', label: '', isAdmin: false }
+
 ]
 
 const EmployeesTable = ({ isLoading, employees, setOpenEditEmployeePopup, setUpdatingStatusPopup, setOpenDeleteEmployeePopup, getEmployeesAPI, setEditedEmployee, setIsLoading }) => {
-    const classes = useStyles();
 
     useEffect(() => {
         setIsLoading(true);
@@ -65,39 +27,39 @@ const EmployeesTable = ({ isLoading, employees, setOpenEditEmployeePopup, setUpd
     }, []);
 
     return (
-        <TableContainer>
-            <Table className={classes.table} sx={{ minWidth: 650 }}>
-                <TableHead>
-                    <TableRow>
-                        {headCells.filter(headCell => headCell.isAdmin === false).map(headCell => (
-                            <TableCell key={headCell.id}>{headCell.label}</TableCell>
-                        ))}
-                    </TableRow>
-                </TableHead>
-                {!isLoading ? <TableBody>
-                    {employees.map((row) => (
-                        <TableRow
-                            key={row.id}
-                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                        >
-                            <TableCell>{row.first_name}</TableCell>
-                            <TableCell>{row.surname}</TableCell>
-                            <TableCell>{row.position_name}</TableCell>
-                            <TableCell>{row.activities.map(activity => activity.name).join(", ")}</TableCell>
-                            <TableCell>{row.phone}</TableCell>
-                            <TableCell>{row.town}</TableCell>
-                            <TableCell>{row.user.email}</TableCell>
-                            {JSON.parse(Auth.getRole()) === "ADMIN" ? <TableCell >
-                                <Box justifyContent="space-evenly" display="flex">
-                                    <ButtonEditEmployee employee={row} setOpenPopup={setOpenEditEmployeePopup} setEditedEmployee={setEditedEmployee} />
-                                    <ButtonDeleteEmployee employee={row} setOpenPopup={setOpenDeleteEmployeePopup} setEditedEmployee={setEditedEmployee} />
-                                </Box >
-                            </TableCell> : null}
-                        </TableRow>
+        < table class="employeesDashboard" >
+            <caption class="employeesDashboard" >NAUCZYCIELE</caption>
+            <thead class="employeesDashboard">
+                <tr>
+                    {headCells.map(headCell => (
+                        <th scope="col" key={headCell.id}>{headCell.label}</th>
                     ))}
-                </TableBody> : <LoadingTableUsers />}
-            </Table>
-        </TableContainer>
+                </tr>
+            </thead>
+            <tbody>
+                {!isLoading ? employees.map((row) => (
+                    <tr class="employeesDashboard"
+                        key={row.id}
+                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    >
+                        <td class="employeesDashboard" data-label="Imię">{row.first_name}</td>
+                        <td class="employeesDashboard" data-label="Nazwisko">{row.surname}</td>
+                        <td class="employeesDashboard" data-label="Stanowisko">{row.position_name}</td>
+                        <td class="employeesDashboard" data-label="Prowadzi zajęcia">{row.activities.map(activity => activity.name).join(", ")}</td>
+                        <td class="employeesDashboard" data-label="Telefon">{row.phone}</td>
+                        <td class="employeesDashboard" data-label="Email">{row.user.email}</td>
+                        <td class="employeesDashboard" id="employeesActionsWindow">{JSON.parse(Auth.getRole()) === "ADMIN" ?
+                            <ButtonEditEmployee employee={row} setOpenPopup={setOpenEditEmployeePopup} setEditedEmployee={setEditedEmployee} />
+                            : null}
+                        </td>
+                        <td class="employeesDashboard" id="employeesActionsWindow">{JSON.parse(Auth.getRole()) === "ADMIN" ?
+                            <ButtonDeleteEmployee employee={row} setOpenPopup={setOpenDeleteEmployeePopup} setEditedEmployee={setEditedEmployee} />
+                            : null}
+                        </td>
+                    </tr>
+                )) : <LoadingTableEmployees />}
+            </tbody>
+        </table >
     );
 }
 

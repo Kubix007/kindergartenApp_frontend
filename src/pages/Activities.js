@@ -1,14 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import PeopleOutlineTwoToneIcon from '@material-ui/icons/PeopleOutlineTwoTone';
-import { Paper, makeStyles, TableBody, Toolbar } from '@material-ui/core';
+import { Paper, makeStyles, Toolbar, Container } from '@material-ui/core';
 import PageHeader from '../components/PageHeader';
-import TableRow from '@mui/material/TableRow';
-import Table from '@mui/material/Table';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import TableContainer from '@mui/material/TableContainer';
 import Repository from '../api/Repository';
-import LoadingTable from '../components/Tables/LoadingTable';
 import ButtonAddActivity from '../components/Activities/ButtonAddActivity';
 import AddActivityForm from '../components/Forms/AddActivityForm';
 import AddActivityPopup from '../components/Popups/Popup';
@@ -20,6 +14,8 @@ import Box from '@mui/material/Box';
 import Auth from '../api/Auth';
 import UpdatingStatusPopup from '../components/Popups/Popup';
 import UpdatingStatusForm from '../components/Forms/UpdatingStatusForm';
+import { toast } from 'react-toastify';
+import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 
 const resourceActivitiesAPI = 'activities';
 const resourceEmployeesAPI = 'employees';
@@ -33,8 +29,11 @@ const useStyles = makeStyles(theme => ({
         padding: theme.spacing(3),
     },
     buttons: {
-        display: 'flex',
-        justifyContent: 'space-between'
+        paddingLeft: theme.spacing(5)
+
+    },
+    blogsContainer: {
+        paddingTop: theme.spacing(3)
     },
     table: {
         marginTop: theme.spacing(3),
@@ -59,8 +58,9 @@ const useStyles = makeStyles(theme => ({
 const headCells = [
     { id: 'name', label: 'Nazwa zajęć:', isAdmin: false, },
     { id: 'leader', label: 'Prowadzący:', isAdmin: false, },
-    { id: 'participantCount', label: 'Liczba uczestników:', isAdmin: false, },
-    { id: 'actions', label: 'Akcje:', isAdmin: false }
+    { id: 'participantCount', label: 'Uczestnicy:', isAdmin: false, },
+    { id: 'description', label: 'Opis:', isAdmin: false, },
+    { id: 'actions', label: 'Akcje:', isAdmin: true }
 ]
 
 const Activities = () => {
@@ -89,6 +89,179 @@ const Activities = () => {
         )
     }
 
+    const refreshAfterNewParticipant = () => {
+        Repository.getAll(resourceActivitiesAPI).then(
+            (data) => {
+                setActivities(data.data.activities);
+                setIsLoading(false);
+                setUpdatingStatusPopup(false);
+                toast.success(`Pomyślnie dodano członka do grupy`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                    toastId: "successfulNewParticipantToast"
+
+                });
+            },
+            (error) => {
+                console.log(error);
+                toast.error(`Nie udało się dodać członka do grupy`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
+
+            }
+        )
+    }
+
+    const refreshAfterDeleteParticipant = () => {
+        Repository.getAll(resourceActivitiesAPI).then(
+            (data) => {
+                setActivities(data.data.activities);
+                setIsLoading(false);
+                setUpdatingStatusPopup(false);
+                toast.success(`Pomyślnie usunięto uczestnika`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                    toastId: "successfulDeleteParticipantToast"
+
+                });
+            },
+            (error) => {
+                console.log(error);
+                toast.error(`Nie udało się usunąć uczestnika`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
+
+            }
+        )
+    }
+
+    const refreshAfterNewPoints = () => {
+        Repository.getAll(resourceActivitiesAPI).then(
+            (data) => {
+                setActivities(data.data.activities);
+                setIsLoading(false);
+                setUpdatingStatusPopup(false);
+                toast.success(`Pomyślnie zaktualizowano punkty`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                    toastId: "successfulAddPointsToast"
+
+                });
+            },
+            (error) => {
+                console.log(error);
+                toast.error(`Nie udało się zaktualizować punktów`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
+
+            }
+        )
+    }
+
+    const refreshAfterAddActivity = () => {
+        Repository.getAll(resourceActivitiesAPI).then(
+            (data) => {
+                setActivities(data.data.activities);
+                setUpdatingStatusPopup(false);
+                toast.success(`Pomyślnie dodano grupę`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                    toastId: "successfulNewGroupToast"
+
+                });
+            },
+            (error) => {
+                console.log(error);
+                toast.error(`Nie udało się dodać grupy`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
+
+            }
+        )
+    }
+
+    const refreshAfterDeleteActivity = () => {
+        Repository.getAll(resourceActivitiesAPI).then(
+            (data) => {
+                setActivities(data.data.activities);
+                setUpdatingStatusPopup(false);
+                toast.success(`Pomyślnie usunięto grupę`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                    toastId: "successfulDeletedGroupToast"
+
+                });
+            },
+            (error) => {
+                console.log(error);
+                toast.error(`Nie udało się usunąć grupy`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
+
+            }
+        )
+    }
+
     const getEmployeesAPI = () => {
         Repository.getAll(resourceEmployeesAPI).then(
             (data) => {
@@ -99,6 +272,15 @@ const Activities = () => {
                 console.log(error);
             }
         )
+    }
+
+    const checkLeader = (emplo, activityId) => {
+        let employee = emplo.filter((x) => x.user_id === parseInt(Auth.getUserId));
+        if (employee.id === activityId.leader_id) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     useEffect(() => {
@@ -116,63 +298,70 @@ const Activities = () => {
                 subTitle="Dodatkowe grupy zajęciowe"
                 icon={<PeopleOutlineTwoToneIcon fontSize="large" />}
             />
-
-            <Paper elevation={6} className={classes.pageContent}>
-                {JSON.parse(Auth.getRole()) === "ADMIN" ? <Toolbar className={classes.buttons}>
+            <Container maxWidth="lg" className={classes.blogsContainer}>
+                {JSON.parse(Auth.getRole()) === "ADMIN" && !updatingStatusPopup ? <Toolbar className={classes.buttons}>
                     <ButtonAddActivity setOpenPopup={setOpenAddActivityPopup} disabled={buttonDisabled} />
                 </Toolbar> : null}
-                {activities.length === 0 && !updatingStatusPopup ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}><h1>Niestety żadne zajęcia nie zostały jeszcze stworzone ;(</h1></div> : null}
-                <TableContainer>
-                    <Table className={classes.table} sx={{ minWidth: 650 }} aria-label="simple table">
-                        <TableHead>
-                            <TableRow>
-                                {activities.length !== 0 ? headCells.filter(headCell => headCell.isAdmin === false).map(headCell => (
-                                    <TableCell key={headCell.id}>{headCell.label}</TableCell>
-                                )) : null}
-                            </TableRow>
-                        </TableHead>
-                        {!updatingStatusPopup ? <TableBody>
-                            {activities.map((activity) => (
-                                <TableRow
-                                    key={activity.id}
-                                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                >
-                                    <TableCell>{activity.name}</TableCell>
-                                    <TableCell>{activity.leader}</TableCell>
-                                    <TableCell>{activity.participantCount}</TableCell>
-                                    <TableCell>{JSON.parse(Auth.getRole()) === "ADMIN" ?
-                                        <Box justifyContent="space-evenly" display="flex">
-                                            <ButtonEditActivity activity={activity} setEditedGroup={setEditedGroup} setOpenPopup={setOpenEditActivityPopup} openPopup={openEditActivityPopup} />
-                                            <ButtonDeleteActivity activity={activity} getActivitiesAPI={getActivitiesAPI} openPopup={openDeleteActivityPopup} setOpenPopup={setOpenDeleteActivityPopup} />
-                                        </Box > : null}
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody> : <LoadingTable />}
-                    </Table>
-                </TableContainer>
-            </Paper>
+                <Paper elevation={6} className={classes.pageContent}>
+                    {activities.length === 0 && !updatingStatusPopup ? <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}><h2>Brak istniejących zajęć</h2></div> : null}
+                    {!updatingStatusPopup && activities.length > 0 ?
+                        <table class="mainActivities">
+                            <caption class="mainActivities">ZAJĘCIA</caption>
+                            <thead class="mainActivities">
+                                <tr class="mainActivities">
+                                    {activities.length !== 0 ? headCells.filter(headCell => headCell.isAdmin === false).map(headCell => (
+                                        <th scope="col" key={headCell.id}>{headCell.label}</th>
+                                    )) : null}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {activities.map((activity) => (
+                                    <tr class="mainActivities">
+                                        <td class="mainActivities" data-label="Nazwa zajęć">{activity.name}</td>
+                                        <td class="mainActivities" data-label="Prowadzący">{activity.leader}</td>
+                                        <td class="mainActivities" data-label="Liczba uczestników">{activity.participantCount}</td>
+                                        <td class="mainActivities" data-label='Opis' ><p id="des">{activity.description}</p></td>
+                                        <td class="mainActivities" data-label="Akcje">{JSON.parse(Auth.getRole()) === "ADMIN" || parseInt(Auth.getUserId()) === activity.user_id.user_id ?
+                                            <Box justifyContent="space-evenly" display="flex">
+                                                <ButtonEditActivity activity={activity} setEditedGroup={setEditedGroup} setOpenPopup={setOpenEditActivityPopup} openPopup={openEditActivityPopup} />
+                                                <ButtonDeleteActivity activity={activity} refreshAfterDeleteActivity={refreshAfterDeleteActivity} setUpdatingStatusPopup={setUpdatingStatusPopup} getActivitiesAPI={getActivitiesAPI} openPopup={openDeleteActivityPopup} setOpenPopup={setOpenDeleteActivityPopup} />
+                                            </Box > : null}
+                                        </td>
+                                    </tr>
+
+                                ))}
+                            </tbody>
+                        </table>
+                        : null}
+                </Paper>
+            </Container>
             <AddActivityPopup
                 openPopup={openAddActivityPopup}
                 setOpenPopup={setOpenAddActivityPopup}
                 title="Dodaj nową grupę"
             >
                 <AddActivityForm
-                    getActivitiesAPI={getActivitiesAPI}
+                    getActivitiesAPI={refreshAfterAddActivity}
                     setOpenPopup={setOpenAddActivityPopup}
                     employees={employees}
+                    setUpdatingStatusPopup={setUpdatingStatusPopup}
                 />
             </AddActivityPopup>
             <EditActivityPopup
                 openPopup={openEditActivityPopup}
                 setOpenPopup={setOpenEditActivityPopup}
                 title="Edytuj grupę"
+                onClose={() => setOpenEditActivityPopup(false)}
                 maxWidth="lg"
             >
                 <EditActivityForm
+                    refreshAfterNewParticipant={refreshAfterNewParticipant}
+                    refreshAfterNewPoints={refreshAfterNewPoints}
+                    refreshAfterDeleteParticipant={refreshAfterDeleteParticipant}
                     getActivitiesAPI={getActivitiesAPI}
                     setOpenPopup={setOpenEditActivityPopup}
                     editedGroup={editedGroup}
+                    setUpdatingStatusPopup={setUpdatingStatusPopup}
                 />
             </EditActivityPopup>
             <UpdatingStatusPopup

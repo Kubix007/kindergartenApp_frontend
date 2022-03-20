@@ -5,24 +5,17 @@ import { toast } from 'react-toastify';
 
 const resourceParticpantsAPI = 'participants';
 
-const ButtonDeleteParticipant = ({ activityId, participantId, getActivitiesAPI, setOpenPopup }) => {
+const ButtonDeleteParticipant = ({ activityId, participantId, refreshAfterDeleteParticipant, setOpenPopup, setUpdatingStatusPopup }) => {
 
     const deleteParticipantsAPI = () => {
+        setOpenPopup(false);
+        setUpdatingStatusPopup(true);
         Repository.deleteParticipant(resourceParticpantsAPI, participantId, activityId).then(
             () => {
-                toast.success(`Pomyślnie usunięto uczestnika`, {
-                    position: "bottom-center",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: false,
-                    draggable: true,
-                    progress: undefined,
-                    toastId: "successfulDeleteParticipantToast"
-
-                });
+                refreshAfterDeleteParticipant();
             },
             (error) => {
+                console.log(error);
                 toast.error(`Nie udało się usunąć uczestnika`, {
                     position: "bottom-center",
                     autoClose: 5000,
@@ -37,16 +30,14 @@ const ButtonDeleteParticipant = ({ activityId, participantId, getActivitiesAPI, 
     }
 
     const handleClick = () => {
-        setOpenPopup(false);
         deleteParticipantsAPI();
-        getActivitiesAPI();
     }
 
     return (
         <Button
             variant="contained"
             color="primary"
-            size="medium"
+            size="small"
             id="deleteParticipantButton"
             onClick={handleClick}
         >

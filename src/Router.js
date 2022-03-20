@@ -13,11 +13,43 @@ import Myitems from './pages/MyItems';
 import MyCharacter from './pages/MyCharacter';
 import ColoringBook from './pages/ColoringBook';
 import AdminDashboard from './pages/AdminDashboard';
+import HistoryPoints from './pages/HistoryPoints';
+import HistoryPointsAdmin from './pages/HistoryPointsAdmin';
 
 const requireLogin = (to, from, next) => {
     if (to.meta.auth) {
         if (Auth.IsLogged()) {
-            next();
+            if (to.meta.admin) {
+                if (JSON.parse(Auth.getRole()) === "ADMIN") {
+                    next();
+                }
+                else if (to.meta.employee) {
+                    if (JSON.parse(Auth.getRole()) === "EMPLOYEE") {
+                        next();
+                    }
+                }
+                next.redirect("/aktualnosci");
+            }
+            else if (to.meta.user) {
+                if (JSON.parse(Auth.getRole()) === "USER") {
+                    next();
+                }
+                else if (to.meta.employee) {
+                    if (JSON.parse(Auth.getRole()) === "EMPLOYEE") {
+                        next();
+                    }
+                }
+                next.redirect("/aktualnosci");
+            }
+            else if (to.meta.employee) {
+                if (JSON.parse(Auth.getRole()) === "EMPLOYEE") {
+                    next();
+                }
+                next.redirect("/aktualnosci");
+            }
+            else {
+                next();
+            }
         }
         next.redirect('/logowanie');
     } else if (to.meta.guestOnly) {
@@ -40,12 +72,14 @@ export const Router = () => {
                     <GuardedRoute exact path="/logowanie" component={Login} meta={{ guestOnly: true }} />
                     <GuardedRoute exact path="/rejestracja" component={Register} meta={{ guestOnly: true }} />
                     <GuardedRoute exact path="/aktualnosci" component={News} meta={{ auth: true }} />
-                    <GuardedRoute exact path="/sklep" component={Shop} meta={{ auth: true }} />
+                    <GuardedRoute exact path="/sklep" component={Shop} meta={{ auth: true, user: true, employee: true }} />
                     <GuardedRoute exact path="/zajecia" component={Activities} meta={{ auth: true }} />
-                    <GuardedRoute exact path="/przedmioty" component={Myitems} meta={{ auth: true }} />
-                    <GuardedRoute exact path="/kolorowanka" component={ColoringBook} meta={{ auth: true }} />
-                    <GuardedRoute exact path="/panel" component={AdminDashboard} meta={{ auth: true }} />
-                    <GuardedRoute exact path="/postac" component={MyCharacter} meta={{ auth: true }} />
+                    <GuardedRoute exact path="/przedmioty" component={Myitems} meta={{ auth: true, user: true, employee: true }} />
+                    <GuardedRoute exact path="/kolorowanka" component={ColoringBook} meta={{ auth: true, user: true, employee: true }} />
+                    <GuardedRoute exact path="/panel" component={AdminDashboard} meta={{ auth: true, admin: true }} />
+                    <GuardedRoute exact path="/postac" component={MyCharacter} meta={{ auth: true, user: true, employee: true }} />
+                    <GuardedRoute exact path="/punkty" component={HistoryPoints} meta={{ auth: true, user: true }} />
+                    <GuardedRoute exact path="/historia" component={HistoryPointsAdmin} meta={{ auth: true, admin: true, employee: true }} />
                     <GuardedRoute exact path="/" component={News} meta={{ auth: true }} />
                     <GuardedRoute path="*" component={Page404} />
                 </Switch>
