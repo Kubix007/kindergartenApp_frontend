@@ -81,7 +81,7 @@ export default function UserRegisterPanel({ backToMain }) {
             .required("Pole wymagane"),
         parentsPhone: yup
             .string()
-            .required()
+            .required("Pole wymagane")
             .matches(/^[0-9]+$/, "Pole musi składać się z samych cyfr")
             .min(9, 'Pole musi składać się z 9 cyfr')
             .max(9, 'Pole musi składać się z 9 cyfr'),
