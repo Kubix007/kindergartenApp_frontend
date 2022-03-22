@@ -1,10 +1,15 @@
 import React from 'react'
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
-import DeleteActivityPopup from '../Popups/Popup';
-import DeleteActivityForm from '../Forms/DeleteActivityForm';
 
-const ButtonDeleteActivity = ({ setOpenPopup, refreshAfterDeleteActivity, activity, openPopup, setUpdatingStatusPopup }) => {
+const ButtonDeleteActivity = ({ setOpenPopup, setActivityId, setActivityParticipants, activityId, activityParticipantCount }) => {
+
+    const handleClick = () => {
+        setOpenPopup(true);
+        setActivityParticipants(activityParticipantCount);
+        setActivityId(activityId);
+    }
+
     return (
         <>
             <Button
@@ -12,24 +17,11 @@ const ButtonDeleteActivity = ({ setOpenPopup, refreshAfterDeleteActivity, activi
                 color="primary"
                 startIcon={<DeleteIcon />}
                 size="small"
-                onClick={() => setOpenPopup(true)}
+                onClick={() => handleClick()}
                 id="deleteActivityButton"
             >
                 Usuń
             </Button>
-            <DeleteActivityPopup
-                openPopup={openPopup}
-                setOpenPopup={setOpenPopup}
-                title="Potwierdzenie akcji"
-            >
-                <DeleteActivityForm
-                    setOpenPopup={setOpenPopup}
-                    refreshAfterDeleteActivity={refreshAfterDeleteActivity}
-                    setUpdatingStatusPopup={setUpdatingStatusPopup}
-                    activityId={activity.id}
-                    activityParticipants={activity.participantCount}
-                />
-            </DeleteActivityPopup>
         </>
     );
 }
