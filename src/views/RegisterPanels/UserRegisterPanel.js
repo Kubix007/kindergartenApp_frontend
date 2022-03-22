@@ -147,8 +147,17 @@ export default function UserRegisterPanel({ backToMain }) {
 
                     },
                     (error) => {
-                        console.log(error);
-                        console.log(error.response);
+                        //console.log(error);
+                        //console.log(error.response);
+                        toast.error(`Błąd!`, {
+                            position: "bottom-center",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: false,
+                            draggable: true,
+                            progress: undefined,
+                        });
 
                     }
                 );

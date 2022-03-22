@@ -204,7 +204,7 @@ const EditActivityForm = ({ getActivitiesAPI, setOpenPopup, editedGroup, setUpda
                             helperText={formik.touched.particpant && formik.errors.particpant}
                             onBlur={formik.handleBlur}
                         >
-                            {userDetails.filter((row) => row.user.role === "USER" || row.user.role === "ADMIN" ).map(userDetails => (
+                            {userDetails.filter((row) => row.user.role === "USER" || row.user.role === "ADMIN").map(userDetails => (
                                 <option style={{ fontSize: "20px" }} key={userDetails.id} value={userDetails.id}>{userDetails.first_name} {userDetails.surname}</option>
                             ))}
                         </TextField> : <TextField
@@ -249,7 +249,7 @@ const EditActivityForm = ({ getActivitiesAPI, setOpenPopup, editedGroup, setUpda
                                 >
                                     <td class="employeesDashboard" data-label="Imię">{participant.first_name}</td>
                                     <td class="employeesDashboard" data-label="Nazwisko">{participant.surname}</td>
-                                    <td class="employeesDashboard" data-label="Stanowisko">{participant.points}</td>
+                                    <td class="employeesDashboard" data-label="Punkty">{participant.points}</td>
                                     <td class="employeesDashboard" id="employeesActionsWindow">{JSON.parse(Auth.getRole()) === "ADMIN" ?
                                         <ButtonAddPoints
                                             setOpenPopup={setOpenAddPointsPopup}

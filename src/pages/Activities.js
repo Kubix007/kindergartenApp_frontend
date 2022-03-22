@@ -16,6 +16,7 @@ import UpdatingStatusPopup from '../components/Popups/Popup';
 import UpdatingStatusForm from '../components/Forms/UpdatingStatusForm';
 import { toast } from 'react-toastify';
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
+import './ActivitiesTable.css';
 
 const resourceActivitiesAPI = 'activities';
 const resourceEmployeesAPI = 'employees';
@@ -274,15 +275,6 @@ const Activities = () => {
         )
     }
 
-    const checkLeader = (emplo, activityId) => {
-        let employee = emplo.filter((x) => x.user_id === parseInt(Auth.getUserId));
-        if (employee.id === activityId.leader_id) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     useEffect(() => {
         getActivitiesAPI();
         getEmployeesAPI();
@@ -320,7 +312,7 @@ const Activities = () => {
                                         <td class="mainActivities" data-label="Nazwa zajęć">{activity.name}</td>
                                         <td class="mainActivities" data-label="Prowadzący">{activity.leader}</td>
                                         <td class="mainActivities" data-label="Liczba uczestników">{activity.participantCount}</td>
-                                        <td class="mainActivities" data-label='Opis' ><p id="des">{activity.description}</p></td>
+                                        <td class="mainActivities" data-label='Opis' ><p style={{ padding: 10 }}>{activity.description}</p></td>
                                         <td class="mainActivities" data-label="Akcje">{JSON.parse(Auth.getRole()) === "ADMIN" || parseInt(Auth.getUserId()) === activity.user_id.user_id ?
                                             <Box justifyContent="space-evenly" display="flex">
                                                 <ButtonEditActivity activity={activity} setEditedGroup={setEditedGroup} setOpenPopup={setOpenEditActivityPopup} openPopup={openEditActivityPopup} />
