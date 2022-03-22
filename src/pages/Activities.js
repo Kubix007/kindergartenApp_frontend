@@ -17,6 +17,8 @@ import UpdatingStatusForm from '../components/Forms/UpdatingStatusForm';
 import { toast } from 'react-toastify';
 import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css';
 import './ActivitiesTable.css';
+import DeleteActivityForm from '../components/Forms/DeleteActivityForm';
+import DeleteActivityPopup from '../components/Popups/Popup';
 
 const resourceActivitiesAPI = 'activities';
 const resourceEmployeesAPI = 'employees';
@@ -76,6 +78,9 @@ const Activities = () => {
     const [openDeleteActivityPopup, setOpenDeleteActivityPopup] = useState(false);
     const [editedGroup, setEditedGroup] = useState();
     const [updatingStatusPopup, setUpdatingStatusPopup] = useState(true);
+    const [activityParticipants, setActivityParticipants] = useState(false);
+    const [activityId, setActivityId] = useState(false);
+
 
 
     const getActivitiesAPI = () => {
@@ -316,7 +321,7 @@ const Activities = () => {
                                         <td class="mainActivities" data-label="Akcje">{JSON.parse(Auth.getRole()) === "ADMIN" || parseInt(Auth.getUserId()) === activity.user_id.user_id ?
                                             <Box justifyContent="space-evenly" display="flex">
                                                 <ButtonEditActivity activity={activity} setEditedGroup={setEditedGroup} setOpenPopup={setOpenEditActivityPopup} openPopup={openEditActivityPopup} />
-                                                <ButtonDeleteActivity activity={activity} refreshAfterDeleteActivity={refreshAfterDeleteActivity} setUpdatingStatusPopup={setUpdatingStatusPopup} getActivitiesAPI={getActivitiesAPI} openPopup={openDeleteActivityPopup} setOpenPopup={setOpenDeleteActivityPopup} />
+                                                <ButtonDeleteActivity activity={activity} setActivityParticipants={setActivityParticipants} setActivityId={setActivityId} activityParticipantCount={activity.participantCount} activityId={activity.id} refreshAfterDeleteActivity={refreshAfterDeleteActivity} setUpdatingStatusPopup={setUpdatingStatusPopup} getActivitiesAPI={getActivitiesAPI} openPopup={openDeleteActivityPopup} setOpenPopup={setOpenDeleteActivityPopup} />
                                             </Box > : null}
                                         </td>
                                     </tr>
@@ -365,6 +370,19 @@ const Activities = () => {
                     setOpenPopup={updatingStatusPopup}
                 />
             </UpdatingStatusPopup>
+            <DeleteActivityPopup
+                openPopup={openDeleteActivityPopup}
+                setOpenPopup={setOpenDeleteActivityPopup}
+                title="Potwierdzenie akcji"
+            >
+                <DeleteActivityForm
+                    setOpenPopup={setOpenDeleteActivityPopup}
+                    refreshAfterDeleteActivity={refreshAfterDeleteActivity}
+                    setUpdatingStatusPopup={setUpdatingStatusPopup}
+                    activityId={activityId}
+                    activityParticipants={activityParticipants}
+                />
+            </DeleteActivityPopup>
         </>
     );
 }
