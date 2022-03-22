@@ -41,7 +41,7 @@ const AddNewsForm = ({ getNewsAPI, setOpenPopup, userDetailsId, setUpdatingStatu
     const validationSchema = yup.object({
         title: yup
             .string()
-            .max(15, "Pole może składać się maksymalnie z 15 znaków")
+            .max(36, "Pole może składać się maksymalnie z 15 znaków")
             .required("Pole wymagane"),
         description: yup
             .string()

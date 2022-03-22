@@ -43,9 +43,6 @@ const register = (login, email, firstName, surname, parentsFirstName, parentsSur
             password: password,
             password_confirmation: passwordConfirmation
         })
-            .then((reponse) => {
-                console.log(reponse);
-            });
     }
 }
 
