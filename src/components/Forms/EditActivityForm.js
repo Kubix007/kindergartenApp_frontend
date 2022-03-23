@@ -250,7 +250,7 @@ const EditActivityForm = ({ getActivitiesAPI, setOpenPopup, editedGroup, setUpda
                                     <td class="employeesDashboard" data-label="Imię">{participant.first_name}</td>
                                     <td class="employeesDashboard" data-label="Nazwisko">{participant.surname}</td>
                                     <td class="employeesDashboard" data-label="Punkty">{participant.points}</td>
-                                    <td class="employeesDashboard" id="employeesActionsWindow">{JSON.parse(Auth.getRole()) === "ADMIN" ?
+                                    <td class="employeesDashboard" id="employeesActionsWindow">{JSON.parse(Auth.getRole()) === "ADMIN" || parseInt(Auth.getUserId()) === editedGroup.user_id.user_id?
                                         <ButtonAddPoints
                                             setOpenPopup={setOpenAddPointsPopup}
                                             openPopup={openAddPointsPopup}
@@ -260,7 +260,7 @@ const EditActivityForm = ({ getActivitiesAPI, setOpenPopup, editedGroup, setUpda
                                         />
                                         : null}
                                     </td>
-                                    <td class="employeesDashboard" id="employeesActionsWindow">{JSON.parse(Auth.getRole()) === "ADMIN" ?
+                                    <td class="employeesDashboard" id="employeesActionsWindow">{JSON.parse(Auth.getRole()) === "ADMIN" || parseInt(Auth.getUserId()) === editedGroup.user_id.user_id?
                                         <ButtonDeleteParticipant activityId={editedGroup.id} setUpdatingStatusPopup={setUpdatingStatusPopup} setOpenPopup={setOpenPopup} refreshAfterDeleteParticipant={refreshAfterDeleteParticipant} participantId={participant.id} />
                                         : null}
                                     </td>

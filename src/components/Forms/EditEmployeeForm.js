@@ -53,8 +53,8 @@ const EditUserForm = ({ setOpenPopup, editedEmployee, getEmployeesAPI, setUpdati
             .required("Pole wymagane"),
         phone: yup
             .string()
-            .max(9, "Numer telefon musi składać się z 9 cyfr")
-            .required("Pole wymagane"),
+            .required("Pole wymagane")
+            .matches(/^[\+]?[(]?[-\s]?[0-9]{3}[)]?[-\s]?[0-9]{3}[-\s]?[0-9]{3,6}$/, "Nieprawidłowy format"),
         email: yup
             .string()
             .email("Wprowadź prawidłowy email")

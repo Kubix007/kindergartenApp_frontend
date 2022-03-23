@@ -49,7 +49,8 @@ const EditUserForm = ({ setOpenPopup, editedUser, getUserDetailsAPI, setUpdating
             .max(20, "Pole może składać się maksymalnie z 20 znaków"),
         parents_phone: yup
             .string()
-            .max(20, "Pole może składać się maksymalnie z 20 znaków"),
+            .required("Pole wymagane")
+            .matches(/^[\+]?[(]?[-\s]?[0-9]{3}[)]?[-\s]?[0-9]{3}[-\s]?[0-9]{3,6}$/, "Nieprawidłowy format"),
         town: yup
             .string()
             .max(20, "Pole może składać się maksymalnie z 20 znaków"),

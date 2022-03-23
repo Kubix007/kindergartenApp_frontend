@@ -82,9 +82,7 @@ export default function UserRegisterPanel({ backToMain }) {
         parentsPhone: yup
             .string()
             .required("Pole wymagane")
-            .matches(/^[0-9]+$/, "Pole musi składać się z samych cyfr")
-            .min(9, 'Pole musi składać się z 9 cyfr')
-            .max(9, 'Pole musi składać się z 9 cyfr'),
+            .matches(/^[\+]?[(]?[-\s]?[0-9]{3}[)]?[-\s]?[0-9]{3}[-\s]?[0-9]{3,6}$/, "Nieprawidłowy format"),
         email: yup
             .string()
             .required("Pole wymagane")
