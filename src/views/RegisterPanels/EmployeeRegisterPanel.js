@@ -73,10 +73,8 @@ export default function EmployeeRegisterPanel({ backToMain }) {
             .required("Pole wymagane"),
         phone: yup
             .string()
-            .required("Pole jest wymagane")
-            .matches(/^[0-9]+$/, "Pole musi składać się z samych cyfr")
-            .min(9, 'Pole musi składać się z 9 cyfr')
-            .max(9, 'Pole musi składać się z 9 cyfr'),
+            .required("Pole wymagane")
+            .matches(/^[\+]?[(]?[-\s]?[0-9]{3}[)]?[-\s]?[0-9]{3}[-\s]?[0-9]{3,6}$/, "Nieprawidłowy format"),
         email: yup
             .string()
             .required("Pole wymagane")

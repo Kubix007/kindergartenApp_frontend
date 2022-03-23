@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
         alignItems: "center",
     },
     buttonSave: {
-        margin: theme.spacing(1),
+        margin: theme.spacing(3),
     },
     paper: {
     }
@@ -150,7 +150,7 @@ const MyCharacter = () => {
                         {character ? renderCharacter(character) : null}
                         <Paper elevation={6} className={classes.paper}><div id="character"></div></Paper>
                     </Grid>
-                    {character ? <Button
+                    {character ? <Button className={classes.buttonSave}
                         variant="contained"
                         size='large'
                         color="primary"
