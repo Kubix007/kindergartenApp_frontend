@@ -25,17 +25,30 @@ const BuyItemClothing = ({ setOpenPopup, userRole, userPoints, userDetailsId, se
 
     const handleClick = () => {
         if (userRole === "EMPLOYEE") {
-            let dataItems = {
-                user_details_id: userDetailsId,
-                item_id: item.id,
-                category: item.category,
-                name: item.name,
-                cost: item.cost,
-                image: item.image,
+            if (userClothes.filter((cloth) => cloth.item_id === item.id).length > 0) {
+                toast.info(`Posiadasz już ten przedmiot`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setOpenPopup(false);    
+            } else {
+                let dataItems = {
+                    user_details_id: userDetailsId,
+                    item_id: item.id,
+                    category: item.category,
+                    name: item.name,
+                    cost: item.cost,
+                    image: item.image,
+                }
+                setBuyingStatusPopup(true);
+                postItemsAPI(dataItems);
+                setOpenPopup(false);
             }
-            setBuyingStatusPopup(true);
-            postItemsAPI(dataItems);
-            setOpenPopup(false);
         }
         else {
             if (userPoints < item.cost) {
@@ -59,9 +72,7 @@ const BuyItemClothing = ({ setOpenPopup, userRole, userPoints, userDetailsId, se
                     draggable: true,
                     progress: undefined,
                 });
-                setOpenPopup(false);
-                console.log(userClothes);
-    
+                setOpenPopup(false);    
             }
             else {
                 let pointsToUpdate = userPoints - item.cost;
