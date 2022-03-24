@@ -71,6 +71,7 @@ const EditUserForm = ({ setOpenPopup, editedEmployee, getEmployeesAPI, setUpdati
         },
         onSubmit: (values, actions) => {
             let data = null;
+            dataUser = null;
             if (typeof user !== "undefined") {
                 data = {
                     first_name: values.first_name,

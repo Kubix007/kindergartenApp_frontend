@@ -12,6 +12,7 @@ import Repository from '../../api/Repository';
 import Auth from '../../api/Auth';
 
 const resourceUserDetailsAPI = 'user_details';
+const resourceUserAPI = 'user';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -33,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
 
 const EditUserForm = ({ setOpenPopup, editedUser, getUserDetailsAPI, setUpdatingStatusPopup }) => {
     const classes = useStyles();
+    let dataUser = null;
 
     const validationSchema = yup.object({
         first_name: yup
@@ -57,6 +59,10 @@ const EditUserForm = ({ setOpenPopup, editedUser, getUserDetailsAPI, setUpdating
         street: yup
             .string()
             .max(20, "Pole może składać się maksymalnie z 20 znaków"),
+        email: yup
+            .string()
+            .email("Wprowadź prawidłowy email")
+            .required("Pole wymagane"),
     });
 
     const formik = useFormik({
@@ -68,10 +74,11 @@ const EditUserForm = ({ setOpenPopup, editedUser, getUserDetailsAPI, setUpdating
             parents_phone: editedUser.parents_phone ? editedUser.parents_phone : "",
             town: editedUser.town ? editedUser.town : "",
             street: editedUser.street ? editedUser.street : "",
-
+            email: editedUser.user.email ? editedUser.user.email : "",
         },
         onSubmit: (values, actions) => {
             let data = null;
+            dataUser = null;
             if (typeof user !== "undefined") {
                 data = {
                     first_name: values.first_name,
@@ -82,7 +89,10 @@ const EditUserForm = ({ setOpenPopup, editedUser, getUserDetailsAPI, setUpdating
                     town: values.town,
                     street: values.street,
                 }
-                updateUserDetailsAPI(editedUser.id, data, actions);
+                dataUser = {
+                    email: values.email,
+                }
+                updateUserDetailsAPI(editedUser.id, data, actions, values);
             } else {
                 Auth.getUser().then(
                     () => {
@@ -96,7 +106,10 @@ const EditUserForm = ({ setOpenPopup, editedUser, getUserDetailsAPI, setUpdating
                             street: values.street,
 
                         }
-                        updateUserDetailsAPI(editedUser.id, data, actions);
+                        dataUser = {
+                            email: values.email,
+                        }
+                        updateUserDetailsAPI(editedUser.id, data, actions, values);
                     },
                     (error) => {
                         console.log(error);
@@ -108,24 +121,61 @@ const EditUserForm = ({ setOpenPopup, editedUser, getUserDetailsAPI, setUpdating
 
     });
 
-    const updateUserDetailsAPI = (userId, data, actions) => {
+    const updateUserDetailsAPI = (userId, data, actions, values) => {
         setUpdatingStatusPopup(true);
         setOpenPopup(false);
         Repository.update(resourceUserDetailsAPI, userId, data).then(
+            () => {
+                if (editedUser.user.email !== values.email) {
+                    updateUserAPI(editedUser.user_id, dataUser, actions);
+                }
+                else {
+                    getUserDetailsAPI();
+                    actions.resetForm({
+                        values: {
+                            first_name: "",
+                            surname: "",
+                            parents_first_name: "",
+                            parents_surname: "",
+                            parents_phone: "",
+                            town: "",
+                            street: "",
+                            email: "",
+                        },
+                    })
+                }
+
+            },
+            (error) => {
+                console.log(error);
+                console.log(error.response);
+                toast.error(`Nie udało się zmienić użytkownika`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setUpdatingStatusPopup(false);
+            }
+        );
+    }
+
+    const updateUserAPI = (userId, data, actions) => {
+        Repository.update(resourceUserAPI, userId, data).then(
             () => {
                 getUserDetailsAPI();
                 actions.resetForm({
                     values: {
                         first_name: "",
                         surname: "",
-                        parents_first_name: "",
-                        parents_surname: "",
-                        parents_phone: "",
-                        town: "",
-                        street: "",
-                    },
+                        position_name: "",
+                        phone: "",
+                        email: "",
+                    }
                 })
-
             },
             (error) => {
                 console.log(error);
@@ -249,6 +299,21 @@ const EditUserForm = ({ setOpenPopup, editedUser, getUserDetailsAPI, setUpdating
                         onChange={formik.handleChange}
                         error={formik.touched.street && Boolean(formik.errors.street)}
                         helperText={formik.touched.street && formik.errors.street}
+                        onBlur={formik.handleBlur}
+
+                    />
+                    <TextField
+                        name="email"
+                        variant="outlined"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="email"
+                        label="Email"
+                        value={formik.values.email}
+                        onChange={formik.handleChange}
+                        error={formik.touched.email && Boolean(formik.errors.email)}
+                        helperText={formik.touched.email && formik.errors.email}
                         onBlur={formik.handleBlur}
 
                     />
