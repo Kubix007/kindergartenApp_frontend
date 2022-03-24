@@ -38,6 +38,12 @@ table {
     text-transform: uppercase;
   }
   
+  table td#emailEmployeeTd {
+    padding: 0;
+    word-wrap: break-word;
+
+}
+  
   @media screen and (max-width: 1195px) {
     table.usersDashboard {
       border: 0;
@@ -46,6 +52,7 @@ table {
     table caption.usersDashboard {
       font-size: 1.3em;
     }
+    
     
     table thead.usersDashboard {
       border: none;

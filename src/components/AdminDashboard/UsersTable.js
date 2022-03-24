@@ -13,6 +13,7 @@ const headCells = [
     { id: 'parents_phone', label: 'Telefon rodzica:' },
     { id: 'town', label: 'Miasto:' },
     { id: 'street', label: 'Ulica:' },
+    { id: 'email', label: 'Email:' },
     { id: 'points', label: 'Punkty:' },
     { id: 'actions', label: '' },
     { id: 'actions', label: '' }
@@ -39,7 +40,7 @@ const UsersTable = ({ isLoading, userDetails, setUpdatingStatusPopup, setOpenEdi
                 </tr>
             </thead>
             <tbody>
-                {!isLoading ? userDetails.filter((row) => row.user.role === "USER" || row.user.role === "ADMIN" ).map((row) => (
+                {!isLoading ? userDetails.filter((row) => row.user.role === "USER" || row.user.role === "ADMIN").map((row) => (
                     <tr class="usersDashboard"
                         key={row.id}
                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -51,6 +52,7 @@ const UsersTable = ({ isLoading, userDetails, setUpdatingStatusPopup, setOpenEdi
                         <td class="usersDashboard" data-label="Telefon">{row.parents_phone ? row.parents_phone : "Brak telefonu"}</td>
                         <td class="usersDashboard" data-label="Miasto">{row.town ? row.town : "Brak miasta"}</td>
                         <td class="usersDashboard" data-label="Ulica">{row.street ? row.street : "Brak ulicy"}</td>
+                        <td class="usersDashboard" id="emailEmployeeTd" data-label="Email">{row.user.email}</td>
                         <td class="usersDashboard" data-label="Punkty">{row.points}</td>
                         <td class="usersDashboard" id="userActionsWindow">{JSON.parse(Auth.getRole()) === "ADMIN" ?
                             <ButtonEditUser user={row} setOpenPopup={setOpenEditUserPopup} setEditedUser={setEditedUser} />
