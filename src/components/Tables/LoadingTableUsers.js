@@ -14,6 +14,8 @@ const LoadingTableParticipants = () => {
                 <td><Skeleton variant="rectangular" /></td>
                 <td><Skeleton variant="rectangular" /></td>
                 <td><Skeleton variant="rectangular" /></td>
+                <td><Skeleton variant="rectangular" /></td>
+                <td><Skeleton variant="rectangular" /></td>
             </tr>
         </>
     );

@@ -26,7 +26,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 
-const SingleShopColoringBookCard = ({ userPoints, userDetailsId, item, setBuyingStatusPopup, getUserDetailsAPI }) => {
+const SingleShopColoringBookCard = ({ userPoints, userDetailsId, item, setBuyingStatusPopup, getUserDetailsAPI, userRole }) => {
     const classes = useStyles();
     const [openBuyItemPopup, setOpenBuyItemPopup] = useState(false);
 
@@ -53,7 +53,7 @@ const SingleShopColoringBookCard = ({ userPoints, userDetailsId, item, setBuying
                             </Typography>
                         </CardContent>
                         <CardActions className={classes.cardActions}>
-                            <ButtonBuyItem getUserDetailsAPI={getUserDetailsAPI} setBuyingStatusPopup={setBuyingStatusPopup} item={item} userPoints={userPoints} userDetailsId={userDetailsId} openPopup={openBuyItemPopup} setOpenPopup={setOpenBuyItemPopup} />
+                            <ButtonBuyItem userRole={userRole} getUserDetailsAPI={getUserDetailsAPI} setBuyingStatusPopup={setBuyingStatusPopup} item={item} userPoints={userPoints} userDetailsId={userDetailsId} openPopup={openBuyItemPopup} setOpenPopup={setOpenBuyItemPopup} />
                         </CardActions>
                     </CardActionArea>
                 </Card>

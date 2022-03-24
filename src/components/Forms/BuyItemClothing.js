@@ -20,40 +20,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const BuyItemClothing = ({ setOpenPopup, userPoints, userDetailsId, setBuyingStatusPopup, getUserDetailsAPI, item, userClothes }) => {
+const BuyItemClothing = ({ setOpenPopup, userRole, userPoints, userDetailsId, setBuyingStatusPopup, getUserDetailsAPI, item, userClothes }) => {
     const classes = useStyles();
 
     const handleClick = () => {
-        if (userPoints < item.cost) {
-            toast.error(`Nie masz wystarczająco pieniędzy`, {
-                position: "bottom-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: false,
-                draggable: true,
-                progress: undefined,
-            });
-            setOpenPopup(false);
-        } else if (userClothes.filter((cloth) => cloth.item_id === item.id).length > 0) {
-            toast.info(`Posiadasz już ten przedmiot`, {
-                position: "bottom-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: false,
-                draggable: true,
-                progress: undefined,
-            });
-            setOpenPopup(false);
-            console.log(userClothes);
-
-        }
-        else {
-            let pointsToUpdate = userPoints - item.cost;
-            let dataUserDetails = {
-                points: pointsToUpdate * 1,
-            }
+        if (userRole === "EMPLOYEE") {
             let dataItems = {
                 user_details_id: userDetailsId,
                 item_id: item.id,
@@ -63,8 +34,52 @@ const BuyItemClothing = ({ setOpenPopup, userPoints, userDetailsId, setBuyingSta
                 image: item.image,
             }
             setBuyingStatusPopup(true);
-            updateUserDetailsAPI(userDetailsId, dataUserDetails, dataItems);
+            postItemsAPI(dataItems);
             setOpenPopup(false);
+        }
+        else {
+            if (userPoints < item.cost) {
+                toast.error(`Nie masz wystarczająco pieniędzy`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setOpenPopup(false);
+            } else if (userClothes.filter((cloth) => cloth.item_id === item.id).length > 0) {
+                toast.info(`Posiadasz już ten przedmiot`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setOpenPopup(false);
+                console.log(userClothes);
+    
+            }
+            else {
+                let pointsToUpdate = userPoints - item.cost;
+                let dataUserDetails = {
+                    points: pointsToUpdate * 1,
+                }
+                let dataItems = {
+                    user_details_id: userDetailsId,
+                    item_id: item.id,
+                    category: item.category,
+                    name: item.name,
+                    cost: item.cost,
+                    image: item.image,
+                }
+                setBuyingStatusPopup(true);
+                updateUserDetailsAPI(userDetailsId, dataUserDetails, dataItems);
+                setOpenPopup(false);
+            }
         }
     }
 

@@ -50,7 +50,6 @@ const AddEmployeeForm = ({ setOpenPopup, getUserDetailsAPI, userDetails, setUpda
         Repository.add(resourceEmployeesAPI, data).then(
             () => {
                 updateUserDetails(employeeId, actions);
-                console.log("ID", employeeId);
             },
             (error) => {
                 console.log(error);

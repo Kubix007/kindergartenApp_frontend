@@ -47,7 +47,7 @@ const EmployeesTable = ({ isLoading, employees, setOpenEditEmployeePopup, setUpd
                         <td class="employeesDashboard" data-label="Stanowisko">{row.position_name}</td>
                         <td class="employeesDashboard" data-label="Prowadzi zajęcia">{row.activities.map(activity => activity.name).join(", ")}</td>
                         <td class="employeesDashboard" data-label="Telefon">{row.phone}</td>
-                        <td class="employeesDashboard" data-label="Email">{row.user.email}</td>
+                        <td class="employeesDashboard" id="emailEmployeeTd" data-label="Email">{row.user.email}</td>
                         <td class="employeesDashboard" id="employeesActionsWindow">{JSON.parse(Auth.getRole()) === "ADMIN" ?
                             <ButtonEditEmployee employee={row} setOpenPopup={setOpenEditEmployeePopup} setEditedEmployee={setEditedEmployee} />
                             : null}

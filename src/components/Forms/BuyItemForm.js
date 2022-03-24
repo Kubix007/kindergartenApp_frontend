@@ -20,26 +20,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const BuyItemForm = ({ setOpenPopup, userPoints, userDetailsId, setBuyingStatusPopup, getUserDetailsAPI, item }) => {
+const BuyItemForm = ({ setOpenPopup, userPoints, userDetailsId, setBuyingStatusPopup, getUserDetailsAPI, userRole, item }) => {
     const classes = useStyles();
 
     const handleClick = () => {
-        if (userPoints < item.cost) {
-            toast.error(`Nie masz wystarczająco pieniędzy`, {
-                position: "bottom-center",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: false,
-                draggable: true,
-                progress: undefined,
-            });
-            setOpenPopup(false);
-        } else {
-            let pointsToUpdate = userPoints - item.cost;
-            let dataUserDetails = {
-                points: parseInt(pointsToUpdate),
-            }
+        if (userRole === "EMPLOYEE") {
             let dataItems = {
                 user_details_id: userDetailsId,
                 item_id: item.id,
@@ -51,8 +36,40 @@ const BuyItemForm = ({ setOpenPopup, userPoints, userDetailsId, setBuyingStatusP
             }
             setBuyingStatusPopup(true);
             setOpenPopup(false);
-            updateUserDetailsAPI(userDetailsId, dataUserDetails, dataItems);
+            postItemsAPI(dataItems);
+
+        } else {
+            if (userPoints < item.cost) {
+                toast.error(`Nie masz wystarczająco pieniędzy`, {
+                    position: "bottom-center",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: false,
+                    draggable: true,
+                    progress: undefined,
+                });
+                setOpenPopup(false);
+            } else {
+                let pointsToUpdate = userPoints - item.cost;
+                let dataUserDetails = {
+                    points: parseInt(pointsToUpdate),
+                }
+                let dataItems = {
+                    user_details_id: userDetailsId,
+                    item_id: item.id,
+                    category: item.category,
+                    item_name: item.item_name,
+                    source: item.source,
+                    cost: item.cost,
+                    image: item.image,
+                }
+                setBuyingStatusPopup(true);
+                setOpenPopup(false);
+                updateUserDetailsAPI(userDetailsId, dataUserDetails, dataItems);
+            }
         }
+
     }
 
 
