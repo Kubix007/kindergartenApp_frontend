@@ -34,6 +34,7 @@ const Shop = () => {
     const [userDetailsId, setUserDetailsId] = useState();
     const [itemShop, setItemShop] = useState();
     const [clothesFromShop, setClothesFromShop] = useState();
+    const [userRole, setUserRole] = useState([]);
     const [buyingStatusPopup, setBuyingStatusPopup] = useState();
     const [userClothes, setUserClothes] = useState([]);
     const [updatingStatusPopup, setUpdatingStatusPopup] = useState(true);
@@ -43,6 +44,7 @@ const Shop = () => {
         Repository.getAll(resourceShopColoringBooksAPI).then(
             (data) => {
                 setItemShop(data.data);
+                setUserRole(JSON.parse(Auth.getRole()));
                 getUserDetails();
             },
             (error) => {
@@ -62,6 +64,7 @@ const Shop = () => {
     }
 
     const getUserDetails = () => {
+        setUpdatingStatusPopup(true);
         let id = parseInt(Auth.getUserId());
         setUserDetailsId(parseInt(Auth.getUserId()));
         Repository.getById(resourceUserDetailsAPI, id).then(
@@ -222,12 +225,12 @@ const Shop = () => {
                 icon={<StoreOutlinedIcon fontSize="large" />}
             />
             <Container maxWidth="lg" className={classes.blogsContainer}>
-                {!updatingStatusPopup ? <Typography variant="h5" component="h2">
+                {!updatingStatusPopup && userRole !== "EMPLOYEE" ? <Typography variant="h5" component="h2">
                     Twoje punkty: {userPoints} pkt.
                 </Typography> : null}
                 <Grid container spacing={3} style={{ paddingTop: "10px" }}>
-                    {!updatingStatusPopup ? <><ShopColoringBooksCardList getUserDetailsAPI={getUserDetails} setBuyingStatusPopup={setBuyingStatusPopup} userPoints={userPoints} userDetailsId={userDetailsId} singleShopItem={itemShop} getShopAPI={getShopAPI} setOpenPopup={setOpenPopup}
-                    /><ShopClothesCardList userClothes={userClothes} getUserDetailsAPI={getUserDetailsRefresh} setBuyingStatusPopup={setBuyingStatusPopup} userPoints={userPoints} userDetailsId={userDetailsId} singleShopItem={clothesFromShop} getShopAPI={getShopAPI} setOpenPopup={setOpenPopup} /> </> :
+                    {!updatingStatusPopup ? <><ShopColoringBooksCardList userRole={userRole} getUserDetailsAPI={getUserDetails} setBuyingStatusPopup={setBuyingStatusPopup} userPoints={userPoints} userDetailsId={userDetailsId} singleShopItem={itemShop} getShopAPI={getShopAPI} setOpenPopup={setOpenPopup}
+                    /><ShopClothesCardList userClothes={userClothes} userRole={userRole} getUserDetailsAPI={getUserDetailsRefresh} setBuyingStatusPopup={setBuyingStatusPopup} userPoints={userPoints} userDetailsId={userDetailsId} singleShopItem={clothesFromShop} getShopAPI={getShopAPI} setOpenPopup={setOpenPopup} /> </> :
                         null}
                 </Grid>
             </Container>

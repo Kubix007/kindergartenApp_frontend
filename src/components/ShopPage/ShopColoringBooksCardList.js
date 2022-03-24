@@ -1,7 +1,7 @@
 import React from 'react'
 import SingleShopColoringBookCard from './SingleShopColoringBookCard';
 
-const ShopColoringBooksCardList = ({ singleShopItem, setBuyingStatusPopup, setOpenPopup, userPoints, userDetailsId, getUserDetailsAPI }) => {
+const ShopColoringBooksCardList = ({ singleShopItem, userRole,setBuyingStatusPopup, setOpenPopup, userPoints, userDetailsId, getUserDetailsAPI }) => {
     return (
         <>
             {singleShopItem.map((shopItem) => {
@@ -12,6 +12,7 @@ const ShopColoringBooksCardList = ({ singleShopItem, setBuyingStatusPopup, setOp
                         setOpenPopup={setOpenPopup}
                         userPoints={userPoints}
                         userDetailsId={userDetailsId}
+                        userRole={userRole}
                         setBuyingStatusPopup={setBuyingStatusPopup}
                         getUserDetailsAPI={getUserDetailsAPI}
                     />)

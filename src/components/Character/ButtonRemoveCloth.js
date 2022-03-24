@@ -4,14 +4,14 @@ import * as d3 from "d3";
 
 const ButtonRemoveCloth = ({ clothes, setOpenPopup, isEquipped, setIsEquipped, otherItems, setOtherItems }) => {
 
-    const test = () => {
+    const removeClothes = () => {
         var className = clothes.name.replaceAll(" ", "");
         var el = document.getElementById('character').querySelector(`g.${className}`);
         d3.select(el).remove();
     }
 
     const handleClick = () => {
-        test();
+        removeClothes();
         setIsEquipped(prevState => !prevState)
         setOtherItems(prevState => !prevState)
     }

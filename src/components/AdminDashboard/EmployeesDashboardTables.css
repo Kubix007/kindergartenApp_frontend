@@ -24,14 +24,16 @@ table {
   }
 
   table td#employeesActionsWindow {
+    padding: 5;
+    margin-left: 15px;
+  }
+
+  table td#emailEmployeeTd {
     padding: 0;
-    text-align: center;
-  }
-  
-  #des {
-    text-align: left;
-  }
-  
+    word-wrap: break-word;
+
+}
+    
   table th {
     font-size: .85em;
     letter-spacing: .1em;
@@ -89,10 +91,4 @@ table {
     table td.employeesDashboard:last-child {
       border-bottom: 0;
     }
-  }
-
-  /* general styling */
-  body {
-    font-family: "Open Sans", sans-serif;
-    line-height: 1.25;
   }

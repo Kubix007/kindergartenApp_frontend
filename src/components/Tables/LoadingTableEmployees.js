@@ -12,6 +12,8 @@ const LoadingTableEmployees = () => {
                 <td><Skeleton variant="rectangular" /></td>
                 <td><Skeleton variant="rectangular" /></td>
                 <td><Skeleton variant="rectangular" /></td>
+                <td><Skeleton variant="rectangular" /></td>
+                <td><Skeleton variant="rectangular" /></td>
             </tr>
         </>
     );
