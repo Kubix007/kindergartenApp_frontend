@@ -44,7 +44,7 @@ Within the application, motivational elements will play an important role, which
 <img src="/src/github/children5.png" alt="Character modification" width="700">
 
 ### Admin dashboard:
-<img src="/src/github/admin4.png" alt="Admin dashboard1" width="700">
-<img src="/src/github/admin5.png" alt="Admin dashboard2" width="700">
+<img src="/src/github/admin4.jpg" alt="Admin dashboard1" width="700">
+<img src="/src/github/admin5.jpg" alt="Admin dashboard2" width="700">
 
 
