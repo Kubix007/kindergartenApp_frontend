@@ -1,70 +1,50 @@
-# Getting Started with Create React App
+# Kindergarten Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+SPA (Single Page Application) web application supporting optional educational activities at kindergartens with motivating elements
 
-## Available Scripts
+## Short description
 
-In the project directory, you can run:
+This is an application that will help in the operation of preschool institutions, more precisely within the conduct of additional activities. It will offer the ability to create classes and supervise their participants. Additional functionality that the application will allow is the creation of news related to the daily life of the kindergarten, for example, information on organized excursions, competitions or events. In addition, there will be basic options for managing general users of the application.     
+Within the application, motivational elements will play an important role, which will be implemented.  This will include coloring books that the user will be able to color in the application or items to complete, which will be vector graphics elements.
+## Photos of the application
 
-### `npm start`
+### Login page:
+<img src="/src/github/login.png" alt="Login page" width="700">
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Register page:
+<img src="/src/github/register.jpg" alt="Register page" width="700">
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### Adding news:
 
-### `npm test`
+#### Administrator
+<img src="/src/github/admin1.jpg" alt="News view for admin" width="700">
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+#### Children/Teacher
+<img src="/src/github/children1.jpg" alt="News view for children" width="700">
 
-### `npm run build`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Additional activities:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+#### Administrator/Teacher
+<img src="/src/github/admin2.jpg" alt="Additional activities for teacher/admin" width="700">
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+#### Children
+<img src="/src/github/children2.jpg" alt="Additional activities for childrens" width="700">
 
-### `npm run eject`
+### Reward store:
+<img src="/src/github/children3.png" alt="Reward store" width="700">
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Owned coloring books:
+<img src="/src/github/children4.png" alt="Owned coloring books" width="700">
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Coloring:
+<img src="/src/github/children6.png" alt="Coloring" width="700">
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Character modification:
+<img src="/src/github/children5.png" alt="Character modification" width="700">
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Admin dashboard:
+<img src="/src/github/admin4.png" alt="Admin dashboard1" width="700">
+<img src="/src/github/admin5.png" alt="Admin dashboard2" width="700">
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
